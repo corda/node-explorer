@@ -1,0 +1,49 @@
+
+.pin{
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 5px;
+    background-color: #DF0A1B;
+    border: 1px solid #FFFFFF;
+  }
+
+  .pin > p {
+    color: #FFFFFF;
+    font-size: 14px;
+    margin-left: 12px;
+    margin-top: -6px;
+    text-shadow: 1px 1px 0px #000000;
+  }
+
+  .side-panel{
+    position: fixed;
+    color: #FFFFFF;
+    overflow: auto;
+    width: 350px;
+    padding-bottom: 10px;
+  }
+
+  .node-container {
+    background-color: rgba(0, 0, 0, 0.4);
+    margin: 10px;
+    font-size: 14px;
+  }
+
+  .node-container p{
+    margin: 0;
+  }
+
+  .node-type{
+    padding: 6px 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .node-type > span {
+    right: 0;
+    float: right;
+    font-size: 28px;
+    line-height: .5;
+  }

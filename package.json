@@ -1,0 +1,46 @@
+{
+  "name": "node-explorer",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "^4.6.1",
+    "@material-ui/icons": "^4.5.1",
+    "mathjs": "^6.2.5",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-redux": "^7.1.3",
+    "react-scripts": "3.2.0",
+    "redux": "^4.0.4",
+    "sockjs-client": "^1.4.0",
+    "stompjs": "^2.3.3",
+    "websocket": "^1.0.30"
+  },
+  "main": "src/electron-starter.js",
+  "electron-dev": "ELECTRON_START_URL=http://localhost:3000 electron .",
+  "homepage": "./",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "electron": "electron ."
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "electron": "^7.1.2"
+  }
+}
