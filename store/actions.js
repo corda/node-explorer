@@ -1,0 +1,7 @@
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGIN_ACTION = 'LOGIN';
+export const FETCH_NETWORK = "FETCH_NETWORK";
+export const LOAD_NETWORK = "LOAD_NETWORK";
+export const TOGGLE_MYIDENTITY = "TOGGLE_MYIDENTITY";
+export const TOGGLE_NOTARIES = "TOGGLE_NOTARIES";
+export const TOGGLE_PEERS = "TOGGLE_PEERS";
