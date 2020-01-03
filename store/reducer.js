@@ -11,18 +11,20 @@ stompClient.connect({}, () => subscribeGeneral(stompClient));
 
 const initialState = {
     isLoggedIn: false,
+    currentPage: 2,
     wsClient: stompClient,
     netWorkMap: {},
     showMyIdentity: true,
     showNotaries: true,
-    showPeers: true
+    showPeers: true,
+    registeredFlows: [],
+    flowParams: []
 };
 
 
 const reducer = (state = initialState, action) => {
     switch ( action.type ) {
         case ActionType.LOGIN_SUCCESS:
-            console.log(state);
             return {
                 ...state,
                 isLoggedIn: true
@@ -33,7 +35,7 @@ const reducer = (state = initialState, action) => {
             );    
             return state;
         case ActionType.FETCH_NETWORK:
-                stompClient.send("/server/networkMap", {}, );    
+            stompClient.send("/server/networkMap", {}, );    
             return state;
         case ActionType.LOAD_NETWORK:
             return {
@@ -54,7 +56,33 @@ const reducer = (state = initialState, action) => {
             return{
                 ...state,
                 showPeers: !state.showPeers
-            }            
+            }
+        case ActionType.CHANGE_SCREEN:
+            return {
+                ...state,
+                currentPage: action.page
+            }
+        case ActionType.FETCH_FLOWS:
+            stompClient.send("/server/flowList", {}, );    
+            return state;
+        case ActionType.LOAD_FLOWS:
+            return {
+                ...state,
+                registeredFlows: action.data
+            }
+        case ActionType.LOAD_FLOW_PARAMS:
+            return {
+                ...state,
+                flowParams: action.data
+            }
+        case ActionType.FETCH_TRNXS:
+            stompClient.send("/server/tranxList", {}, JSON.stringify(action.data));
+            return state;
+        case ActionType.LOAD_TRNXS:
+            return {
+                ...state,
+                trnxList: action.data
+            }       
         default:
             return state;
     }

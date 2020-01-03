@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import CordaNetwork from './components/CordaNetwork';
+import CordaNetwork from './screens/CordaNetwork';
+import TransactionExplorer from './screens/TransactionExplorer';
 import Header from './components/Header';
 import Login from './components/Login';
 import SideMenu from './components/SideMenu';
@@ -24,8 +25,10 @@ const explorer = props => {
                 <SideMenu></SideMenu>
                 <div style={{marginLeft: 120}}>
                   <div className="content-pane">
-
-                      <CordaNetwork></CordaNetwork>
+                    {
+                      props.currentPage === 1 ? <CordaNetwork></CordaNetwork> : 
+                      props.currentPage === 2 ? <TransactionExplorer></TransactionExplorer> : <CordaNetwork></CordaNetwork>
+                    }
                   </div> 
                 </div> 
             </div> 
@@ -39,7 +42,8 @@ const explorer = props => {
 const mapStateToProps = state => {
     return {
         isLoggedIn: state.isLoggedIn,
-        networkMap: state.networkMap
+        networkMap: state.networkMap,
+        currentPage: state.currentPage
     }
 }
 
