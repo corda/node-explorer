@@ -2,5 +2,7 @@ package net.corda.explorer.model;
 
 public enum Command {
     CONNECT,
-    NETWORKMAP;
+    NETWORK_MAP,
+    FLOW_LIST,
+    TRNX_LIST;
 }

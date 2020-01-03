@@ -1,4 +1,6 @@
-package net.corda.explorer.model;
+package net.corda.explorer.model.request;
+
+import net.corda.explorer.model.Data;
 
 public class LoginRequest extends Data {
 

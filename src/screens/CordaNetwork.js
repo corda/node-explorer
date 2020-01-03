@@ -11,13 +11,12 @@ class CordaNetwork extends Component{
     super(props);
     props.onNetworkLoad();
     _props = props;
-    console.log(props);
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
   }
 
   screenHeight = 0;
   screenWidth = 0;
-
+  
   componentDidMount() {
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions);

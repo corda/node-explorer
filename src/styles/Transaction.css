@@ -1,0 +1,25 @@
+.page-title{
+    height: 50px;
+    color: #000000;
+    font-size: 25px;
+}
+
+.page-title > span {
+    display: block;
+    float: left;
+}
+
+.paper {
+    position: absolute;
+    background-color: #ffffff;
+    border: 1px solid #444444;
+    width: 800px;
+    top:20%;
+    left: 50%;
+    margin-left: -400px;
+    padding: 20px;
+}
+
+*:focus {
+    outline: none !important;
+}
