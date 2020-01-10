@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import CordaNetwork from './screens/CordaNetwork';
 import TransactionExplorer from './screens/TransactionExplorer';
 import Header from './components/Header';
-import Login from './components/Login';
+import Login from './screens/Login';
 import SideMenu from './components/SideMenu';
-import * as ActionType from './store/actions';
+import * as ActionType from './store/Actions';
 
 let _props = {};
 
@@ -41,9 +41,8 @@ const explorer = props => {
 
 const mapStateToProps = state => {
     return {
-        isLoggedIn: state.isLoggedIn,
-        networkMap: state.networkMap,
-        currentPage: state.currentPage
+        isLoggedIn: state.common.isLoggedIn,
+        currentPage: state.common.currentPage
     }
 }
 

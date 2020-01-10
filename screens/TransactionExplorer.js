@@ -1,8 +1,8 @@
-import { Button, FormControl, InputLabel, MenuItem, Select, Table, TableCell, TableContainer, TableHead, TableRow, TextField, TableBody } from '@material-ui/core';
+import { Button, FormControl, InputLabel, MenuItem, Select, Table, TableCell, TableContainer, TableHead, TableRow, TextField, TableBody, TablePagination } from '@material-ui/core';
 import Modal from '@material-ui/core/Modal';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as ActionType from '../store/actions';
+import * as ActionType from '../store/Actions';
 import '../styles/Transaction.css';
 
 let _props = {};
@@ -10,7 +10,11 @@ let _props = {};
 class TransactionExplorer extends Component{
     state = {
         open: false,
-        flowSelected: false
+        flowSelected: false,
+        page: {
+            pageSize: 10,
+            offset: 0
+        }
     }
 
     handleClose = () => {
@@ -29,9 +33,8 @@ class TransactionExplorer extends Component{
 
     constructor(props){
         super(props);
-        _props = props;
         props.fetchFlowList();
-        props.fetchTrnxList();
+        props.fetchTrnxList(this.state.page);
     }
 
     handleFlowSelection = (event) => {
@@ -45,6 +48,30 @@ class TransactionExplorer extends Component{
         this.setState({
             flowSelected: true
         });
+    }
+
+
+    handleChangePage = (event, newPage) => {
+        this.setState({
+            page: {
+                pageSize: 10,
+                offset: newPage
+            }
+        }, this.loadNewPage);
+        
+    }
+
+    loadNewPage = () => {
+        _props.fetchTrnxList(this.state.page);
+    }
+
+    handleChangeRowsPerPage = (event) => {
+        this.setState({
+            page: {
+                pageSize: event.target.value,
+                offset: this.state.page.offset
+            }
+        }, this.loadNewPage);
     }
 
     render(){
@@ -109,17 +136,17 @@ class TransactionExplorer extends Component{
                             </TableHead>
                             <TableBody>
                             {
-                                this.props.transactionList ?
+                                this.props.transactionList && this.props.transactionList.size > 0 ?
                                 this.props.transactionList.map((trnx, index) => {
                                     return (
                                         <TableRow key={index}>
                                             <TableCell style={{maxWidth: 200, fontSize: 12}}>{trnx.transactionId}</TableCell>
-                                            <TableCell>{trnx.inputTypes? trnx.inputTypes.map((typeCnt) => {
-                                                return ( <div> {typeCnt.type + "(" + typeCnt.count + ")" }</div>);
+                                            <TableCell>{trnx.inputTypes? trnx.inputTypes.map((typeCnt, index) => {
+                                                return ( <div key={index}> {typeCnt.type + "(" + typeCnt.count + ")" }</div>);
                                             }) :"-"}
                                             </TableCell>
-                                            <TableCell>{trnx.outputTypes? trnx.outputTypes.map((typeCnt) => {
-                                                return ( <div> {typeCnt.type + "(" + typeCnt.count + ")" }</div>);
+                                            <TableCell>{trnx.outputTypes? trnx.outputTypes.map((typeCnt, index) => {
+                                                return ( <div key={index}> {typeCnt.type + "(" + typeCnt.count + ")" }</div>);
                                             }) :"-"}
                                             </TableCell>
                                             <TableCell>{trnx.commands.map( command => {
@@ -130,45 +157,42 @@ class TransactionExplorer extends Component{
                                         </TableRow>
                                     );
                                 })
-                                :""
+                                : 
+                                    <TableRow>
+                                        <TableCell colSpan="4">No Data Found</TableCell>
+                                    </TableRow>
                             }
                             </TableBody>
                         </Table>
                     </TableContainer>
+                    <TablePagination
+                        rowsPerPageOptions={[10, 25, 50, 100]}
+                        component="div"
+                        count={this.props.totalRecords}
+                        rowsPerPage={this.state.page.pageSize}
+                        page={this.state.page.offset}
+                        onChangePage={this.handleChangePage}
+                        onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                    />
                 </div>
             </div>
         );
     }
 }
 
-export const loadFlowList = (data) => {
-    console.log("Flow from server:"+ JSON.stringify(data.flowInfoList));
-    _props.loadFlowList(data.flowInfoList);
-}
-
-export const loadTrnxList = (data) => {
-    console.log("Trnxs from server:"+ JSON.stringify(data.transactionData));
-    _props.loadTrnxList(data.transactionData);
-}
-
 const mapStateToProps = state => {
     return {
-        registeredFlows: state.registeredFlows,
-        flowParams: state.flowParams,
-        transactionList: state.trnxList
+        registeredFlows: state.trnx.registeredFlows,
+        flowParams: state.trnx.flowParams,
+        transactionList: state.trnx.trnxList,
+        totalRecords: state.trnx.trnxListPage
     }
 }
 
 const mapDispatchToProps = dispatch => {
-    const page = {
-        pageSize: 10,
-        offset: 0
-    }
     return {
-        fetchTrnxList: () => dispatch({type: ActionType.FETCH_TRNXS, data: page}),
-        loadTrnxList: (data) => dispatch({type: ActionType.LOAD_TRNXS, data: data}),
-        fetchFlowList: () => dispatch({type: ActionType.FETCH_FLOWS}),
-        loadFlowList: (data) => dispatch({type: ActionType.LOAD_FLOWS, data: data}),
+        fetchTrnxList: (page) => dispatch(ActionType.fetchTransactions(page)),
+        fetchFlowList: () => dispatch(ActionType.fetchFlows()),
         loadFlowParams: (data) => dispatch({type: ActionType.LOAD_FLOW_PARAMS, data: data}) 
     }
 }

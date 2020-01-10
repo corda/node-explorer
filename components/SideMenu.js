@@ -1,10 +1,11 @@
 import React from 'react';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import { connect } from 'react-redux';
-import * as ActionType from '../store/actions';
+import * as ActionType from '../store/Actions';
 import PublicIcon from '@material-ui/icons/Public';
 import SyncAltRoundedIcon from '@material-ui/icons/SyncAltRounded';
 import SecurityRoundedIcon from '@material-ui/icons/SecurityRounded';
+import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
 import '../styles/SideMenu.css';
 
 const sideMenu = (props) => {
@@ -35,6 +36,12 @@ const sideMenu = (props) => {
                     </div>
                     <span>Vault</span>
                 </li>
+                <li className={props.currentPage === 4? "active":""} onClick={() => props.changeScreen(4)}>
+                    <div>
+                        <SettingsApplicationsIcon fontSize="large"></SettingsApplicationsIcon>
+                    </div>
+                    <span>Settings</span>
+                </li>
             </ul>
         </div>
     );
@@ -43,7 +50,7 @@ const sideMenu = (props) => {
 
 const mapStateToProps = state => {
     return {
-        currentPage: state.currentPage
+        currentPage: state.common.currentPage
     }
   }
   

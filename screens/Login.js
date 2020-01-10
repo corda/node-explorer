@@ -1,7 +1,7 @@
 import { Button, Grid, TextField } from '@material-ui/core';
 import React from 'react';
 import '../styles/Login.css';
-import * as ActionType from '../store/actions';
+import * as ActionType from '../store/Actions';
 import { connect } from 'react-redux';
 
 const login = props => {
@@ -46,14 +46,14 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-    const message = {
+    const data = {
       hostName: 'localhost',
       port: 10006,
       username: 'user1',
       password: 'test'
     }
     return {
-      onLoginAction:() => dispatch({type: ActionType.LOGIN_ACTION, message: message})
+      onLoginAction:() => dispatch(ActionType.login(data))
     }
 }
 
