@@ -1,11 +1,8 @@
 package net.corda.explorer.model.response;
 
-import net.corda.core.identity.Party;
-import net.corda.explorer.model.Data;
-
 import java.util.List;
 
-public class NetworkMap extends Data {
+public class NetworkMap {
 
     private NodeData self;
     private List<NodeData> notaries;

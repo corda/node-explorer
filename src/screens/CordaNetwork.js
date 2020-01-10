@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
-import * as ActionType from '../store/actions';
+import * as ActionType from '../store/Actions';
 import { connect } from 'react-redux';
 import '../styles/Network.css';
-
-let _props = {};
 
 class CordaNetwork extends Component{
   
   constructor(props){
     super(props);
     props.onNetworkLoad();
-    _props = props;
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
   }
 
@@ -151,28 +148,23 @@ class CordaNetwork extends Component{
 }
 
 const mapStateToProps = state => {
-  return {
-      self: state.netWorkMap.self,
-      notaries: state.netWorkMap.notaries,
-      peers: state.netWorkMap.peers,
-      showMyIdentity: state.showMyIdentity,
-      showNotaries: state.showNotaries,
-      showPeers: state.showPeers
-  }
+    return {
+        self: state.explorer.netWorkMap.self,
+        notaries: state.explorer.netWorkMap.notaries,
+        peers: state.explorer.netWorkMap.peers,
+        showMyIdentity: state.explorer.showMyIdentity,
+        showNotaries: state.explorer.showNotaries,
+        showPeers: state.explorer.showPeers
+    }
 }
 
 const mapDispatchToProps = dispatch => {
-  return {
-    onNetworkLoad: () => dispatch({type: ActionType.FETCH_NETWORK}),
-    loadNetworkMap: (data) => dispatch({type: ActionType.LOAD_NETWORK, data: data}),
-    toggleMyIdentity: () => dispatch({type: ActionType.TOGGLE_MYIDENTITY}),
-    toggleNoraties: () => dispatch({type: ActionType.TOGGLE_NOTARIES}),
-    toggleMyPeers: () => dispatch({type: ActionType.TOGGLE_PEERS})
-  }
-}
-
-export const loadNetworkMap = (data) => {
-  _props.loadNetworkMap(data);
+    return {
+      onNetworkLoad: () => dispatch(ActionType.fetchNetworkMap()),
+      toggleMyIdentity: () => dispatch({type: ActionType.TOGGLE_MYIDENTITY}),
+      toggleNoraties: () => dispatch({type: ActionType.TOGGLE_NOTARIES}),
+      toggleMyPeers: () => dispatch({type: ActionType.TOGGLE_PEERS})
+    }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CordaNetwork);

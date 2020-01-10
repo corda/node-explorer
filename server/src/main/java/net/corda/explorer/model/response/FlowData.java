@@ -1,10 +1,8 @@
 package net.corda.explorer.model.response;
 
-import net.corda.explorer.model.Data;
-
 import java.util.List;
 
-public class FlowData extends Data {
+public class FlowData {
 
     private List<FlowInfo> flowInfoList;
 

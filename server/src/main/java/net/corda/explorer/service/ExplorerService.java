@@ -1,9 +1,12 @@
-//package net.corda.explorer.service;
-//
-//import org.springframework.stereotype.Service;
-//
-//@Service
-//public class ExplorerService {
-//
-//
-//}
+package net.corda.explorer.service;
+
+import net.corda.explorer.model.response.NetworkMap;
+
+import java.util.Map;
+
+public interface ExplorerService {
+
+    NetworkMap getNetworkMap();
+    Map<String, String> getPartyKeyMap();
+
+}

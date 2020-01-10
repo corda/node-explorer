@@ -1,14 +1,21 @@
 package net.corda.explorer.model.response;
 
 import net.corda.core.contracts.ContractState;
-import net.corda.core.crypto.SecureHash;
-import net.corda.explorer.model.Data;
 
 import java.util.List;
 
-public class TransactionList extends Data {
+public class TransactionList {
 
-    List<TransactionData> transactionData;
+    private List<TransactionData> transactionData;
+    private int totalRecords;
+
+    public int getTotalRecords() {
+        return totalRecords;
+    }
+
+    public void setTotalRecords(int totalRecords) {
+        this.totalRecords = totalRecords;
+    }
 
     public List<TransactionData> getTransactionData() {
         return transactionData;

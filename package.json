@@ -5,15 +5,17 @@
   "dependencies": {
     "@material-ui/core": "^4.8.2",
     "@material-ui/icons": "^4.5.1",
+    "axios": "^0.19.1",
+    "logger": "0.0.1",
     "mathjs": "^6.2.5",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-redux": "^7.1.3",
+    "react-redux-toastr": "^7.6.4",
     "react-scripts": "3.2.0",
     "redux": "^4.0.4",
-    "sockjs-client": "^1.4.0",
-    "stompjs": "^2.3.3",
-    "websocket": "^1.0.30"
+    "redux-devtools-extension": "^2.13.8",
+    "redux-thunk": "^2.3.0"
   },
   "main": "src/electron-starter.js",
   "electron-dev": "ELECTRON_START_URL=http://localhost:3000 electron .",

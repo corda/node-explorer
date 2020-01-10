@@ -2,7 +2,6 @@
 const {app, BrowserWindow} = require('electron')
 const path = require('path')
 const url = require('url');
-//const logger = require('./logger');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -11,18 +10,19 @@ let mainWindow
 let serverProcess;
 let baseUrl;
 
-const JAR = 'server.jar'
+const JAR = 'serveexplorer-websocket-server-0.1.0.jar'
 
 function startServer(port) {
   //logger.info(`Starting server at port ${port}`)
 
-  const server = `${path.join(app.getAppPath(), '..', '..', JAR)}`;
-  //logger.info(`Launching server with jar ${server} at port ${port}...`);
+  const server = `${path.join(app.getAppPath(), "src/server.sh")}`;
   console.log("Starting Sever" + server);
   serverProcess = require('child_process')
-    .spawn('java', [ '-jar', server, `--server.port=${port}`]);
+    .spawn('src/server.sh');
 
-  //serverProcess.stdout.on('data', logger.server);
+    serverProcess.stdout.on('data', function (data) {``
+      console.log('Server: ' + data);
+    });
 
   if (serverProcess.pid) {
     console.log(serverProcess.pid)
@@ -93,7 +93,7 @@ function createWindow () {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', ()=>{
+app.on('ready', () => {
   startServer(8080);
   createWindow();
 });
