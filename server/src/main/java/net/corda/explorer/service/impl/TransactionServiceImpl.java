@@ -1,9 +1,10 @@
 package net.corda.explorer.service.impl;
 
 import net.corda.core.contracts.Amount;
+import net.corda.core.contracts.ContractState;
+import net.corda.core.contracts.StateRef;
 import net.corda.core.contracts.UniqueIdentifier;
 import net.corda.core.crypto.CryptoUtils;
-import net.corda.core.identity.Party;
 import net.corda.core.transactions.CoreTransaction;
 import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.transactions.WireTransaction;
@@ -17,10 +18,12 @@ import net.corda.explorer.service.ExplorerService;
 import net.corda.explorer.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.security.x509.UniqueIdentity;
 
 import java.io.File;
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
@@ -52,26 +55,67 @@ public class TransactionServiceImpl implements TransactionService {
         List<TransactionList.TransactionData> transactionDataList = new ArrayList<>();
         transactionList.setTotalRecords(signedTransactions.size());
         int initial = offset * pageSize;
-        int limit = initial + pageSize > signedTransactions.size()? signedTransactions.size(): initial + pageSize;
+        int limit = Math.min(initial + pageSize, signedTransactions.size());
         for(int i=initial; i< limit; i++){
             CoreTransaction coreTransaction = signedTransactions.get(i).getCoreTransaction();
             TransactionList.TransactionData transactionData = new TransactionList.TransactionData();
+
+            List<TransactionList.Signer> signerList = new ArrayList<>();
+            signedTransactions.get(i).getSigs().forEach(signature -> {
+                String key = CryptoUtils.toStringShort(signature.getBy());
+                TransactionList.Signer signer = new TransactionList.Signer();
+                signer.setSignature(signature);
+                signer.setPartyName(explorerService.getPartyKeyMap().get(key));
+                signerList.add(signer);
+            });
+            transactionData.setSigners(signerList);
+
+            List<ContractState> inputList = new ArrayList<>();
+            if(coreTransaction.getInputs().size()>0){
+                for(StateRef stateRef: coreTransaction.getInputs()){
+                    SignedTransaction signedTransaction = NodeRPCClient.getRpcProxy()
+                            .internalFindVerifiedTransaction(stateRef.getTxhash());
+                    if(signedTransaction!=null)
+                        inputList.add(signedTransaction.getCoreTransaction().getOutputStates().get(stateRef.getIndex()));
+                }
+                transactionData.setInputs(inputList);
+
+                Map<String, Integer> inputTypeMap = new HashMap<>();
+                transactionData.getInputs().forEach(contractState -> {
+                    String type = contractState.getClass().getCanonicalName().substring(
+                            contractState.getClass().getCanonicalName().lastIndexOf(".") + 1);
+                    if (inputTypeMap.containsKey(type)) {
+                        inputTypeMap.put(type, inputTypeMap.get(type) + 1);
+                    } else {
+                        inputTypeMap.put(type, 1);
+                    }
+                });
+                List<TransactionList.TypeCount> inputTypeCountList = new ArrayList<>();
+                inputTypeMap.keySet().forEach(s -> {
+                    TransactionList.TypeCount typeCount = new TransactionList.TypeCount();
+                    typeCount.setType(s);
+                    typeCount.setCount(inputTypeMap.get(s));
+                    inputTypeCountList.add(typeCount);
+                });
+                transactionData.setInputTypes(inputTypeCountList);
+            }
+
             transactionData.setOutputs(coreTransaction.getOutputStates());
-            Map<String, Integer> typeMap = new HashMap<>();
+            Map<String, Integer> outputTypeMap = new HashMap<>();
             coreTransaction.getOutputStates().forEach(contractState -> {
                 String type = contractState.getClass().getCanonicalName().substring(
                         contractState.getClass().getCanonicalName().lastIndexOf(".") + 1);
-                if (typeMap.containsKey(type)) {
-                    typeMap.put(type, typeMap.get(type) + 1);
+                if (outputTypeMap.containsKey(type)) {
+                    outputTypeMap.put(type, outputTypeMap.get(type) + 1);
                 } else {
-                    typeMap.put(type, 1);
+                    outputTypeMap.put(type, 1);
                 }
             });
             List<TransactionList.TypeCount> outputTypeCountList = new ArrayList<>();
-            typeMap.keySet().forEach(s -> {
+            outputTypeMap.keySet().forEach(s -> {
                 TransactionList.TypeCount typeCount = new TransactionList.TypeCount();
                 typeCount.setType(s);
-                typeCount.setCount(typeMap.get(s));
+                typeCount.setCount(outputTypeMap.get(s));
                 outputTypeCountList.add(typeCount);
             });
             transactionData.setOutputTypes(outputTypeCountList);
@@ -81,17 +125,6 @@ public class TransactionServiceImpl implements TransactionService {
                     command.getValue().getClass().getCanonicalName().substring(command.getValue().getClass()
                             .getCanonicalName().lastIndexOf(".")+1)).collect(Collectors.toList()));
 
-            List<TransactionList.Signer> signerList = new ArrayList<>();
-            ((WireTransaction) coreTransaction).getCommands().forEach(command -> {
-                command.getSigners().forEach(publicKey -> {
-                    String key = CryptoUtils.toStringShort(publicKey);
-                    TransactionList.Signer signer = new TransactionList.Signer();
-                    signer.setPartyName(explorerService.getPartyKeyMap().get(key));
-                    signer.setSigningKey(key);
-                    signerList.add(signer);
-                });
-            });
-            transactionData.setSigners(signerList);
             transactionData.setNotary(coreTransaction.getNotary().getName().getOrganisation());
             transactionDataList.add(transactionData);
         }

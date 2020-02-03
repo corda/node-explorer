@@ -52,3 +52,56 @@
 .selection li span:hover{
     color: #000000;
 }
+
+table tr:hover {
+    background-color: #FAFAFA;
+}
+
+tr th{
+    background-color: #EEEEEE !important;
+    font-weight: bold !important;
+}
+
+.wrapper{
+    display: inline-block;
+    width: 100%;
+    /* padding: 10px 20px; */
+    text-align: left;
+    border: 1px solid #CCCCCC;
+    vertical-align: middle;
+
+}
+
+.wtitle {
+    border-bottom: 1px solid #CCCCCC;
+    background: #999999;
+    padding: 6px 10px;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+.cmd-wrapper{
+    display: inline-block;
+    vertical-align: middle;
+}
+
+
+.stripe {
+    color: black;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      #ccc 10px,
+      #ccc 20px
+    )!important;
+  }
+
+  .content{
+      min-height: 150px;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      padding: 10px;
+      background: #FFFFFF;
+  }

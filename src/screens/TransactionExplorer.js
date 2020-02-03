@@ -1,12 +1,13 @@
 import { Button, FormControl, InputLabel, MenuItem, Select, Table, TableCell, TableContainer, 
-    TableHead, TableRow, TextField, TableBody, TablePagination } from '@material-ui/core';
+    TableHead, TableRow, TextField, TableBody, TablePagination, Grid } from '@material-ui/core';
 import Modal from '@material-ui/core/Modal';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import ForwardIcon from '@material-ui/icons/Forward';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as ActionType from '../store/Actions';
 import '../styles/Transaction.css';
-
-let _props = {};
 
 class TransactionExplorer extends Component{
     state = {
@@ -17,7 +18,8 @@ class TransactionExplorer extends Component{
             offset: 0
         },
         flowInfo: {},
-        selectedFlow: ""
+        selectedFlow: "",
+        trnxDetail: []
     }
 
     handleClose = () => {
@@ -62,7 +64,8 @@ class TransactionExplorer extends Component{
             page: {
                 pageSize: 10,
                 offset: newPage
-            }
+            },
+            trnxDetail: []
         }, this.loadNewPage);
         
     }
@@ -75,8 +78,9 @@ class TransactionExplorer extends Component{
         this.setState({
             page: {
                 pageSize: event.target.value,
-                offset: this.state.page.offset
-            }
+                offset: 0
+            },
+            trnxDetail: []
         }, this.loadNewPage);
     }
 
@@ -97,6 +101,35 @@ class TransactionExplorer extends Component{
             },
             open: false
         }, () => this.props.startFlow(this.state.flowInfo));
+    }
+
+    showTrnxDetails = (trnx, index) => {
+        this.state.trnxDetail[index] = !this.state.trnxDetail[index]
+        this.setState({
+            trnxDetail : this.state.trnxDetail
+        });
+    }
+
+    renderJson = (jsonObj, lvl) => {
+        return(
+            Object.keys(jsonObj).map((key) => {
+                return (
+                    jsonObj[key] ?
+                    <div style={{marginLeft: lvl * 15}}>
+                        {lvl == 0?
+                        <span><strong>{key}: &nbsp;</strong></span>
+                        :
+                        <span>{key}: &nbsp;</span>
+                        }
+
+                        {typeof jsonObj[key] === 'object'?
+                            this.renderJson(jsonObj[key], lvl+1)
+                        :
+                        jsonObj[key]}
+                    </div>:null
+                )
+            }) 
+        )
     }
 
     render(){
@@ -179,6 +212,7 @@ class TransactionExplorer extends Component{
                         <Table stickyHeader>
                             <TableHead>
                                 <TableRow>
+                                    <TableCell style={{width: 40}}></TableCell>
                                     <TableCell>Transaction Id</TableCell>
                                     <TableCell>Inputs</TableCell>
                                     <TableCell>Outputs</TableCell>
@@ -190,27 +224,103 @@ class TransactionExplorer extends Component{
                                 this.props.transactionList && this.props.transactionList.length > 0 ?
                                 this.props.transactionList.map((trnx, index) => {
                                     return (
-                                        <TableRow key={index}>
-                                            <TableCell style={{maxWidth: 200, fontSize: 12}}>{trnx.transactionId}</TableCell>
-                                            <TableCell>{trnx.inputTypes? trnx.inputTypes.map((typeCnt, index) => {
-                                                return ( <div key={index}> {typeCnt.type + "(" + typeCnt.count + ")" }</div>);
-                                            }) :"-"}
-                                            </TableCell>
-                                            <TableCell>{trnx.outputTypes? trnx.outputTypes.map((typeCnt, index) => {
-                                                return ( <div key={index}> {typeCnt.type + "(" + typeCnt.count + ")" }</div>);
-                                            }) :"-"}
-                                            </TableCell>
-                                            <TableCell>{trnx.commands.map( command => {
-                                                return (<div>{command}</div>)
+                                        <React.Fragment>
+                                            <TableRow key={index} style={{cursor: "pointer"}} onClick={() => this.showTrnxDetails(trnx, index)}>
+                                                <TableCell style={{width: 40}}>
+                                                    {
+                                                        this.state.trnxDetail[index]?
+                                                        <ExpandLessIcon></ExpandLessIcon>:
+                                                        <ExpandMoreIcon></ExpandMoreIcon> 
                                                     }
-                                                )}
-                                            </TableCell>
-                                        </TableRow>
+                                                </TableCell>
+                                                <TableCell style={{maxWidth: 200, fontSize: 12}}>{trnx.transactionId}</TableCell>
+                                                <TableCell>{trnx.inputTypes? trnx.inputTypes.map((typeCnt, index) => {
+                                                    return ( <div key={index}> {typeCnt.type + "(" + typeCnt.count + ")" }</div>);
+                                                }) :"-"}
+                                                </TableCell>
+                                                <TableCell>{trnx.outputTypes && trnx.outputTypes.length > 0 ? trnx.outputTypes.map((typeCnt, index) => {
+                                                    return ( <div key={index}> {typeCnt.type + "(" + typeCnt.count + ")" }</div>);
+                                                }) :"-"}
+                                                </TableCell>
+                                                <TableCell>{trnx.commands.map( command => {
+                                                    return (<div>{command}</div>)
+                                                        }
+                                                    )}
+                                                </TableCell>
+                                            </TableRow>
+                                            {
+                                                this.state.trnxDetail[index]?
+                                                <TableRow style={{backgroundColor: "#EEEEEE"}}>
+                                                    <TableCell colSpan="5">
+                                                    <div style={{textAlign: "center", padding: "0 30px"}}>
+                                                        <Grid container spacing={0}>
+                                                            <Grid item xs={5}>
+                                                                <div className="wrapper">
+                                                                    <div class="wtitle">Inputs</div>
+                                                                    {
+                                                                        trnx.inputs?
+                                                                        trnx.inputs.map((input, idx) => {
+                                                                            return (
+                                                                                <div className="content">
+                                                                                    {this.renderJson(input, 0)}
+                                                                                </div>
+                                                                            )
+                                                                        }):
+                                                                            <div className="content stripe"></div>
+                                                                    }
+                                                                </div>
+                                                            </Grid>
+                                                            <Grid item xs={2}>
+                                                                <div className="cmd-wrapper">
+                                                                    <ForwardIcon style={{color: "#DE0A1B", fontSize: 100, marginTop: "50%"}}></ForwardIcon>
+                                                                </div>
+                                                            </Grid>
+                                                            <Grid item xs={5}>
+                                                            <div className="wrapper">
+                                                                <div class="wtitle">Outputs</div>
+                                                                {
+                                                                    trnx.outputs && trnx.outputs.length > 0?
+                                                                    trnx.outputs.map((output, idx) => {
+                                                                        return (
+                                                                            <div className="content">
+                                                                                {this.renderJson(output, 0)}
+                                                                            </div>    
+                                                                        )
+                                                                    }):<div className="content stripe"></div>
+                                                                }
+                                                            </div>
+                                                            </Grid>
+                                                            <Grid item xs={12}>
+                                                            <div className="wrapper" style={{marginTop: 20, minWidth: "auto"}}>
+                                                                <div class="wtitle">Signatures</div>
+                                                                <div style={{padding: "10px"}}>
+                                                                    {
+                                                                        trnx.signers && trnx.signers.length > 0?
+                                                                        trnx.signers.map((sig, idx) => {
+                                                                            return (
+                                                                                <div>{sig.signature.bytes}<strong>({sig.partyName})</strong></div>
+                                                                            )
+                                                                        })
+                                                                        :
+                                                                        <div>Transaction has no signatures</div>
+
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                            </Grid>
+                                                        </Grid>
+                                                        
+                                                    </div>
+                                                    </TableCell>
+                                                </TableRow>
+                                                :""
+                                            }
+                                        </React.Fragment>
                                     );
                                 })
                                 : 
                                     <TableRow>
-                                        <TableCell colSpan="4">No Data Found</TableCell>
+                                        <TableCell colSpan="5">No Data Found</TableCell>
                                     </TableRow>
                             }
                             </TableBody>

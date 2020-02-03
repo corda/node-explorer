@@ -1,6 +1,7 @@
 package net.corda.explorer.model.response;
 
 import net.corda.core.contracts.ContractState;
+import net.corda.core.crypto.TransactionSignature;
 
 import java.util.List;
 
@@ -34,6 +35,7 @@ public class TransactionList {
         private List<Signer> signers;
         private String transactionId;
         private String notary;
+        private List<TransactionSignature> signatures;
 
         public List<ContractState> getInputs() {
             return inputs;
@@ -98,18 +100,19 @@ public class TransactionList {
         public void setOutputTypes(List<TypeCount> outputTypes) {
             this.outputTypes = outputTypes;
         }
+
     }
 
     public static class Signer{
-        private String signingKey;
+        private TransactionSignature signature;
         private String partyName;
 
-        public String getSigningKey() {
-            return signingKey;
+        public TransactionSignature getSignature() {
+            return signature;
         }
 
-        public void setSigningKey(String signingKey) {
-            this.signingKey = signingKey;
+        public void setSignature(TransactionSignature signature) {
+            this.signature = signature;
         }
 
         public String getPartyName() {
