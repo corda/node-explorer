@@ -23,3 +23,32 @@
 *:focus {
     outline: none !important;
 }
+
+.selection {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.selection li{
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid #999999;
+    border-radius: 15px;
+    margin: 3px;
+    background-color: #eeeeee;
+}
+
+.selection li span{
+    margin: 0 3px;
+    float: right;
+    right: -6px;
+    position: relative;
+    line-height: 1;
+    color: #AAAAAA;
+    cursor: pointer;
+}
+
+.selection li span:hover{
+    color: #000000;
+}

@@ -1,9 +1,15 @@
 package net.corda.explorer.service.impl;
 
+import net.corda.core.contracts.Amount;
+import net.corda.core.contracts.UniqueIdentifier;
 import net.corda.core.crypto.CryptoUtils;
+import net.corda.core.identity.Party;
 import net.corda.core.transactions.CoreTransaction;
 import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.transactions.WireTransaction;
+import net.corda.explorer.exception.UnsupportedFlowParamException;
+import net.corda.explorer.model.common.FlowInfo;
+import net.corda.explorer.model.common.FlowParam;
 import net.corda.explorer.model.response.FlowData;
 import net.corda.explorer.model.response.TransactionList;
 import net.corda.explorer.rpc.NodeRPCClient;
@@ -11,16 +17,17 @@ import net.corda.explorer.service.ExplorerService;
 import net.corda.explorer.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sun.security.x509.UniqueIdentity;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
+import java.lang.reflect.*;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,7 +52,8 @@ public class TransactionServiceImpl implements TransactionService {
         List<TransactionList.TransactionData> transactionDataList = new ArrayList<>();
         transactionList.setTotalRecords(signedTransactions.size());
         int initial = offset * pageSize;
-        for(int i=initial; i< initial + pageSize; i++){
+        int limit = initial + pageSize > signedTransactions.size()? signedTransactions.size(): initial + pageSize;
+        for(int i=initial; i< limit; i++){
             CoreTransaction coreTransaction = signedTransactions.get(i).getCoreTransaction();
             TransactionList.TransactionData transactionData = new TransactionList.TransactionData();
             transactionData.setOutputs(coreTransaction.getOutputStates());
@@ -91,9 +99,70 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionList;
     }
 
+    @Override
+    public void triggerFlow(FlowInfo flowInfo) throws UnsupportedFlowParamException,
+            ClassNotFoundException, ExecutionException, InterruptedException {
+        Class clazz = Class.forName(flowInfo.getFlowName());
+        List<Object> params = new ArrayList<>();
+        for(FlowParam flowParam : flowInfo.getFlowParams()){
+            params.add(buildFlowParam(flowParam));
+        }
+        if(params.size() == 0){
+            NodeRPCClient.getRpcProxy().startFlowDynamic(clazz).getReturnValue().get();
+        }else {
+            NodeRPCClient.getRpcProxy().startFlowDynamic(clazz, params.toArray()).getReturnValue().get();
+        }
+    }
+
+    private Object buildFlowParam(FlowParam flowParam){
+        switch (flowParam.getParamType().getCanonicalName()){
+            case "net.corda.core.identity.Party":
+                return NodeRPCClient.getRpcProxy().partiesFromName((String)flowParam.getParamValue(), false).iterator().next();
+
+            case "java.lang.String":
+            case "java.lang.StringBuilder":
+            case "java.lang.StringBuffer":
+                return flowParam.getParamValue().toString();
+
+            case "java.lang.Long":
+                return Long.valueOf(flowParam.getParamValue().toString());
+
+            case "java.lang.Integer":
+                return Integer.valueOf(flowParam.getParamValue().toString());
+
+            case "java.land.Double":
+                return Double.valueOf(flowParam.getParamValue().toString());
+
+            case "java.lang.Float":
+                return Float.valueOf(flowParam.getParamValue().toString());
+
+            case "java.math.BigDecimal":
+                return new BigDecimal(flowParam.getParamValue().toString());
+
+            case "java.math.BigInteger":
+                return new BigInteger(flowParam.getParamValue().toString());
+
+            case "java.lang.Boolean":
+                return Boolean.valueOf(flowParam.getParamValue().toString());
+
+            case "java.util.UUID":
+                return UUID.fromString(flowParam.getParamValue().toString());
+
+            case "net.corda.core.contracts.UniqueIdentifier":
+                return new UniqueIdentifier(null, UUID.fromString(flowParam.getParamValue().toString()));
+
+            case "net.corda.core.contracts.Amount":
+                return Amount.parseCurrency(flowParam.getParamValue().toString());
+
+            default:
+                throw new UnsupportedFlowParamException("Type "+ flowParam.getParamType() + " in Flow Paramter not " +
+                        "supported by current version of Node Explorer");
+        }
+    }
+
     private List<File> loadCorDappsToClassPath() {
         //TODO Fetch from Config
-        String CORDAPP_PATH = "/Users/ashutoshmeher/Corda/corda-samples/schedulable-state/build/nodes/Auctioner/cordapps";
+        String CORDAPP_PATH = "/Users/ashutoshmeher/Corda/corda-samples/schedulable-state/build/nodes/PartyA/cordapps";
 
         List<File> jarFiles = filterJarFiles(CORDAPP_PATH);
         addJarFilesToClassPath(jarFiles);
@@ -130,8 +199,8 @@ public class TransactionServiceImpl implements TransactionService {
         }
     }
 
-    private List<FlowData.FlowInfo> loadFlowsInfoFromJarFiles(List<File> jarFiles, List<String> registeredFlows){
-        List<FlowData.FlowInfo> flowInfoList = new ArrayList<>();
+    private List<FlowInfo> loadFlowsInfoFromJarFiles(List<File> jarFiles, List<String> registeredFlows){
+        List<FlowInfo> flowInfoList = new ArrayList<>();
 
         for(String flow: registeredFlows){
             if(!flow.contains("net.corda.core.flows")){
@@ -139,7 +208,7 @@ public class TransactionServiceImpl implements TransactionService {
                     try{
                         URL url = jarFile.toURI().toURL();
                         URLClassLoader classLoader = new URLClassLoader(new URL[]{url}, getClass().getClassLoader());
-                        FlowData.FlowInfo flowInfo = new FlowData.FlowInfo();
+                        FlowInfo flowInfo = new FlowInfo();
                         flowInfo.setFlowName(flow);
                         try {
                             Class flowClass = Class.forName(flow, true, classLoader);
@@ -159,8 +228,8 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     // TODO: Handle multiple constructors
-    private List<FlowData.FlowParam> loadFlowParams(Class flowClass) {
-        List<FlowData.FlowParam> flowParamList = new ArrayList<>();
+    private List<FlowParam> loadFlowParams(Class flowClass) {
+        List<FlowParam> flowParamList = new ArrayList<>();
         StringBuilder constructorID;
 
         // construct params List for each constructor
@@ -171,9 +240,18 @@ public class TransactionServiceImpl implements TransactionService {
             for(Parameter param: constructor.getParameters()){
                 if(param.isNamePresent()){
                     //TODO: Fetch Generic Type of List/Set
-                    FlowData.FlowParam flowParam = new FlowData.FlowParam();
+                    FlowParam flowParam = new FlowParam();
                     flowParam.setParamName(param.getName());
                     flowParam.setParamType(param.getType());
+//                    try {
+//                        if (param.getType().getCanonicalName().equals("java.util.List") ||
+//                                param.getType().getCanonicalName().equals("java.util.Set")) {
+//
+//                            flowParam.setParameterizedType(Class.forName(((ParameterizedType)
+//                                    param.getParameterizedType()).getActualTypeArguments()[0].getTypeName()));
+//                            flowParam.setHasParameterizedType(true);
+//                        }
+//                    }catch (Exception e){}
                     flowParamList.add(flowParam);
 //                    if ((constructorID.length() == 0)) {
 //                        constructorID.append(param.getName() + ":" + param.getType().getSimpleName());

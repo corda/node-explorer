@@ -3,7 +3,8 @@ import * as ActionType from '../Actions';
 const initialState = {
     registeredFlows: [],
     flowParams: [],
-    trnxList:[]
+    trnxList:[],
+    parties: []
 };
 
 const reducer = (state = initialState, action) => {
@@ -24,6 +25,11 @@ const reducer = (state = initialState, action) => {
                 trnxList: action.payload.transactionData,
                 trnxListPage: action.payload.totalRecords
             }       
+        case ActionType.LOAD_PARTIES:
+            return {
+                ...state,
+                parties: action.payload
+            }   
         default:
             return state;
     }

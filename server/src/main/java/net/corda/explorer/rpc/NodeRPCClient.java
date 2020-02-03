@@ -31,6 +31,7 @@ public class NodeRPCClient {
         try {
             rpcProxy = new CordaRPCClient(NetworkHostAndPort.parse(loginRequest.getHostName() + ":" +
                     loginRequest.getPort())).start(loginRequest.getUsername(), loginRequest.getPassword()).getProxy();
+
         } catch (RPCException re) {
             throw new ConnectionException(re.getMessage());
         }

@@ -26,6 +26,20 @@ public class ExplorerServiceImpl implements ExplorerService {
         return partyKeyMap;
     }
 
+    @Override
+    public List<String> getParties() {
+        List<String> parties = new ArrayList<>();
+        List<NodeInfo> nodeInfoList = NodeRPCClient.getRpcProxy().networkMapSnapshot();
+        NodeInfo selfNodeInfo = NodeRPCClient.getRpcProxy().nodeInfo();
+
+        for(NodeInfo nodeInfo: nodeInfoList){
+            if(!(nodeInfo.equals(selfNodeInfo))) {
+                parties.add(nodeInfo.getLegalIdentities().get(0).getName().getOrganisation());
+            }
+        }
+        return parties;
+    }
+
     public NetworkMap getNetworkMap(){
         List<NodeInfo> nodeInfoList = NodeRPCClient.getRpcProxy().networkMapSnapshot();
         List<Party> notaries = NodeRPCClient.getRpcProxy().notaryIdentities();
@@ -67,4 +81,5 @@ public class ExplorerServiceImpl implements ExplorerService {
         partyKeyMap.put(CryptoUtils.toStringShort(party.getOwningKey()), party.getName().getOrganisation());
         return nodeData;
     }
+
 }

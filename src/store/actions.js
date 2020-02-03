@@ -10,6 +10,7 @@ export const CHANGE_SCREEN = "CHANGE_SCREEN";
 export const LOAD_FLOWS = "LOAD_FLOWS";
 export const LOAD_FLOW_PARAMS = "LOAD_FLOW_PARAMS";
 export const LOAD_TRNXS = "LOAD_TRANDSACTIONS";
+export const LOAD_PARTIES = "LOAD_PARTIES";
 
 export const login = (loginRequest) => {
     return function(dispatch) {
@@ -77,6 +78,55 @@ export const fetchTransactions = (page) => {
                     type: LOAD_TRNXS,
                     payload: data.data
                 })
+            }else{
+                errorHandler(data);
+            }
+        })
+        .catch(error => {
+            errorHandler(error);
+        });
+    }
+}
+
+export const fetchParties = () => {
+    return function(dispatch){
+        axios.get("http://localhost:8080/party-list")
+        .then(({data}) => {
+            if(data.status){
+                dispatch({    
+                    type: LOAD_PARTIES,
+                    payload: data.data
+                })
+            }else{
+                errorHandler(data);
+            }
+        })
+        .catch(error => {
+            errorHandler(error);
+        });
+    }
+}
+
+export const startFlow = (flowInfo) => {
+    return function(dispatch){
+        axios.post("http://localhost:8080/start-flow", flowInfo)
+        .then(({data}) => {
+            if(data.status){
+                toastr.success("Flow completed successfully!");
+                axios.post("http://localhost:8080/transaction-list", {pageSize: 10, offset: 0})
+                .then(({data}) => {
+                    if(data.status){
+                        dispatch({    
+                            type: LOAD_TRNXS,
+                            payload: data.data
+                        })
+                    }else{
+                        errorHandler(data);
+                    }
+                })
+                .catch(error => {
+                    errorHandler(error);
+                });
             }else{
                 errorHandler(data);
             }
