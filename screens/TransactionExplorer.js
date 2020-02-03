@@ -1,4 +1,5 @@
-import { Button, FormControl, InputLabel, MenuItem, Select, Table, TableCell, TableContainer, TableHead, TableRow, TextField, TableBody, TablePagination } from '@material-ui/core';
+import { Button, FormControl, InputLabel, MenuItem, Select, Table, TableCell, TableContainer, 
+    TableHead, TableRow, TextField, TableBody, TablePagination } from '@material-ui/core';
 import Modal from '@material-ui/core/Modal';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -14,7 +15,9 @@ class TransactionExplorer extends Component{
         page: {
             pageSize: 10,
             offset: 0
-        }
+        },
+        flowInfo: {},
+        selectedFlow: ""
     }
 
     handleClose = () => {
@@ -35,6 +38,7 @@ class TransactionExplorer extends Component{
         super(props);
         props.fetchFlowList();
         props.fetchTrnxList(this.state.page);
+        props.fetchParties();
     }
 
     handleFlowSelection = (event) => {
@@ -46,12 +50,14 @@ class TransactionExplorer extends Component{
             }
         }
         this.setState({
-            flowSelected: true
+            flowSelected: true,
+            selectedFlow: event.target.value
         });
     }
 
 
     handleChangePage = (event, newPage) => {
+
         this.setState({
             page: {
                 pageSize: 10,
@@ -62,7 +68,7 @@ class TransactionExplorer extends Component{
     }
 
     loadNewPage = () => {
-        _props.fetchTrnxList(this.state.page);
+        this.props.fetchTrnxList(this.state.page);
     }
 
     handleChangeRowsPerPage = (event) => {
@@ -72,6 +78,25 @@ class TransactionExplorer extends Component{
                 offset: this.state.page.offset
             }
         }, this.loadNewPage);
+    }
+
+    prepareFlowDataToStart = () => {
+        console.log("Selected Flow " +  this.state.selectedFlow);
+        let _flowParams = [];
+        for(var i=0; i<this.props.flowParams.length;i++){
+            _flowParams.push({
+                paramName: this.props.flowParams[i].paramName,
+                paramType: this.props.flowParams[i].paramType,
+                paramValue: this.props.flowParams[i].paramValue.value
+            })
+        }
+        this.setState({
+            flowInfo: {
+                flowName: this.state.selectedFlow,
+                flowParams: _flowParams
+            },
+            open: false
+        }, () => this.props.startFlow(this.state.flowInfo));
     }
 
     render(){
@@ -89,7 +114,7 @@ class TransactionExplorer extends Component{
                             <div>
                                 <FormControl style={{minWidth: 250}}>
                                     <InputLabel id="flow-select-label">Select A Flow to Execute</InputLabel>
-                                    <Select labelId="flow-select-label" id="demo-simple-select" onChange={this.handleFlowSelection} autoWidth>
+                                    <Select labelId="flow-select-label" onChange={this.handleFlowSelection} autoWidth>
                                         {
                                             this.props.registeredFlows.map((flow, index) => {
                                                 return(
@@ -104,11 +129,37 @@ class TransactionExplorer extends Component{
                                    {
                                        this.props.flowParams.map((param, index) => {
                                            return (
-                                                // param.paramType === "java.lang.String" ? 
                                                 <div key={index} style={{width: "50%", float: "left"}}>
-                                                    <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
-                                                        <TextField label={param.paramName} fullWidth/> 
-                                                    </div>
+                                                    {
+                                                        // param.paramType === 'java.util.List' || param.paramType === 'java.util.Set'?
+                                                        //     param.parameterizedType === 'net.corda.core.identity.Party' ? 
+                                                        //     <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
+                                                        //         <FormControl fullWidth>
+                                                        //             <InputLabel id="flow-party-label">{param.paramName}</InputLabel>
+                                                        //             <Select labelId="flow-party-label" autoWidth>
+                                                        //                 {
+                                                        //                     this.props.parties.map((party, index) => {
+                                                        //                         return(
+                                                        //                             <MenuItem key={index} value={party}>{party}</MenuItem>
+                                                        //                         );
+                                                        //                     })
+                                                        //                 }
+                                                        //             </Select>
+                                                        //         </FormControl>
+                                                        //         <ul className="selection">
+                                                        //             <li>PartyA<span>x</span></li>
+                                                        //             <li>PartyB<span>x</span></li>
+                                                        //         </ul>
+                                                        //     </div>
+                                                        //     :
+                                                        //     <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
+                                                        //         <TextField label={param.paramName} fullWidth/> 
+                                                        //     </div>  
+                                                        // : 
+                                                        <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
+                                                            <TextField inputRef={ref => {param.paramValue = ref}} label={param.paramName} fullWidth/> 
+                                                        </div>
+                                                    }
                                                 </div> 
                                                 // : null
                                            )
@@ -116,7 +167,7 @@ class TransactionExplorer extends Component{
                                    }
                                    {
                                        this.state.flowSelected?
-                                        <Button style={{float: "right", marginTop: 10}} variant="contained" color="primary">Execute</Button>
+                                        <Button onClick={() => this.prepareFlowDataToStart()} style={{float: "right", marginTop: 10}} variant="contained" color="primary">Execute</Button>
                                        :null
                                    }
                             </div>
@@ -136,7 +187,7 @@ class TransactionExplorer extends Component{
                             </TableHead>
                             <TableBody>
                             {
-                                this.props.transactionList && this.props.transactionList.size > 0 ?
+                                this.props.transactionList && this.props.transactionList.length > 0 ?
                                 this.props.transactionList.map((trnx, index) => {
                                     return (
                                         <TableRow key={index}>
@@ -185,14 +236,17 @@ const mapStateToProps = state => {
         registeredFlows: state.trnx.registeredFlows,
         flowParams: state.trnx.flowParams,
         transactionList: state.trnx.trnxList,
-        totalRecords: state.trnx.trnxListPage
+        totalRecords: state.trnx.trnxListPage,
+        parties: state.trnx.parties
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
         fetchTrnxList: (page) => dispatch(ActionType.fetchTransactions(page)),
+        startFlow: (flowInfo) => dispatch(ActionType.startFlow(flowInfo)),
         fetchFlowList: () => dispatch(ActionType.fetchFlows()),
+        fetchParties: () => dispatch(ActionType.fetchParties()),
         loadFlowParams: (data) => dispatch({type: ActionType.LOAD_FLOW_PARAMS, data: data}) 
     }
 }
