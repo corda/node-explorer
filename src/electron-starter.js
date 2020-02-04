@@ -61,12 +61,11 @@ function startServer(port) {
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
     webPreferences: {
       nodeIntegration: true
     }
-  })
+  });
+  mainWindow.maximize();
 
   const startUrl = url.format({
     pathname: path.join(__dirname, '/../build/index.html'),
@@ -79,7 +78,7 @@ function createWindow () {
   mainWindow.loadURL('http://localhost:3000');
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  //mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {

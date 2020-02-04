@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import * as ActionType from '../store/Actions';
 import { connect } from 'react-redux';
+import * as ActionType from '../store/Actions';
 import '../styles/Network.css';
-
+import BoxWithTitle from '../components/BoxWithTitle';
+import ListBoxWithTitle from '../components/ListBoxWithTitle';
+import Pin from '../components/Pin';
+ 
 class CordaNetwork extends Component{
   
   constructor(props){
@@ -14,15 +17,11 @@ class CordaNetwork extends Component{
   screenHeight = 0;
   screenWidth = 0;
   
-  componentDidMount() {
+  update(){
+    this.forceUpdate();
     this.updateWindowDimensions();
-    window.addEventListener('resize', this.updateWindowDimensions);
   }
 
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateWindowDimensions);
-  }
-  
   updateWindowDimensions() {
     this.screenWidth = window.innerWidth - 120;
     this.screenHeight = this.screenWidth;
@@ -30,7 +29,6 @@ class CordaNetwork extends Component{
 
   getScreenXPos(posX){
       return this.screenWidth * (posX + 180) / 360 - 5;
-
   }
 
   getScreenYPos(posY){
@@ -42,105 +40,48 @@ class CordaNetwork extends Component{
       return Math.log(Math.tan(pos/ 360 * Math.PI + Math.PI/4))
   }
 
+  handleImageLoaded = () => {
+    this.updateWindowDimensions();
+    window.addEventListener('resize', this.update.bind(this));
+    let viewFrame = window.innerHeight - 60;
+    let scroll = (this.screenHeight - viewFrame)/3;
+    this.refs.mapPane.scrollTop = scroll;
+  }
+
   render(){
     return (
-      <div style={{position: "relative", height:window.outerHeight, overflowY: "auto"}}>
-        <img src="WorldMapSquare.png" alt="World Map" width="100%"></img>
+      <div style={{position: "relative", height:window.outerHeight, overflowY: "auto"}} ref="mapPane">
+        <img src="WorldMapSquare.png" alt="World Map" width="100%" onLoad={this.handleImageLoaded.bind(this)}></img>
         <div style={{position: "absolute", top: "0"}}>
           <div className="side-panel" style={{height:window.innerHeight - 60}}>
-              { this.props.self? 
-              <div className="node-container">
-                  <div className="node-type" onClick={()=> this.props.toggleMyIdentity()}>
-                    My Identity
-                    <span>{this.props.showMyIdentity? "-" : "+"}</span>
-                  </div>
-                  <div style={{padding: 10, display: this.props.showMyIdentity? 'block': 'none'}}>
-                      <p style={{fontSize: 16, fontWeight: "bold", marginBottom: 5}}>{this.props.self.name}</p>
-                      <div>
-                        <p><strong>Public Key:</strong> {this.props.self.publicKey}</p>
-                        <p><strong>Location: </strong> {this.props.self.city}, {this.props.self.country}</p>
-                        <p><strong>Address:</strong> {this.props.self.address}</p>
-                      </div>
-                  </div>
-              </div> : null
-              }
-              {
-                  this.props.notaries ? 
-                    <div className="node-container" style={{paddingBottom: 1}}>
-                        <div className="node-type" onClick={()=> this.props.toggleNoraties()}>
-                          Notaries
-                          <span>{this.props.showNotaries? "-" : "+"}</span>
-                        </div>     
-                  <div style={{display: this.props.showNotaries? 'block': 'none'}}>
-                  {
-                  this.props.notaries.map((node, index) => {
-                    return (
-                      <div key={index} style={{padding: 10, margin: 5, backgroundColor: "rgba(0, 0, 0, 0.3)"}}>
-                            <p style={{fontSize: 16, fontWeight: "bold", marginBottom: 5}}>{node.name}</p>
-                            <div>
-                              <p><strong>Public Key:</strong> {node.publicKey}</p>
-                              <p><strong>Location: </strong> {node.city}, {node.country}</p>
-                              <p><strong>Address:</strong> {node.address}</p>
-                            </div>
-                        </div>
-                      )
-                    })
-                  }
-                  </div>
-                  </div> : null
-              }
-              {
-                  this.props.peers ? 
-                      <div className="node-container" style={{paddingBottom: 1}}>
-                          <div className="node-type" onClick={()=> this.props.toggleMyPeers()}>
-                            Peers
-                            <span>{this.props.showPeers? "-" : "+"}</span>
-                          </div>
-                        <div style={{display: this.props.showPeers? 'block': 'none'}}>
-                    {
-                      this.props.peers.map((node, index) => {
-                        return (
-                          <div key={index} style={{padding: 10, margin: 5, backgroundColor: "rgba(0, 0, 0, 0.3)"}}>
-                                <p style={{fontSize: 16, fontWeight: "bold", marginBottom: 5}}>{node.name}</p>
-                                <div>
-                                  <p><strong>Public Key:</strong> {node.publicKey}</p>
-                                  <p><strong>Location: </strong> {node.city}, {node.country}</p>
-                                  <p><strong>Address:</strong> {node.address}</p>
-                                </div>
-                          </div>
-                        )
-                      })
-                    }
-                      </div>
-                      </div> : null
-              }
-              
+              <BoxWithTitle node={this.props.self}/>
+              <ListBoxWithTitle list={this.props.notaries}/>
+              <ListBoxWithTitle list={this.props.peers}/>
           </div>
         </div>
+
         {
           this.props.self? 
-          <div className="pin" style={{top: this.getScreenYPos(this.props.self.lat), left: this.getScreenXPos(this.props.self.lng)}}>
-                    <p>{this.props.self.name}</p>
-          </div>
+          <Pin top={this.getScreenYPos(this.props.self.lat)} 
+                left={this.getScreenXPos(this.props.self.lng)} 
+                name={this.props.self.name}/>
           : null
         }
         {   
             this.props.notaries?
             this.props.notaries.map((node, index) => {
-              return  <div key={index} className="pin" style={{top: this.getScreenYPos(node.lat), left: this.getScreenXPos(node.lng)}}>
-                        <p>{node.name}</p>
-                      </div>
-            })
-            : null
+              return  <Pin top={this.getScreenYPos(node.lat)} 
+                            left={this.getScreenXPos(node.lng)} 
+                            name={node.name}/>
+            }): null
         }
         {
             this.props.peers?
             this.props.peers.map((node, index) => {
-              return  <div key={index} className="pin" style={{top: this.getScreenYPos(node.lat), left: this.getScreenXPos(node.lng)}}>
-                        <p>{node.name}</p>
-                      </div>
-            })
-            : null
+              return  <Pin top={this.getScreenYPos(node.lat)} 
+                            left={this.getScreenXPos(node.lng)} 
+                            name={node.name}/>
+            }): null
         }
       </div>
     );
@@ -151,19 +92,13 @@ const mapStateToProps = state => {
     return {
         self: state.explorer.netWorkMap.self,
         notaries: state.explorer.netWorkMap.notaries,
-        peers: state.explorer.netWorkMap.peers,
-        showMyIdentity: state.explorer.showMyIdentity,
-        showNotaries: state.explorer.showNotaries,
-        showPeers: state.explorer.showPeers
+        peers: state.explorer.netWorkMap.peers
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-      onNetworkLoad: () => dispatch(ActionType.fetchNetworkMap()),
-      toggleMyIdentity: () => dispatch({type: ActionType.TOGGLE_MYIDENTITY}),
-      toggleNoraties: () => dispatch({type: ActionType.TOGGLE_NOTARIES}),
-      toggleMyPeers: () => dispatch({type: ActionType.TOGGLE_PEERS})
+      onNetworkLoad: () => dispatch(ActionType.fetchNetworkMap())
     }
 }
 
