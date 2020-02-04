@@ -85,7 +85,7 @@ class TransactionExplorer extends Component{
     }
 
     prepareFlowDataToStart = () => {
-        console.log("Selected Flow " +  this.state.selectedFlow);
+        //console.log("Selected Flow " +  this.state.selectedFlow);
         let _flowParams = [];
         for(var i=0; i<this.props.flowParams.length;i++){
             _flowParams.push({
@@ -104,9 +104,10 @@ class TransactionExplorer extends Component{
     }
 
     showTrnxDetails = (trnx, index) => {
-        this.state.trnxDetail[index] = !this.state.trnxDetail[index]
+        let txDetail = this.state.trnxDetail;
+        txDetail[index] = !this.state.trnxDetail[index]
         this.setState({
-            trnxDetail : this.state.trnxDetail
+            trnxDetail : txDetail
         });
     }
 
@@ -116,7 +117,7 @@ class TransactionExplorer extends Component{
                 return (
                     jsonObj[key] ?
                     <div style={{marginLeft: lvl * 15}}>
-                        {lvl == 0?
+                        {lvl === 0?
                         <span><strong>{key}: &nbsp;</strong></span>
                         :
                         <span>{key}: &nbsp;</span>

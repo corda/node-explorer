@@ -3,9 +3,6 @@ import {toastr} from 'react-redux-toastr'
 
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOAD_NETWORK = "LOAD_NETWORK";
-export const TOGGLE_MYIDENTITY = "TOGGLE_MYIDENTITY";
-export const TOGGLE_NOTARIES = "TOGGLE_NOTARIES";
-export const TOGGLE_PEERS = "TOGGLE_PEERS";
 export const CHANGE_SCREEN = "CHANGE_SCREEN";
 export const LOAD_FLOWS = "LOAD_FLOWS";
 export const LOAD_FLOW_PARAMS = "LOAD_FLOW_PARAMS";
