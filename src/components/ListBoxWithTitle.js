@@ -12,7 +12,7 @@ const ListBoxWithTitle = props => {
       <React.Fragment>
         { props.list? 
           <div className="node-container" style={{paddingBottom: 1}}>
-            <div className="node-type" onClick={toggle}>Notaries
+            <div className="node-type" onClick={toggle}>{props.title}
                 <span>{show? "-" : "+"}</span>
             </div>     
             
@@ -23,9 +23,9 @@ const ListBoxWithTitle = props => {
                       <div key={index} style={{padding: 10, margin: 5, backgroundColor: "rgba(0, 0, 0, 0.3)"}}>
                             <p style={{fontSize: 16, fontWeight: "bold", marginBottom: 5}}>{node.name}</p>
                             <div>
-                              <p><strong>Public Key:</strong> {node.publicKey}</p>
+                              <p><strong>Public Key: </strong> {node.publicKey}</p>
                               <p><strong>Location: </strong> {node.city}, {node.country}</p>
-                              <p><strong>Address:</strong> {node.address}</p>
+                              <p><strong>Address: </strong> {node.address}</p>
                             </div>
                         </div>
                       )

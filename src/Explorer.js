@@ -6,6 +6,9 @@ import Header from './components/Header';
 import Login from './screens/Login';
 import SideMenu from './components/SideMenu';
 import * as ActionType from './store/Actions';
+import VaultExplorer from './screens/VaultExplorer';
+import Dashboard from './screens/Dashboard';
+import Settings from './screens/Settings';
 
 let _props = {};
 
@@ -26,8 +29,12 @@ const explorer = props => {
                 <div style={{marginLeft: 120}}>
                   <div className="content-pane">
                     {
-                      props.currentPage === 1 ? <CordaNetwork></CordaNetwork> : 
-                      props.currentPage === 2 ? <TransactionExplorer></TransactionExplorer> : <CordaNetwork></CordaNetwork>
+                      props.currentPage === 0 ? <Dashboard/>: 
+                      props.currentPage === 1 ? <CordaNetwork/>: 
+                      props.currentPage === 2 ? <TransactionExplorer/>:
+                      props.currentPage === 3 ? <VaultExplorer/>: 
+                      props.currentPage === 4 ? <Settings/>: 
+                      <Dashboard/>
                     }
                   </div> 
                 </div> 

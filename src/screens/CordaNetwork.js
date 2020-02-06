@@ -55,8 +55,8 @@ class CordaNetwork extends Component{
         <div style={{position: "absolute", top: "0"}}>
           <div className="side-panel" style={{height:window.innerHeight - 60}}>
               <BoxWithTitle node={this.props.self}/>
-              <ListBoxWithTitle list={this.props.notaries}/>
-              <ListBoxWithTitle list={this.props.peers}/>
+              <ListBoxWithTitle list={this.props.notaries} title="Notaries"/>
+              <ListBoxWithTitle list={this.props.peers} title="Peers"/>
           </div>
         </div>
 

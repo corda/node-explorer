@@ -188,7 +188,7 @@ public class TransactionServiceImpl implements TransactionService {
                 return Amount.parseCurrency(flowParam.getParamValue().toString());
 
             default:
-                throw new UnsupportedFlowParamException("Type "+ flowParam.getParamType() + " in Flow Paramter not " +
+                throw new UnsupportedFlowParamException("Type "+ flowParam.getParamType() + " in Flow Parameter not " +
                         "supported by current version of Node Explorer");
         }
     }
