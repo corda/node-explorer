@@ -85,7 +85,6 @@ class TransactionExplorer extends Component{
     }
 
     prepareFlowDataToStart = () => {
-        //console.log("Selected Flow " +  this.state.selectedFlow);
         let _flowParams = [];
         for(var i=0; i<this.props.flowParams.length;i++){
             _flowParams.push({
@@ -116,7 +115,7 @@ class TransactionExplorer extends Component{
             Object.keys(jsonObj).map((key) => {
                 return (
                     jsonObj[key] ?
-                    <div style={{marginLeft: lvl * 15}}>
+                    <div style={{marginLeft: lvl * 15, paddingBottom: lvl === 0?5:0}}>
                         {lvl === 0?
                         <span><strong>{key}: &nbsp;</strong></span>
                         :
@@ -226,7 +225,8 @@ class TransactionExplorer extends Component{
                                 this.props.transactionList.map((trnx, index) => {
                                     return (
                                         <React.Fragment>
-                                            <TableRow key={index} style={{cursor: "pointer"}} onClick={() => this.showTrnxDetails(trnx, index)}>
+                                            <TableRow key={index} style={{cursor: "pointer"}} onClick={() => this.showTrnxDetails(trnx, index)}
+                                                className={this.state.trnxDetail[index]?"open":null}>
                                                 <TableCell style={{width: 40}}>
                                                     {
                                                         this.state.trnxDetail[index]?

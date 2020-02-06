@@ -7,6 +7,7 @@ import {reducer as toastrReducer} from 'react-redux-toastr'
 import commonReducer from './store/reducers/CommonReducer';
 import explorerReducer from './store/reducers/ExplorerReducer';
 import txReducer from './store/reducers/TxExplorerReducer'
+import vltReducer from './store/reducers/VaultReducer'
 import thunk from "redux-thunk";
 import Explorer from './Explorer';
 import './index.css';
@@ -19,7 +20,8 @@ const rootReducer = combineReducers({
     common: commonReducer,
     explorer: explorerReducer,
     trnx: txReducer,
-    toastr: toastrReducer
+    toastr: toastrReducer,
+    vault: vltReducer
 });
 
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));

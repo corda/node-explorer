@@ -1,9 +1,3 @@
-.page-title{
-    height: 50px;
-    color: #000000;
-    font-size: 25px;
-}
-
 .page-title > span {
     display: block;
     float: left;
@@ -65,11 +59,10 @@ tr th{
 .wrapper{
     display: inline-block;
     width: 100%;
-    /* padding: 10px 20px; */
     text-align: left;
     border: 1px solid #CCCCCC;
     vertical-align: middle;
-
+    background: #ffffff;
 }
 
 .wtitle {
@@ -105,3 +98,11 @@ tr th{
       padding: 10px;
       background: #FFFFFF;
   }
+
+tr.open td {
+    color: #FFFFFF;
+}
+
+tr.open {
+    background: #DF0B1B !important;
+}

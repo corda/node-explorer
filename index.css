@@ -22,3 +22,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.page-title{
+  height: 50px;
+  color: #000000;
+  font-size: 25px;
+}
