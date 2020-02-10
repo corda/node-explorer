@@ -2,6 +2,7 @@
     width: 100%;
     display: inline-block;
     font-size: 14px;
+    position: relative;
 }
 
 .filter-title{
@@ -37,6 +38,10 @@
 .state-wrapper{
     margin: 0 20px 20px 0;
     border: 1px solid #CCCCCC;
+}
+
+.state-wrapper:hover {
+    box-shadow: 2px 1px 4px #999;
 }
 
 .meta-container{

@@ -63,6 +63,7 @@ tr th{
     border: 1px solid #CCCCCC;
     vertical-align: middle;
     background: #ffffff;
+    height: 100%;
 }
 
 .wtitle {
@@ -71,16 +72,24 @@ tr th{
     padding: 6px 10px;
     color: #FFFFFF;
     font-weight: bold;
+    height: 20px;
 }
 
 .cmd-wrapper{
-    display: inline-block;
-    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    flex-direction: column;
 }
 
+tr:hover {
+    box-shadow: 1px 1px 2px #999;
+}
 
 .stripe {
     color: black;
+    height: calc(100% - 52px);
     background: repeating-linear-gradient(
       45deg,
       transparent,
