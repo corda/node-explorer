@@ -46,7 +46,7 @@ class VaultExplorer extends Component{
                             this.props.states.map((state, idx) => {
                                 return (
                                     <div className="state-wrapper">
-                                        <div class="state-title">
+                                        <div className="state-title">
                                             <div style={{display:"inline=block"}}>{this.props.statesMetaData?this.props.statesMetaData[idx].contractStateClassName:null}</div>
                                             <div className="tx">StateRef: {state.ref.txhash}({state.ref.index})</div>
                                         </div>
@@ -60,7 +60,7 @@ class VaultExplorer extends Component{
                                                 {
                                                     this.props.statesMetaData?
                                                     <React.Fragment>
-                                                        <div class="bar">
+                                                        <div className="bar">
                                                             <div className={this.props.statesMetaData[idx].relevancyStatus==='RELEVANT'?'blue':'grey'}>{this.props.statesMetaData[idx].relevancyStatus}</div>
                                                             <div className={this.props.statesMetaData[idx].status==='CONSUMED'?'red':'green'}>{this.props.statesMetaData[idx].status}</div>
                                                         </div>

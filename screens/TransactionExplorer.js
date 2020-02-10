@@ -273,7 +273,14 @@ class TransactionExplorer extends Component{
                                                             </Grid>
                                                             <Grid item xs={2}>
                                                                 <div className="cmd-wrapper">
-                                                                    <ForwardIcon style={{color: "#DE0A1B", fontSize: 100, marginTop: "50%"}}></ForwardIcon>
+                                                                    <ForwardIcon style={{color: "#DE0A1B", fontSize: 120}}></ForwardIcon>
+                                                                    <div style={{position: "relative", top: -15}}>
+                                                                        {trnx.commands.map( command => {
+                                                                            return (<div>{command}</div>)
+                                                                                }
+                                                                            )
+                                                                        }
+                                                                    </div>
                                                                 </div>
                                                             </Grid>
                                                             <Grid item xs={5}>
@@ -292,7 +299,7 @@ class TransactionExplorer extends Component{
                                                             </div>
                                                             </Grid>
                                                             <Grid item xs={12}>
-                                                            <div className="wrapper" style={{marginTop: 20, minWidth: "auto"}}>
+                                                            <div className="wrapper" style={{marginTop: 20, minWidth: "auto", height: "auto"}}>
                                                                 <div class="wtitle">Signatures</div>
                                                                 <div style={{padding: "10px"}}>
                                                                     {
