@@ -82,8 +82,8 @@ public class TransactionServiceImpl implements TransactionService {
 
                 Map<String, Integer> inputTypeMap = new HashMap<>();
                 transactionData.getInputs().forEach(contractState -> {
-                    String type = contractState.getClass().getCanonicalName().substring(
-                            contractState.getClass().getCanonicalName().lastIndexOf(".") + 1);
+                    String type = contractState.getClass().toString().substring(
+                            contractState.getClass().toString().lastIndexOf(".") + 1);
                     if (inputTypeMap.containsKey(type)) {
                         inputTypeMap.put(type, inputTypeMap.get(type) + 1);
                     } else {
@@ -103,8 +103,8 @@ public class TransactionServiceImpl implements TransactionService {
             transactionData.setOutputs(coreTransaction.getOutputStates());
             Map<String, Integer> outputTypeMap = new HashMap<>();
             coreTransaction.getOutputStates().forEach(contractState -> {
-                String type = contractState.getClass().getCanonicalName().substring(
-                        contractState.getClass().getCanonicalName().lastIndexOf(".") + 1);
+                String type = contractState.getClass().toString().substring(
+                        contractState.getClass().toString().lastIndexOf(".") + 1);
                 if (outputTypeMap.containsKey(type)) {
                     outputTypeMap.put(type, outputTypeMap.get(type) + 1);
                 } else {

@@ -4,12 +4,136 @@ import PageTitle from '../components/PageTitle';
 import Filter from '../components/Filter';
 import { connect } from 'react-redux';
 import * as ActionType from '../store/Actions';
-import { Grid } from '@material-ui/core';
+import { Grid, TablePagination } from '@material-ui/core';
 
 class VaultExplorer extends Component{
 
+    state = {
+        filter: {
+            offset: 0,
+            pageSize: 10,
+            stateTypes: [],
+            statuses: [],
+            relevancies: [],
+            parties: [],
+            notaries: []
+        }
+    }
+
+    handleFilterUpdate = (type, value, checked) => {
+        
+        if(type === 'stateType'){
+            this.handleStateFilters(value, checked);
+        }else if(type === 'status'){
+            this.handleStatusFilters(value, checked);
+        }else if(type === 'relevancy'){
+            this.handleRelevancyFilters(value, checked);
+        }else if(type === 'party'){
+            this.handlePartyFilters(value, checked);
+        }
+    }
+
+    handleStateFilters = (value, checked) => {
+        let list = this.state.filter.stateTypes;
+        if(checked)
+            list.push(value);
+        else
+            list.pop(value);
+
+        this.setState({
+            filter: {
+                offset: this.state.filter.offset,
+                pageSize: this.state.filter.pageSize,
+                stateTypes: list,
+                statuses: this.state.filter.statuses,
+                relevancies: this.state.filter.relevancies,
+                parties: this.state.filter.parties,
+                notaries: this.state.filter.notaries
+            }
+        }, this.loadNewPage);
+    }
+
+    handleStatusFilters = (value, checked) => {
+        let list = this.state.filter.statuses;
+        if(checked)
+            list.push(value);
+        else
+            list.pop(value);
+
+        this.setState({
+            filter: {
+                offset: this.state.filter.offset,
+                pageSize: this.state.filter.pageSize,
+                stateTypes: this.state.filter.stateTypes,
+                statuses: list,
+                relevancies: this.state.filter.relevancies,
+                parties: this.state.filter.parties,
+                notaries: this.state.filter.notaries
+            }
+        }, this.loadNewPage)
+    }
+
+    handleRelevancyFilters = (value, checked) => {
+        let list = this.state.filter.relevancies;
+        if(checked)
+            list.push(value);
+        else
+            list.pop(value);
+
+        this.setState({
+            filter: {
+                offset: this.state.filter.offset,
+                pageSize: this.state.filter.pageSize,
+                stateTypes: this.state.filter.stateTypes,
+                statuses: this.state.filter.statuses,
+                relevancies: list,
+                parties: this.state.filter.parties,
+                notaries: this.state.filter.notaries
+            }
+        }, this.loadNewPage)
+    }
+
+    handlePartyFilters = (value, checked) => {
+        let list = this.state.filter.parties;
+        if(checked)
+            list.push(value);
+        else
+            list.pop(value);
+
+        this.setState({
+            filter: {
+                offset: this.state.filter.offset,
+                pageSize: this.state.filter.pageSize,
+                stateTypes: this.state.filter.stateTypes,
+                statuses: this.state.filter.statuses,
+                relevancies: this.state.filter.relevancies,
+                parties: list,
+                notaries: this.state.filter.notaries
+            }
+        }, this.loadNewPage)
+    }
+
+    handleChangePage = (event, newPage) => {
+        this.setState({
+            filter: {
+                pageSize: 10,
+                offset: newPage,
+                stateTypes: this.state.filter.stateTypes,
+                statuses: this.state.filter.statuses,
+                relevancies: this.state.filter.relevancies,
+                parties: this.state.filter.parties,
+                notaries: this.state.filter.notaries
+            }
+        }, this.loadNewPage);
+    }
+
     componentDidMount(){
-        this.props.fetchStates({});   
+        this.loadNewPage();
+        this.props.fetchFilters();
+    }
+
+    loadNewPage = () => {
+        this.props.fetchStates(this.state.filter);   
     }
 
     renderJson = (jsonObj, lvl) => {
@@ -39,7 +163,7 @@ class VaultExplorer extends Component{
             <React.Fragment>
                 <PageTitle value="Vault Explorer" />
                 <Grid container spacing={0}>
-                    <Grid item xs={3}><Filter/></Grid>
+                    <Grid item xs={3}><Filter filter={this.props.filters} handler={(type, value, checked) => this.handleFilterUpdate(type, value, checked)}/></Grid>
                     <Grid item xs={9}>
                         {
                             this.props.states?
@@ -81,6 +205,21 @@ class VaultExplorer extends Component{
                                     </div>
                                 )
                             }): null
+
+                        }
+                        {
+                            !this.props.states || this.props.states.length === 0? 
+                            <div className="empty">No States Recorded in The Vault</div>:null
+                        }
+                        {
+                            <TablePagination style= {{padding: "0 10px", marginTop: -15}}
+                                rowsPerPageOptions={[]}
+                                component="div"
+                                count={this.props.totalResults}
+                                rowsPerPage={this.state.filter.pageSize}
+                                page={this.state.filter.offset}
+                                onChangePage={this.handleChangePage}
+                            />
                         }
                     </Grid>
                 </Grid>
@@ -93,13 +232,16 @@ class VaultExplorer extends Component{
 const mapStateToProps = state => {
     return {
         states: state.vault.vaultStates,
-        statesMetaData: state.vault.stateMetadata
+        statesMetaData: state.vault.stateMetadata,
+        totalResults: state.vault.totalResults,
+        filters: state.vault.filters
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-      fetchStates: (filters) => dispatch(ActionType.fetchStates())
+        fetchStates: (filters) => dispatch(ActionType.fetchStates(filters)),
+        fetchFilters: () => dispatch(ActionType.fetchVaultFilters())
     }
 }
 

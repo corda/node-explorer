@@ -1,9 +1,10 @@
 buildscript {
     ext.corda_release_group = 'net.corda'
-    ext.corda_release_version = '4.1'
+    ext.corda_release_version = '4.3'
     ext.corda_gradle_plugins_version = '4.0.42'
     ext.spring_boot_version = '2.0.2.RELEASE'
     ext.spring_boot_gradle_plugin_version = '2.0.2.RELEASE'
+    ext.kotlin_version = '1.2.71'
     repositories {
         mavenCentral()
         jcenter()
@@ -35,7 +36,12 @@ targetCompatibility = 1.8
 
 dependencies {
     compile "$corda_release_group:corda-rpc:$corda_release_version"
-    compile "$corda_release_group:corda-jackson:$corda_release_version"
+    compile ("$corda_release_group:corda-jackson:$corda_release_version"){
+        exclude group: 'com.fasterxml.jackson.module', module: 'jackson-module-kotlin'
+    }
+
+    compile group: 'com.fasterxml.jackson.module', name: 'jackson-module-kotlin', version: '2.10.2'
+
     compile("org.springframework.boot:spring-boot-starter-websocket:$spring_boot_version")
     compile group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
     testCompile("org.springframework.boot:spring-boot-starter-test")
