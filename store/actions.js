@@ -9,6 +9,7 @@ export const LOAD_FLOW_PARAMS = "LOAD_FLOW_PARAMS";
 export const LOAD_TRNXS = "LOAD_TRANDSACTIONS";
 export const LOAD_PARTIES = "LOAD_PARTIES";
 export const LOAD_STATES = "LOAD_STATES";
+export const LOAD_VAULT_FILTERS = "LOAD_VAULT_FILTERS";
 
 export const login = (loginRequest) => {
     return function(dispatch) {
@@ -137,7 +138,7 @@ export const startFlow = (flowInfo) => {
 
 export const fetchStates = (filters) => {
     return function(dispatch){
-        axios.get("http://localhost:8080/vault-query")
+        axios.post("http://localhost:8080/vault-query", filters)
         .then(({data}) => {
             if(data.status){
                 dispatch({    
@@ -153,6 +154,26 @@ export const fetchStates = (filters) => {
         });
     }
 }
+
+export const fetchVaultFilters = () => {
+    return function(dispatch){
+        axios.get("http://localhost:8080/vault-filter")
+        .then(({data}) => {
+            if(data.status){
+                dispatch({    
+                    type: LOAD_VAULT_FILTERS,
+                    payload: data.data
+                })
+            }else{
+                errorHandler(data);
+            }
+        })
+        .catch(error => {
+            errorHandler(error);
+        });
+    }
+}
+
 
 const errorHandler = error => {
     if(error.message){

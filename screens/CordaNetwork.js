@@ -70,7 +70,7 @@ class CordaNetwork extends Component{
         {   
             this.props.notaries?
             this.props.notaries.map((node, index) => {
-              return  <Pin top={this.getScreenYPos(node.lat)} 
+              return  <Pin key={index} top={this.getScreenYPos(node.lat)} 
                             left={this.getScreenXPos(node.lng)} 
                             name={node.name}/>
             }): null
@@ -78,7 +78,7 @@ class CordaNetwork extends Component{
         {
             this.props.peers?
             this.props.peers.map((node, index) => {
-              return  <Pin top={this.getScreenYPos(node.lat)} 
+              return  <Pin key={index}  top={this.getScreenYPos(node.lat)} 
                             left={this.getScreenXPos(node.lng)} 
                             name={node.name}/>
             }): null

@@ -112,10 +112,10 @@ class TransactionExplorer extends Component{
 
     renderJson = (jsonObj, lvl) => {
         return(
-            Object.keys(jsonObj).map((key) => {
+            Object.keys(jsonObj).map((key, index) => {
                 return (
                     jsonObj[key] ?
-                    <div style={{marginLeft: lvl * 15, paddingBottom: lvl === 0?5:0}}>
+                    <div key={index} style={{marginLeft: lvl * 15, paddingBottom: lvl === 0?5:0}}>
                         {lvl === 0?
                         <span><strong>{key}: &nbsp;</strong></span>
                         :
@@ -257,7 +257,7 @@ class TransactionExplorer extends Component{
                                                         <Grid container spacing={0}>
                                                             <Grid item xs={5}>
                                                                 <div className="wrapper">
-                                                                    <div class="wtitle">Inputs</div>
+                                                                    <div className="wtitle">Inputs</div>
                                                                     {
                                                                         trnx.inputs?
                                                                         trnx.inputs.map((input, idx) => {
@@ -285,7 +285,7 @@ class TransactionExplorer extends Component{
                                                             </Grid>
                                                             <Grid item xs={5}>
                                                             <div className="wrapper">
-                                                                <div class="wtitle">Outputs</div>
+                                                                <div className="wtitle">Outputs</div>
                                                                 {
                                                                     trnx.outputs && trnx.outputs.length > 0?
                                                                     trnx.outputs.map((output, idx) => {
@@ -300,7 +300,7 @@ class TransactionExplorer extends Component{
                                                             </Grid>
                                                             <Grid item xs={12}>
                                                             <div className="wrapper" style={{marginTop: 20, minWidth: "auto", height: "auto"}}>
-                                                                <div class="wtitle">Signatures</div>
+                                                                <div className="wtitle">Signatures</div>
                                                                 <div style={{padding: "10px"}}>
                                                                     {
                                                                         trnx.signers && trnx.signers.length > 0?
@@ -334,7 +334,9 @@ class TransactionExplorer extends Component{
                             </TableBody>
                         </Table>
                     </TableContainer>
-                    <TablePagination
+                    {
+                    this.props.totalRecords?
+                        <TablePagination
                         rowsPerPageOptions={[10, 25, 50, 100]}
                         component="div"
                         count={this.props.totalRecords}
@@ -342,7 +344,9 @@ class TransactionExplorer extends Component{
                         page={this.state.page.offset}
                         onChangePage={this.handleChangePage}
                         onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                    />
+                        />
+                        :null
+                    }
                 </div>
             </div>
         );

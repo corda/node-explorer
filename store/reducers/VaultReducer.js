@@ -12,8 +12,14 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 vaultStates: action.payload.states,
-                stateMetadata: action.payload.statesMetadata
+                stateMetadata: action.payload.statesMetadata,
+                totalResults: action.payload.totalStatesAvailable
             } 
+        case ActionType.LOAD_VAULT_FILTERS:
+            return {
+                ...state,
+                filters: action.payload
+            }  
         default:
             return state;
     }
