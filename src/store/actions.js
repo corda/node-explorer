@@ -13,6 +13,7 @@ export const LOAD_VAULT_FILTERS = "LOAD_VAULT_FILTERS";
 
 export const login = (loginRequest) => {
     return function(dispatch) {
+        console.log(loginRequest);
         axios.post("http://localhost:8080/login", loginRequest)
         .then(({data}) => {
             if(data.status){
