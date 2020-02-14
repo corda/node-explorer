@@ -53,8 +53,9 @@ class Login extends Component {
       const errors = this.validate();
       const hasErrors = Object.keys(errors).some(x => errors[x]);
       if(!hasErrors){
-        delete this.state.touched;
-        this.props.onLoginAction(this.state);
+        let data = {...this.state};
+        delete data.touched;
+        this.props.onLoginAction(data);
       }
     }
 
