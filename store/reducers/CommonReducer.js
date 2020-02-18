@@ -1,6 +1,7 @@
 import * as ActionType from '../Actions';
 
 const initialState = {
+    isServerAwake: false,
     isLoggedIn: false,
     currentPage: 1
 };
@@ -8,6 +9,11 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
     switch ( action.type ) {
+        case ActionType.SERVER_AWAKE:
+            return {
+                ...state,
+                isServerAwake: true
+            }
         case ActionType.LOGIN_SUCCESS:
             localStorage.setItem('isLoggedIn', true);    
             return {

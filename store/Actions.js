@@ -1,7 +1,9 @@
 import axios from 'axios';
+import axiosRetry from "axios-retry";
 import {toastr} from 'react-redux-toastr'
 
 export const LOAD_APP_STATE = "LOAD_APP_STATE";
+export const SERVER_AWAKE = 'SERVER_AWAKE';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOAD_NETWORK = "LOAD_NETWORK";
 export const CHANGE_SCREEN = "CHANGE_SCREEN";
@@ -12,6 +14,28 @@ export const LOAD_PARTIES = "LOAD_PARTIES";
 export const LOAD_STATES = "LOAD_STATES";
 export const LOAD_VAULT_FILTERS = "LOAD_VAULT_FILTERS";
 
+export const server_awake = () => {
+    // Sets flag notifying successful access to Spring server
+    return function(dispatch) {
+        const retryClient = axios.create({ baseURL: 'http://localhost:8080' })
+        axiosRetry(retryClient, { retries: 5, retryDelay: (retryCount) => {
+                return retryCount * 2000;
+            }});
+        retryClient.get("/server_awake")
+            .then(({data}) => {
+                console.log(data);
+                if(data.status) {
+                    dispatch({
+                        type: SERVER_AWAKE,
+                    })
+                }
+            })
+            // TODO: throw custom internal error
+            .catch(error => {
+                errorHandler(error);
+            });
+    }
+}
 
 export const login = (loginRequest) => {
     return function(dispatch) {
