@@ -6,6 +6,7 @@
     "@material-ui/core": "^4.8.2",
     "@material-ui/icons": "^4.5.1",
     "axios": "^0.19.1",
+    "axios-retry": "^3.1.2",
     "logger": "0.0.1",
     "mathjs": "^6.2.5",
     "react": "^16.12.0",
