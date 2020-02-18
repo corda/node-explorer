@@ -61,8 +61,8 @@ class Login extends Component {
 
     render() {
 
-      const errors = this.validate();
-      const isDisabled = Object.keys(errors).some(x => errors[x]);
+      //const errors = this.validate();
+      //const isDisabled = Object.keys(errors).some(x => errors[x]);
 
       return(
         <div style={{position: 'relative'}}>
@@ -94,14 +94,15 @@ class Login extends Component {
                     onBlur={this.handleBlur("username")}/>
                   </Grid>
                   <Grid item xs={12}>
-                    <TextField label="Password" type="password" fullWidth onInput={e => this.setState({password: e.target.value})}  
+                    <TextField label="Password" type="password" fullWidth onChange={e => this.setState({password: e.target.value})}  
                     error={this.shouldMarkError("password")} 
                     helperText={this.shouldMarkError("password") ? 'Please Enter Password' : ''}
                     onBlur={this.handleBlur("password")}/>
                   </Grid>
                 </Grid>
                 <Grid item xs={12} style={{marginTop: "20px", textAlign:"right"}}>
-                  <Button variant="contained" type="submit" color="primary" onClick={this.doLogin} disabled={isDisabled}>Connect</Button>
+                  {/* <Button variant="contained" type="submit" color="primary" onClick={this.doLogin} disabled={isDisabled}>Connect</Button> */}
+                  <Button variant="contained" type="submit" color="primary" onClick={this.props.onLoginAction}>Connect</Button>
                 </Grid>
               </Grid>
             </div>
@@ -117,8 +118,15 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
+    const data = {
+      hostName: "localhost",
+      port: "10006",
+      username: "user1",
+      password: "test",
+    }
     return {
-      onLoginAction:(data) => dispatch(ActionType.login(data))
+      //onLoginAction:(data) => dispatch(ActionType.login(data))
+      onLoginAction:() => dispatch(ActionType.login(data))
     }
 }
 

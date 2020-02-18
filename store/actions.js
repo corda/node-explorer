@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {toastr} from 'react-redux-toastr'
 
+export const LOAD_APP_STATE = "LOAD_APP_STATE";
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOAD_NETWORK = "LOAD_NETWORK";
 export const CHANGE_SCREEN = "CHANGE_SCREEN";
@@ -11,13 +12,13 @@ export const LOAD_PARTIES = "LOAD_PARTIES";
 export const LOAD_STATES = "LOAD_STATES";
 export const LOAD_VAULT_FILTERS = "LOAD_VAULT_FILTERS";
 
+
 export const login = (loginRequest) => {
     return function(dispatch) {
-        console.log(loginRequest);
         axios.post("http://localhost:8080/login", loginRequest)
         .then(({data}) => {
             if(data.status){
-                dispatch({    
+                dispatch({
                         type: LOGIN_SUCCESS,
                         payload: data.data
                 })
@@ -175,6 +176,18 @@ export const fetchVaultFilters = () => {
     }
 }
 
+export const updateSettings = (settings) => {
+    axios.post("http://localhost:8080/settings/cordapp-dir", settings)
+    .then(({data}) => {
+        if(data.status){
+            toastr.success("CorDapp Directory successfully!");
+        }else{
+            errorHandler(data);
+        }
+    }).catch( error => {
+        errorHandler(error);
+    });
+}
 
 const errorHandler = error => {
     if(error.message){
