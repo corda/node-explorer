@@ -1,4 +1,4 @@
-package net.corda.explorer.model.request;
+package net.corda.explorer.model.response;
 
 import net.corda.core.identity.Party;
 

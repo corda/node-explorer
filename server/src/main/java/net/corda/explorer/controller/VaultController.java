@@ -3,7 +3,7 @@ package net.corda.explorer.controller;
 import net.corda.core.contracts.ContractState;
 import net.corda.core.node.services.Vault;
 import net.corda.explorer.exception.GenericException;
-import net.corda.explorer.model.request.VaultFilter;
+import net.corda.explorer.model.response.VaultFilter;
 import net.corda.explorer.model.request.VaultFilterSelection;
 import net.corda.explorer.model.response.MessageResponseEntity;
 import net.corda.explorer.service.VaultService;

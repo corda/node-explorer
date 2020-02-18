@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import CordaNetwork from './screens/CordaNetwork';
 import TransactionExplorer from './screens/TransactionExplorer';
@@ -10,40 +10,38 @@ import VaultExplorer from './screens/VaultExplorer';
 import Dashboard from './screens/Dashboard';
 import Settings from './screens/Settings';
 
-let _props = {};
+class Explorer extends Component {
 
-export const loginSuccess = () => {
-   _props.onLoginSuccess();
-}
+    componentDidMount(){
+        this.props.getApplicationState();
+    }
 
-const explorer = props => {
-
-  _props = props;
-
-    return (
-      <div>
-          {props.isLoggedIn ?
-            <div>
-                <Header/>
-                <SideMenu></SideMenu>
-                <div style={{marginLeft: 120}}>
-                  <div className="content-pane">
-                    {
-                      props.currentPage === 0 ? <Dashboard/>: 
-                      props.currentPage === 1 ? <CordaNetwork/>: 
-                      props.currentPage === 2 ? <TransactionExplorer/>:
-                      props.currentPage === 3 ? <VaultExplorer/>: 
-                      props.currentPage === 4 ? <Settings/>: 
-                      <Dashboard/>
-                    }
+    render(){
+      return (
+        <div>
+            {this.props.isLoggedIn ?
+              <div>
+                  <Header/>
+                  <SideMenu></SideMenu>
+                  <div style={{marginLeft: 120}}>
+                    <div className="content-pane">
+                      {
+                        this.props.currentPage === 0 ? <Dashboard/>: 
+                        this.props.currentPage === 1 ? <CordaNetwork/>: 
+                        this.props.currentPage === 2 ? <TransactionExplorer/>:
+                        this.props.currentPage === 3 ? <VaultExplorer/>: 
+                        this.props.currentPage === 4 ? <Settings/>: 
+                        <Dashboard/>
+                      }
+                    </div> 
                   </div> 
-                </div> 
-            </div> 
-            : 
-            <Login></Login>
-          }
-      </div>
-    );
+              </div> 
+              : 
+              <Login></Login>
+            }
+        </div>
+      );
+    }
 }
 
 const mapStateToProps = state => {
@@ -56,7 +54,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
       onLoginSuccess: () => dispatch({type: ActionType.LOGIN_SUCCESS}),
+      getApplicationState: () => dispatch({type: ActionType.LOAD_APP_STATE}),
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(explorer);
+export default connect(mapStateToProps, mapDispatchToProps)(Explorer);
