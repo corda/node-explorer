@@ -9,19 +9,28 @@ import java.io.*;
 
 @Service
 public class SettingsServiceImpl implements SettingsService {
+
+    private Settings settings;
+
     @Override
-    public Settings getApplicationSettings() throws IOException {
+    public void loadApplicationSettings() {
         try (BufferedReader br= new BufferedReader(
                 new FileReader("settings.conf"))){
             String st;
-            while ((st = br.readLine()) != null)
-                System.out.println(st);
-
-            return null;
-
-        }catch (FileNotFoundException e){
-            return null;
+            settings = new Settings();
+            while ((st = br.readLine()) != null){
+                if(st.startsWith("cordapp_dir:")){
+                    settings.setCordappDirectory(st.substring(13));
+                }
+            }
+        }catch (IOException e ){
+            throw new GenericException(e.getMessage());
         }
+    }
+
+    @Override
+    public Settings getApplicationSettings() {
+        return settings;
     }
 
     @Override
@@ -31,6 +40,7 @@ public class SettingsServiceImpl implements SettingsService {
         }catch (Exception e){
             throw new GenericException(e.getMessage());
         }
+        settings.setCordappDirectory(path);
         return null;
     }
 }

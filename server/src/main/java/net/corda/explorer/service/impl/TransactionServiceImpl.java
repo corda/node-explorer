@@ -11,10 +11,12 @@ import net.corda.core.transactions.WireTransaction;
 import net.corda.explorer.exception.UnsupportedFlowParamException;
 import net.corda.explorer.model.common.FlowInfo;
 import net.corda.explorer.model.common.FlowParam;
+import net.corda.explorer.model.common.Settings;
 import net.corda.explorer.model.response.FlowData;
 import net.corda.explorer.model.response.TransactionList;
 import net.corda.explorer.rpc.NodeRPCClient;
 import net.corda.explorer.service.ExplorerService;
+import net.corda.explorer.service.SettingsService;
 import net.corda.explorer.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +40,9 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Autowired
     private ExplorerService explorerService;
+
+    @Autowired
+    private SettingsService settingsService;
 
     @Override
     public FlowData getFlowList() {
@@ -158,15 +163,19 @@ public class TransactionServiceImpl implements TransactionService {
                 return flowParam.getParamValue().toString();
 
             case "java.lang.Long":
+            case "long":
                 return Long.valueOf(flowParam.getParamValue().toString());
 
             case "java.lang.Integer":
+            case "int":
                 return Integer.valueOf(flowParam.getParamValue().toString());
 
             case "java.land.Double":
+            case "double":
                 return Double.valueOf(flowParam.getParamValue().toString());
 
             case "java.lang.Float":
+            case "float":
                 return Float.valueOf(flowParam.getParamValue().toString());
 
             case "java.math.BigDecimal":
@@ -195,7 +204,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     private List<File> loadCorDappsToClassPath() {
         //TODO Fetch from Config
-        String CORDAPP_PATH = "/Users/ashutoshmeher/Corda/corda-samples/schedulable-state/build/nodes/PartyA/cordapps";
+        String CORDAPP_PATH = settingsService.getApplicationSettings().getCordappDirectory();
 
         List<File> jarFiles = filterJarFiles(CORDAPP_PATH);
         addJarFilesToClassPath(jarFiles);

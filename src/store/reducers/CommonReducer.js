@@ -3,7 +3,8 @@ import * as ActionType from '../Actions';
 const initialState = {
     isServerAwake: false,
     isLoggedIn: false,
-    currentPage: 1
+    currentPage: 1,
+    profile: {}
 };
 
 
@@ -15,25 +16,37 @@ const reducer = (state = initialState, action) => {
                 isServerAwake: true
             }
         case ActionType.LOGIN_SUCCESS:
-            localStorage.setItem('isLoggedIn', true);    
+            sessionStorage.setItem('isLoggedIn', true);    
+            sessionStorage.setItem('profile', JSON.stringify(action.payload));   
             return {
                 ...state,
-                isLoggedIn: true
+                isLoggedIn: true,
+                profile: action.payload
             }
         case ActionType.CHANGE_SCREEN:
-            localStorage.setItem('currentPage', action.page);    
+            sessionStorage.setItem('currentPage', action.page);    
             return {
                 ...state,
                 currentPage: action.page
             }
         case ActionType.LOAD_APP_STATE: 
-            const isLoggedIn = localStorage.getItem("isLoggedIn");
-            const currentPage = Number(localStorage.getItem("currentPage"));
+            const isLoggedIn = sessionStorage.getItem("isLoggedIn");
+            const currentPage = Number(sessionStorage.getItem("currentPage"));
+            const profile =  JSON.parse(sessionStorage.getItem('profile'));   
             return{
                 ...state,
                 isLoggedIn: isLoggedIn,
-                currentPage: currentPage
+                currentPage: currentPage,
+                profile: profile
             }
+        case ActionType.LOGOUT: 
+            sessionStorage.removeItem("isLoggedIn");
+            sessionStorage.removeItem("currentPage");
+            return{
+                ...state,
+                isLoggedIn: false,
+                currentPage: 0
+            }    
         default:
             return state;    
     }

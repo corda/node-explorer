@@ -3,6 +3,7 @@ package net.corda.explorer.controller;
 import net.corda.explorer.exception.GenericException;
 import net.corda.explorer.model.request.LoginRequest;
 import net.corda.explorer.model.response.MessageResponseEntity;
+import net.corda.explorer.model.response.Profile;
 import net.corda.explorer.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +21,9 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public MessageResponseEntity<String> login(@RequestBody LoginRequest loginRequest){
+    public MessageResponseEntity<Profile> login(@RequestBody LoginRequest loginRequest){
         try {
-            loginService.loginToNode(loginRequest);
-            return new MessageResponseEntity<>();
+            return new MessageResponseEntity<>(loginService.loginToNode(loginRequest));
         }catch (Exception e){
             throw new GenericException(e.getMessage());
         }

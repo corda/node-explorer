@@ -6,6 +6,7 @@ import java.io.IOException;
 
 public interface SettingsService {
 
-    Settings getApplicationSettings() throws IOException;
+    void loadApplicationSettings();
+    Settings getApplicationSettings();
     Void updateCorDappDirectory(String path) throws IOException;
 }
