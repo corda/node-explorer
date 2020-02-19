@@ -1,4 +1,5 @@
 import { Grid, TextField } from "@material-ui/core";
+import axios from 'axios';
 import React, { Component } from "react";
 import PageTitle from "../components/PageTitle";
 import * as ActionType from "../store/Actions";
@@ -11,6 +12,26 @@ class Settings extends Component{
 
     dirty = {
         cordappDirectory: false
+    }
+
+    componentDidMount(){
+        this.loadSettings();
+    }
+
+    loadSettings = () => {
+        axios.get("http://localhost:8080/settings")
+        .then(({data}) => {
+            if(data.status){
+                const settings = data.data;
+                this.setState({
+                    cordappDirectory: settings.cordappDirectory
+                });
+            }else{
+                ActionType.errorHandler(data);
+            }
+        }).catch( error => {
+            ActionType.errorHandler(error);
+        });
     }
 
     handleChange = (event, type) => {
@@ -37,6 +58,7 @@ class Settings extends Component{
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
                             <TextField label="Enter the path of your cordapps directory" fullWidth
+                            value={this.state.cordappDirectory}
                             onChange={event => this.handleChange(event, 'cordappDir')} 
                             onBlur={() => this.handleBlur('cordappDir')} />
                         </Grid>

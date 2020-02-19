@@ -75,6 +75,7 @@ span.MuiTypography-root.MuiFormControlLabel-label {
     text-align: right;
     font-size: 12px;
     margin-top: -5px;
+    margin-bottom: 5px;
 }
 
 .bar div{

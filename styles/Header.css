@@ -12,3 +12,17 @@
     width: 100px;
     padding: 15px 20px;
 }
+
+.profile{
+    float: right;
+    margin: 10px 20px;
+}
+
+.profile > div{
+    left: -12px !important;
+    min-width: 120px;
+}
+
+.profile-dtls{
+    padding: 10px;
+}

@@ -5,6 +5,7 @@ import {toastr} from 'react-redux-toastr'
 export const LOAD_APP_STATE = "LOAD_APP_STATE";
 export const SERVER_AWAKE = 'SERVER_AWAKE';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGOUT = 'LOGOUT';
 export const LOAD_NETWORK = "LOAD_NETWORK";
 export const CHANGE_SCREEN = "CHANGE_SCREEN";
 export const LOAD_FLOWS = "LOAD_FLOWS";
@@ -23,7 +24,7 @@ export const server_awake = () => {
             }});
         retryClient.get("/server_awake")
             .then(({data}) => {
-                console.log(data);
+                //console.log(data);
                 if(data.status) {
                     dispatch({
                         type: SERVER_AWAKE,
@@ -213,7 +214,7 @@ export const updateSettings = (settings) => {
     });
 }
 
-const errorHandler = error => {
+export const errorHandler = error => {
     if(error.message){
         toastr.error(error.message);
     }
