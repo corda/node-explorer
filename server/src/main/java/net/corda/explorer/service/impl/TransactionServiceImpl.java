@@ -101,20 +101,24 @@ public class TransactionServiceImpl implements TransactionService {
             });
             transactionData.setSigners(signerList);
 
-            List<ContractState> inputList = new ArrayList<>();
+            List<TransactionList.StateAndType> inputList = new ArrayList<>();
             if(coreTransaction.getInputs().size()>0){
                 for(StateRef stateRef: coreTransaction.getInputs()){
                     SignedTransaction signedTransaction = NodeRPCClient.getRpcProxy()
                             .internalFindVerifiedTransaction(stateRef.getTxhash());
-                    if(signedTransaction!=null)
-                        inputList.add(signedTransaction.getCoreTransaction().getOutputStates().get(stateRef.getIndex()));
+                    if(signedTransaction!=null) {
+                        inputList.add(new TransactionList.StateAndType(
+                                signedTransaction.getCoreTransaction().getOutputStates().get(stateRef.getIndex()),
+                                signedTransaction.getCoreTransaction().getOutputStates().get(stateRef.getIndex())
+                                        .getClass().getCanonicalName()));
+                    }
                 }
                 transactionData.setInputs(inputList);
 
                 Map<String, Integer> inputTypeMap = new HashMap<>();
-                transactionData.getInputs().forEach(contractState -> {
-                    String type = contractState.getClass().toString().substring(
-                            contractState.getClass().toString().lastIndexOf(".") + 1);
+                transactionData.getInputs().forEach(stateAndType -> {
+                    String type = stateAndType.getState().getClass().toString().substring(
+                            stateAndType.getState().getClass().toString().lastIndexOf(".") + 1);
                     if (inputTypeMap.containsKey(type)) {
                         inputTypeMap.put(type, inputTypeMap.get(type) + 1);
                     } else {
@@ -131,7 +135,15 @@ public class TransactionServiceImpl implements TransactionService {
                 transactionData.setInputTypes(inputTypeCountList);
             }
 
-            transactionData.setOutputs(coreTransaction.getOutputStates());
+            List<TransactionList.StateAndType> outputList = new ArrayList<>();
+            coreTransaction.getOutputStates().forEach(contractState -> {
+                outputList.add(new TransactionList.StateAndType(
+                        contractState,
+                        contractState.getClass().getCanonicalName()
+                ));
+            });
+            transactionData.setOutputs(outputList);
+
             Map<String, Integer> outputTypeMap = new HashMap<>();
             coreTransaction.getOutputStates().forEach(contractState -> {
                 String type = contractState.getClass().toString().substring(
@@ -313,7 +325,7 @@ public class TransactionServiceImpl implements TransactionService {
         List<FlowInfo> flowInfoList = new ArrayList<>();
 
         for(String flow: registeredFlows){
-            if(!flow.contains("net.corda.core.flows")){
+            if(!flow.contains("net.corda.core.flows") && !flow.contains("com.r3.corda.lib")){
                 for(File jarFile: jarFiles){
                     try{
                         URL url = jarFile.toURI().toURL();

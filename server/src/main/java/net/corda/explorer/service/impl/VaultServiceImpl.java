@@ -105,8 +105,8 @@ public class VaultServiceImpl implements VaultService {
     @Override
     public VaultFilter  getVaultFilters() {
         VaultFilter filter = new VaultFilter();
-
-        Vault.Page<ContractState> result = NodeRPCClient.getRpcProxy().vaultQuery(ContractState.class);
+        QueryCriteria.VaultQueryCriteria queryCriteria = new QueryCriteria.VaultQueryCriteria().withStatus(Vault.StateStatus.ALL);
+        Vault.Page<ContractState> result = NodeRPCClient.getRpcProxy().vaultQueryByCriteria(queryCriteria, ContractState.class);
         Map<String, String> stateTypeMap = new TreeMap<>();
         result.getStates().forEach(stateAndRef -> {
             stateTypeMap.put(stateAndRef.getState().getData().getClass().toString().substring(

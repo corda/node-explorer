@@ -27,29 +27,28 @@ public class TransactionList {
     }
 
     public static class TransactionData {
-        private List<ContractState> inputs;
+        private List<StateAndType> inputs;
         private List<TypeCount> inputTypes;
-        private List<ContractState> outputs;
+        private List<StateAndType> outputs;
         private List<TypeCount> outputTypes;
         private List<String> commands;
         private List<Signer> signers;
         private String transactionId;
         private String notary;
-        private List<TransactionSignature> signatures;
 
-        public List<ContractState> getInputs() {
+        public List<StateAndType> getInputs() {
             return inputs;
         }
 
-        public void setInputs(List<ContractState> inputs) {
+        public void setInputs(List<StateAndType> inputs) {
             this.inputs = inputs;
         }
 
-        public List<ContractState> getOutputs() {
+        public List<StateAndType> getOutputs() {
             return outputs;
         }
 
-        public void setOutputs(List<ContractState> outputs) {
+        public void setOutputs(List<StateAndType> outputs) {
             this.outputs = outputs;
         }
 
@@ -142,6 +141,32 @@ public class TransactionList {
 
         public void setCount(int count) {
             this.count = count;
+        }
+    }
+
+    public static class StateAndType{
+        private ContractState state;
+        private String type;
+
+        public StateAndType(ContractState state, String type) {
+            this.state = state;
+            this.type = type;
+        }
+
+        public ContractState getState() {
+            return state;
+        }
+
+        public void setState(ContractState state) {
+            this.state = state;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
         }
     }
 }

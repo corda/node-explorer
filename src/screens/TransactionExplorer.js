@@ -244,7 +244,7 @@ class TransactionExplorer extends Component{
                                                         <ExpandMoreIcon></ExpandMoreIcon> 
                                                     }
                                                 </TableCell>
-                                                <TableCell style={{maxWidth: 200, fontSize: 12}}>{trnx.transactionId}</TableCell>
+                                                <TableCell style={{fontSize: 12, maxWidth: 275}}>{trnx.transactionId}</TableCell>
                                                 <TableCell>{trnx.inputTypes? trnx.inputTypes.map((typeCnt, index) => {
                                                     return ( <div key={index}> {typeCnt.type + "(" + typeCnt.count + ")" }</div>);
                                                 }) :"-"}
@@ -273,7 +273,8 @@ class TransactionExplorer extends Component{
                                                                         trnx.inputs.map((input, idx) => {
                                                                             return (
                                                                                 <div className="content">
-                                                                                    {this.renderJson(input, 0)}
+                                                                                    <div className="stitle">{input.type}</div>
+                                                                                    {this.renderJson(input.state, 0)}
                                                                                 </div>
                                                                             )
                                                                         }):
@@ -301,7 +302,8 @@ class TransactionExplorer extends Component{
                                                                     trnx.outputs.map((output, idx) => {
                                                                         return (
                                                                             <div className="content">
-                                                                                {this.renderJson(output, 0)}
+                                                                                <div className="stitle">{output.type}</div>
+                                                                                {this.renderJson(output.state, 0)}
                                                                             </div>    
                                                                         )
                                                                     }):<div className="content stripe"></div>
@@ -311,7 +313,7 @@ class TransactionExplorer extends Component{
                                                             <Grid item xs={12}>
                                                             <div className="wrapper" style={{marginTop: 20, minWidth: "auto", height: "auto"}}>
                                                                 <div className="wtitle">Signatures</div>
-                                                                <div style={{padding: "10px"}}>
+                                                                <div style={{padding: "10px", backgroundColor: "#FFFFFF"}}>
                                                                     {
                                                                         trnx.signers && trnx.signers.length > 0?
                                                                         trnx.signers.map((sig, idx) => {
