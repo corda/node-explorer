@@ -8,6 +8,7 @@ import net.corda.core.crypto.CryptoUtils;
 import net.corda.core.transactions.CoreTransaction;
 import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.transactions.WireTransaction;
+import net.corda.explorer.exception.GenericException;
 import net.corda.explorer.exception.UnsupportedFlowParamException;
 import net.corda.explorer.model.common.FlowInfo;
 import net.corda.explorer.model.common.FlowParam;
@@ -44,10 +45,35 @@ public class TransactionServiceImpl implements TransactionService {
     @Autowired
     private SettingsService settingsService;
 
+    private List<File> jarFiles;
+
+    private List<String> typeList =  new ArrayList<>(
+            Arrays.asList("net.corda.core.identity.Party",
+                    "java.lang.String",
+                    "java.lang.StringBuilder",
+                    "java.lang.StringBuffer",
+                    "java.lang.Long",
+                    "long",
+                    "java.lang.Integer",
+                    "int",
+                    "java.land.Double",
+                    "double",
+                    "java.lang.Float",
+                    "float",
+                    "java.math.BigDecimal",
+                    "java.math.BigInteger",
+                    "java.lang.Boolean",
+                    "java.util.UUID",
+                    "net.corda.core.contracts.UniqueIdentifier",
+                    "net.corda.core.contracts.Amount"
+            )
+    );
+
     @Override
     public FlowData getFlowList() {
         FlowData flowData = new FlowData();
         List<File> jarFiles = loadCorDappsToClassPath();
+        this.jarFiles = jarFiles;
         flowData.setFlowInfoList(loadFlowsInfoFromJarFiles(jarFiles, NodeRPCClient.getRpcProxy().registeredFlows()));
         return flowData;
     }
@@ -153,6 +179,32 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     private Object buildFlowParam(FlowParam flowParam){
+        if(flowParam.getFlowParams()!=null && flowParam.getFlowParams().size()>0){
+            List<Object> params = new ArrayList<>();
+            Class clazz = null;
+            try {
+                clazz = Class.forName(flowParam.getParamType().getCanonicalName());
+            }catch (ClassNotFoundException e){
+                clazz = loadClassFromCordappJar(flowParam.getParamType().getCanonicalName());
+                if(clazz == null){
+                    throw new GenericException("Cannot load flow class "+ flowParam.getParamType().toString());
+                }
+            }
+
+            try {
+                for (FlowParam param : flowParam.getFlowParams()) {
+                    params.add(buildFlowParam(param));
+                }
+
+                for (Constructor<?> ctor : clazz.getConstructors()) {
+                    if (ctor.getParameters().length == params.size())
+                        return ctor.newInstance(params.toArray());
+                }
+            }catch (Exception e){
+                throw new GenericException(e.getMessage());
+            }
+        }
+
         switch (flowParam.getParamType().getCanonicalName()){
             case "net.corda.core.identity.Party":
                 return NodeRPCClient.getRpcProxy().partiesFromName((String)flowParam.getParamValue(), false).iterator().next();
@@ -241,6 +293,22 @@ public class TransactionServiceImpl implements TransactionService {
         }
     }
 
+    private Class loadClassFromCordappJar(String clazzStr){
+        Class clazz = null;
+        for(File jarFile: jarFiles){
+            try{
+                URL url = jarFile.toURI().toURL();
+                URLClassLoader classLoader = new URLClassLoader(new URL[]{url}, getClass().getClassLoader());
+                try {
+                    clazz = Class.forName(clazzStr, false, classLoader);
+                    break;
+                } catch (ClassNotFoundException e) { }
+            }catch (MalformedURLException e){
+            }
+        }
+        return clazz;
+    }
+
     private List<FlowInfo> loadFlowsInfoFromJarFiles(List<File> jarFiles, List<String> registeredFlows){
         List<FlowInfo> flowInfoList = new ArrayList<>();
 
@@ -279,31 +347,44 @@ public class TransactionServiceImpl implements TransactionService {
             boolean defaultConstructorMarker = false; // sentinel for skipping kotlin default constructor
             constructorID = new StringBuilder();
 
-            for(Parameter param: constructor.getParameters()){
-                if(param.isNamePresent()){
-                    //TODO: Fetch Generic Type of List/Set
-                    FlowParam flowParam = new FlowParam();
-                    flowParam.setParamName(param.getName());
-                    flowParam.setParamType(param.getType());
-//                    try {
-//                        if (param.getType().getCanonicalName().equals("java.util.List") ||
-//                                param.getType().getCanonicalName().equals("java.util.Set")) {
+            flowParamList = collectObjectTypes(constructor.getParameters());
+
+//            for(Parameter param: constructor.getParameters()){
+//                if(param.isNamePresent()){
+//                    //TODO: Fetch Generic Type of List/Set
+//                    FlowParam flowParam = new FlowParam();
+//                    flowParam.setParamName(param.getName());
+//                    flowParam.setParamType(param.getType());
+//                    if(typeList.contains(param.getType().toString()) && param.getType().getConstructors().length != 0){
 //
-//                            flowParam.setParameterizedType(Class.forName(((ParameterizedType)
-//                                    param.getParameterizedType()).getActualTypeArguments()[0].getTypeName()));
-//                            flowParam.setHasParameterizedType(true);
+//                        if(param.getType().getConstructors().length==1){
+//                            flowParam.setFlowParams(collectObjectTypes(param.getType().getConstructors()[0].getParameters()));
+//                        }else {
+//                            for (int i = 0; i < param.getType().getConstructors().length; i++) {
+//
+//                            }
 //                        }
-//                    }catch (Exception e){}
-                    flowParamList.add(flowParam);
-//                    if ((constructorID.length() == 0)) {
-//                        constructorID.append(param.getName() + ":" + param.getType().getSimpleName());
-//                    } else {
-//                        constructorID.append(", ").append(param.getName() + ":" + param.getType().getSimpleName());
 //                    }
-                }else{
-                    defaultConstructorMarker = true;
-                }
-            }
+//
+////                    try {
+////                        if (param.getType().getCanonicalName().equals("java.util.List") ||
+////                                param.getType().getCanonicalName().equals("java.util.Set")) {
+////
+////                            flowParam.setParameterizedType(Class.forName(((ParameterizedType)
+////                                    param.getParameterizedType()).getActualTypeArguments()[0].getTypeName()));
+////                            flowParam.setHasParameterizedType(true);
+////                        }
+////                    }catch (Exception e){}
+//                    flowParamList.add(flowParam);
+////                    if ((constructorID.length() == 0)) {
+////                        constructorID.append(param.getName() + ":" + param.getType().getSimpleName());
+////                    } else {
+////                        constructorID.append(", ").append(param.getName() + ":" + param.getType().getSimpleName());
+////                    }
+//                }else{
+//                    defaultConstructorMarker = true;
+//                }
+//            }
 
             // skip if contains type: DefaultConstructorMarker
             if (defaultConstructorMarker) continue;
@@ -312,6 +393,32 @@ public class TransactionServiceImpl implements TransactionService {
             // constructorToParams.putIfAbsent(constructorID.toString(), params);
         }
 
+        return flowParamList;
+    }
+
+    private List<FlowParam> collectObjectTypes(Parameter[] parameters){
+        List<FlowParam> flowParamList = new ArrayList<>();
+        for(Parameter param: parameters) {
+            if (param.isNamePresent()) {
+                //TODO: Fetch Generic Type of List/Set
+                FlowParam flowParam = new FlowParam();
+                flowParam.setParamName(param.getName());
+                flowParam.setParamType(param.getType());
+
+                if(!typeList.contains(param.getType().toString()) && param.getType().getConstructors().length != 0){
+                    if(param.getType().getConstructors().length==1){
+                        flowParam.setFlowParams(
+                                collectObjectTypes(param.getType().getConstructors()[0].getParameters()));
+                    }else {
+                        for (int i = 0; i < param.getType().getConstructors().length; i++) {
+
+                        }
+                    }
+                }
+
+                flowParamList.add(flowParam);
+            }
+        }
         return flowParamList;
     }
 }

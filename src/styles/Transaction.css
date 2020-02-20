@@ -115,3 +115,10 @@ tr.open td {
 tr.open {
     background: #DF0B1B !important;
 }
+
+.inner-form {
+    background: #EEEEEE;
+    margin: 10px 0;
+    width: 100%;
+    float: left;
+}

@@ -14,6 +14,7 @@ export const LOAD_TRNXS = "LOAD_TRANDSACTIONS";
 export const LOAD_PARTIES = "LOAD_PARTIES";
 export const LOAD_STATES = "LOAD_STATES";
 export const LOAD_VAULT_FILTERS = "LOAD_VAULT_FILTERS";
+export const UPDATE_PARAM_VAL = "UPDATE_PARAM_VAL";
 
 export const server_awake = () => {
     // Sets flag notifying successful access to Spring server

@@ -30,6 +30,11 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 parties: action.payload
             }   
+        case ActionType.UPDATE_PARAM_VAL:
+            return{
+                ...state,
+                flowParams: action.data
+            }    
         default:
             return state;
     }
