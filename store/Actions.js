@@ -15,6 +15,10 @@ export const LOAD_PARTIES = "LOAD_PARTIES";
 export const LOAD_STATES = "LOAD_STATES";
 export const LOAD_VAULT_FILTERS = "LOAD_VAULT_FILTERS";
 export const UPDATE_PARAM_VAL = "UPDATE_PARAM_VAL";
+export const CLOSE_TX_MODAL = "CLOSE_TX_MODAL";
+export const OPEN_TX_MODAL = "OPEN_TX_MODAL";
+export const SET_FLOW_SELECTION_FLAG = "SET_FLOW_SELECTION_FLAG";
+export const SET_INFLIGHT_FLOW_FLAG = "SET_INFLIGHT_FLOW_FLAG";
 
 export const server_awake = () => {
     // Sets flag notifying successful access to Spring server
@@ -140,6 +144,7 @@ export const startFlow = (flowInfo) => {
         .then(({data}) => {
             if(data.status){
                 toastr.success("Flow completed successfully!");
+                dispatch({type: SET_INFLIGHT_FLOW_FLAG, data: false});
                 axios.post("http://localhost:8080/transaction-list", {pageSize: 10, offset: 0})
                 .then(({data}) => {
                     if(data.status){
@@ -155,10 +160,12 @@ export const startFlow = (flowInfo) => {
                     errorHandler(error);
                 });
             }else{
+                dispatch({type: SET_INFLIGHT_FLOW_FLAG, data: false});
                 errorHandler(data);
             }
         })
         .catch(error => {
+            dispatch({type: SET_INFLIGHT_FLOW_FLAG, data: false});
             errorHandler(error);
         });
     }
