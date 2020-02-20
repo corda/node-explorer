@@ -1,8 +1,7 @@
-import { Button, FormControl, InputLabel, MenuItem, Select, Table, TableCell, TableContainer, 
-    TableHead, TableRow, TextField, TableBody, TablePagination, Grid } from '@material-ui/core';
+import { Button, FormControl, Grid, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField } from '@material-ui/core';
 import Modal from '@material-ui/core/Modal';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ForwardIcon from '@material-ui/icons/Forward';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -85,21 +84,14 @@ class TransactionExplorer extends Component{
     }
 
     prepareFlowDataToStart = () => {
-        let _flowParams = [];
-        for(var i=0; i<this.props.flowParams.length;i++){
-            _flowParams.push({
-                paramName: this.props.flowParams[i].paramName,
-                paramType: this.props.flowParams[i].paramType,
-                paramValue: this.props.flowParams[i].paramValue.value
-            })
-        }
         this.setState({
             flowInfo: {
                 flowName: this.state.selectedFlow,
-                flowParams: _flowParams
-            },
-            open: false
-        }, () => this.props.startFlow(this.state.flowInfo));
+                flowParams: this.props.flowParams
+            }
+        }, 
+        () => this.props.startFlow(this.state.flowInfo)
+        );
     }
 
     showTrnxDetails = (trnx, index) => {
@@ -132,6 +124,57 @@ class TransactionExplorer extends Component{
         )
     }
 
+    renderParamForm(innerForm, paramList, title, deep){
+        return(
+            <React.Fragment>
+            {
+                innerForm? 
+                    <div className="inner-form" style={{padding: deep? "10px 0px 0px 0px":  "10px 0"}}>
+                        <div style={{padding: deep? 0:  "0 10px"}}>
+                            <div style={{textTransform:"capitalize"}}><strong>{title}</strong></div>
+                            {
+                                paramList.map((param, index) => this.renderInnerForm(param, index, true))
+                            }
+                        </div>
+                    </div>
+                :
+                this.props.flowParams?this.props.flowParams.map((param, index) => this.renderInnerForm(param, index, false)):null
+            }
+            </React.Fragment>
+        );
+    }
+
+    renderInnerForm(param, index, deep){
+        return(
+            param.flowParams && param.flowParams.length > 1? 
+                this.renderParamForm(true, param.flowParams, param.paramName, deep)
+            :        
+            <div key={index} style={{width: "50%", float: "left"}}>
+                {
+                param.paramType === 'net.corda.core.identity.Party'?
+                    <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
+                        <FormControl fullWidth>
+                            <InputLabel>{param.paramName}</InputLabel>
+                                <Select onChange={e => {param.paramValue = e.target.value}} autoWidth>
+                                    {
+                                        this.props.parties.map((party, index) => {
+                                            return(
+                                                <MenuItem key={index} value={party}>{party}</MenuItem>
+                                            );
+                                        })
+                                    }
+                                </Select>
+                            </FormControl>
+                    </div>
+                :
+                    <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
+                        <TextField onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} fullWidth/> 
+                    </div>
+                }
+            </div> 
+        );
+    }
+
     render(){
         return(
             <div style={{padding: 20}}>
@@ -141,6 +184,7 @@ class TransactionExplorer extends Component{
                     <Modal
                         open={this.state.open}
                         onClose={this.handleClose}
+                        style={{overflow:"scroll"}}
                         >
                         <div className="paper">
                             <h3 id="simple-modal-title">Please Select a Flow to Execute</h3>
@@ -159,50 +203,16 @@ class TransactionExplorer extends Component{
                                 </FormControl>
                             </div>
                             <div>
-                                   {
-                                       this.props.flowParams.map((param, index) => {
-                                           return (
-                                                <div key={index} style={{width: "50%", float: "left"}}>
-                                                    {
-                                                        // param.paramType === 'java.util.List' || param.paramType === 'java.util.Set'?
-                                                        //     param.parameterizedType === 'net.corda.core.identity.Party' ? 
-                                                        //     <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
-                                                        //         <FormControl fullWidth>
-                                                        //             <InputLabel id="flow-party-label">{param.paramName}</InputLabel>
-                                                        //             <Select labelId="flow-party-label" autoWidth>
-                                                        //                 {
-                                                        //                     this.props.parties.map((party, index) => {
-                                                        //                         return(
-                                                        //                             <MenuItem key={index} value={party}>{party}</MenuItem>
-                                                        //                         );
-                                                        //                     })
-                                                        //                 }
-                                                        //             </Select>
-                                                        //         </FormControl>
-                                                        //         <ul className="selection">
-                                                        //             <li>PartyA<span>x</span></li>
-                                                        //             <li>PartyB<span>x</span></li>
-                                                        //         </ul>
-                                                        //     </div>
-                                                        //     :
-                                                        //     <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
-                                                        //         <TextField label={param.paramName} fullWidth/> 
-                                                        //     </div>  
-                                                        // : 
-                                                        <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
-                                                            <TextField inputRef={ref => {param.paramValue = ref}} label={param.paramName} fullWidth/> 
-                                                        </div>
-                                                    }
-                                                </div> 
-                                                // : null
-                                           )
-                                       })
-                                   }
-                                   {
-                                       this.state.flowSelected?
-                                        <Button onClick={() => this.prepareFlowDataToStart()} style={{float: "right", marginTop: 10}} variant="contained" color="primary">Execute</Button>
-                                       :null
-                                   }
+                                {
+                                    this.renderParamForm(false)
+                                }
+                                {
+                                    this.state.flowSelected?
+                                    <div style={{width: "100%", float:"left", marginTop: 10}}>
+                                    <Button onClick={() => this.prepareFlowDataToStart()} style={{float: "right", marginTop: 10}} variant="contained" color="primary">Execute</Button>
+                                    </div>
+                                    :null
+                                }
                             </div>
                         </div>
                     </Modal>
