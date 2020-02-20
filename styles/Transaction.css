@@ -62,7 +62,7 @@ tr th{
     text-align: left;
     border: 1px solid #CCCCCC;
     vertical-align: middle;
-    background: #ffffff;
+    background: #F1F1F1;
     height: 100%;
 }
 
@@ -73,6 +73,19 @@ tr th{
     color: #FFFFFF;
     font-weight: bold;
     height: 20px;
+}
+
+.stitle{
+    border: 1px solid #CCC;
+    margin-top: -1px;
+    margin-left: -11px;
+    padding: 5px 10px;
+    position: absolute;
+    width: calc(100% - 20px);
+    top: 0;
+    background: #ECECEC;
+    font-weight: bold;
+    color: #DF0B1B;
 }
 
 .cmd-wrapper{
@@ -89,7 +102,7 @@ tr:hover {
 
 .stripe {
     color: black;
-    height: calc(100% - 52px);
+    height: calc(100% - 90px);
     background: repeating-linear-gradient(
       45deg,
       transparent,
@@ -106,6 +119,10 @@ tr:hover {
       flex-direction: column;
       padding: 10px;
       background: #FFFFFF;
+      border: 1px solid #CCC;
+      margin: 5px;
+      position: relative;
+      padding-top: 35px;
   }
 
 tr.open td {
