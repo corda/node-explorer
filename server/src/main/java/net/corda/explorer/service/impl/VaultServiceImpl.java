@@ -68,13 +68,13 @@ public class VaultServiceImpl implements VaultService {
                     .collect(Collectors.toList());
         }
 
-        QueryCriteria queryCriteria = null;
+        QueryCriteria.VaultQueryCriteria queryCriteria = null;
         if(parties!=null && parties.size()>0) {
             queryCriteria = new QueryCriteria.VaultQueryCriteria()
                     .withRelevancyStatus(relevancyStatus)
                     .withContractStateTypes(stateType)
                     .withStatus(status);
-            queryCriteria = queryCriteria.and(new QueryCriteria.VaultQueryCriteria().withParticipants(parties));
+            queryCriteria = addParticipants(queryCriteria, parties);
         }else{
              queryCriteria = new QueryCriteria.VaultQueryCriteria()
                      .withRelevancyStatus(relevancyStatus)
@@ -84,6 +84,22 @@ public class VaultServiceImpl implements VaultService {
 
         return NodeRPCClient.getRpcProxy()
                 .vaultQueryByWithPagingSpec(ContractState.class, queryCriteria, pageSpecification);
+    }
+
+    private QueryCriteria.VaultQueryCriteria addParticipants(QueryCriteria.VaultQueryCriteria criteria, List<Party> parties){
+        return new QueryCriteria.VaultQueryCriteria(
+                criteria.getStatus(),
+                criteria.getContractStateTypes(),
+                criteria.getStateRefs(),
+                criteria.getNotary(),
+                criteria.getSoftLockingCondition(),
+                criteria.getTimeCondition(),
+                criteria.getRelevancyStatus(),
+                criteria.getConstraintTypes(),
+                criteria.getConstraints(),
+                parties,
+                criteria.getExternalIds()
+        );
     }
 
     @Override

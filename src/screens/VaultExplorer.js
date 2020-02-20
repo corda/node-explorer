@@ -38,7 +38,7 @@ class VaultExplorer extends Component{
         if(checked)
             list.push(value);
         else
-            list.pop(value);
+            list = list.filter((val) => val!==value);
 
         this.setState({
             filter: {
@@ -58,8 +58,8 @@ class VaultExplorer extends Component{
         if(checked)
             list.push(value);
         else
-            list.pop(value);
-
+            list = list.filter((val) => val!==value);
+                
         this.setState({
             filter: {
                 offset: this.state.filter.offset,
@@ -78,7 +78,7 @@ class VaultExplorer extends Component{
         if(checked)
             list.push(value);
         else
-            list.pop(value);
+            list = list.filter((val) => val!==value);
 
         this.setState({
             filter: {
@@ -98,7 +98,7 @@ class VaultExplorer extends Component{
         if(checked)
             list.push(value);
         else
-            list.pop(value);
+            list = list.filter((val) => val!==value);
 
         this.setState({
             filter: {
