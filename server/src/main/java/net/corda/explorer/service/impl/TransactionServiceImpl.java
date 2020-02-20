@@ -1,7 +1,6 @@
 package net.corda.explorer.service.impl;
 
 import net.corda.core.contracts.Amount;
-import net.corda.core.contracts.ContractState;
 import net.corda.core.contracts.StateRef;
 import net.corda.core.contracts.UniqueIdentifier;
 import net.corda.core.crypto.CryptoUtils;
@@ -12,7 +11,6 @@ import net.corda.explorer.exception.GenericException;
 import net.corda.explorer.exception.UnsupportedFlowParamException;
 import net.corda.explorer.model.common.FlowInfo;
 import net.corda.explorer.model.common.FlowParam;
-import net.corda.explorer.model.common.Settings;
 import net.corda.explorer.model.response.FlowData;
 import net.corda.explorer.model.response.TransactionList;
 import net.corda.explorer.rpc.NodeRPCClient;
@@ -88,7 +86,12 @@ public class TransactionServiceImpl implements TransactionService {
         int initial = offset * pageSize;
         int limit = Math.min(initial + pageSize, signedTransactions.size());
         for(int i=initial; i< limit; i++){
-            CoreTransaction coreTransaction = signedTransactions.get(i).getCoreTransaction();
+            CoreTransaction coreTransaction = null;
+            try {
+                coreTransaction = signedTransactions.get(i).getCoreTransaction();
+            }catch (Exception  e){
+                continue;
+            }
             TransactionList.TransactionData transactionData = new TransactionList.TransactionData();
 
             List<TransactionList.Signer> signerList = new ArrayList<>();

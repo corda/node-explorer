@@ -10,8 +10,6 @@ import '../styles/Transaction.css';
 
 class TransactionExplorer extends Component{
     state = {
-        open: false,
-        flowSelected: false,
         page: {
             pageSize: 10,
             offset: 0
@@ -23,16 +21,11 @@ class TransactionExplorer extends Component{
 
     handleClose = () => {
         this.props.loadFlowParams([]);
-        this.setState({
-            open: false,
-            flowSelected: false
-        });
+        this.props.closeTxModal();
     }
 
     handleOpen = () => {
-        this.setState({
-            open: true
-        });
+        this.props.openTxModal();
     }
 
     constructor(props){
@@ -50,8 +43,8 @@ class TransactionExplorer extends Component{
                 break;
             }
         }
+        this.props.setFlowSelectionFlag();
         this.setState({
-            flowSelected: true,
             selectedFlow: event.target.value
         });
     }
@@ -84,14 +77,13 @@ class TransactionExplorer extends Component{
     }
 
     prepareFlowDataToStart = () => {
+        this.props.inFlightFLow(true);
         this.setState({
             flowInfo: {
                 flowName: this.state.selectedFlow,
                 flowParams: this.props.flowParams
-            }
-        }, 
-        () => this.props.startFlow(this.state.flowInfo)
-        );
+            },
+        }, () => this.props.startFlow(this.state.flowInfo));
     }
 
     showTrnxDetails = (trnx, index) => {
@@ -182,7 +174,7 @@ class TransactionExplorer extends Component{
                     <span>Transaction Explorer</span>
                     <Button style={{float: "right"}} variant="contained" color="primary" onClick={this.handleOpen}>New Transaction</Button>
                     <Modal
-                        open={this.state.open}
+                        open={this.props.open}
                         onClose={this.handleClose}
                         style={{overflow:"scroll"}}
                         >
@@ -207,9 +199,12 @@ class TransactionExplorer extends Component{
                                     this.renderParamForm(false)
                                 }
                                 {
-                                    this.state.flowSelected?
+                                    this.props.flowSelected?
                                     <div style={{width: "100%", float:"left", marginTop: 10}}>
-                                    <Button onClick={() => this.prepareFlowDataToStart()} style={{float: "right", marginTop: 10}} variant="contained" color="primary">Execute</Button>
+                                        <Button onClick={() => this.prepareFlowDataToStart()} style={{float: "right", marginTop: 10}} 
+                                                variant="contained" color="primary" disabled={this.props.flowInFlight}>
+                                            {this.props.flowInFlight?'Please Wait...':'Execute'}
+                                        </Button>
                                     </div>
                                     :null
                                 }
@@ -371,7 +366,10 @@ const mapStateToProps = state => {
         flowParams: state.trnx.flowParams,
         transactionList: state.trnx.trnxList,
         totalRecords: state.trnx.trnxListPage,
-        parties: state.trnx.parties
+        parties: state.trnx.parties,
+        open: state.trnx.showTxPopup,
+        flowSelected: state.trnx.isFlowSelected,
+        flowInFlight: state.trnx.isFlowInFlight
     }
 }
 
@@ -381,7 +379,12 @@ const mapDispatchToProps = dispatch => {
         startFlow: (flowInfo) => dispatch(ActionType.startFlow(flowInfo)),
         fetchFlowList: () => dispatch(ActionType.fetchFlows()),
         fetchParties: () => dispatch(ActionType.fetchParties()),
-        loadFlowParams: (data) => dispatch({type: ActionType.LOAD_FLOW_PARAMS, data: data}) 
+        loadFlowParams: (data) => dispatch({type: ActionType.LOAD_FLOW_PARAMS, data: data}),
+        closeTxModal: () => dispatch({type: ActionType.CLOSE_TX_MODAL}),
+        openTxModal: () => dispatch({type: ActionType.OPEN_TX_MODAL}),
+        setFlowSelectionFlag: () => dispatch({type: ActionType.SET_FLOW_SELECTION_FLAG}),
+        inFlightFLow: (flag) => dispatch({type: ActionType.SET_INFLIGHT_FLOW_FLAG, data: flag})
+
     }
 }
   

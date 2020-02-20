@@ -1,10 +1,14 @@
 import * as ActionType from '../Actions';
+import { stat } from 'fs';
 
 const initialState = {
     registeredFlows: [],
     flowParams: [],
     trnxList:[],
-    parties: []
+    parties: [],
+    showTxPopup: false,
+    isFlowSelected: false,
+    isFlowInFlight: false
 };
 
 const reducer = (state = initialState, action) => {
@@ -23,7 +27,8 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 trnxList: action.payload.transactionData,
-                trnxListPage: action.payload.totalRecords
+                trnxListPage: action.payload.totalRecords,
+                showTxPopup: false
             }       
         case ActionType.LOAD_PARTIES:
             return {
@@ -35,6 +40,27 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 flowParams: action.data
             }    
+        case ActionType.CLOSE_TX_MODAL:
+            return{
+                ...state,
+                showTxPopup: false,
+                isFlowSelected: false
+            } 
+        case ActionType.OPEN_TX_MODAL:
+            return{
+                ...state,
+                showTxPopup: true
+            }
+        case ActionType.SET_FLOW_SELECTION_FLAG:
+            return{
+                ...state,
+                isFlowSelected: true
+            }
+        case ActionType.SET_INFLIGHT_FLOW_FLAG:
+            return{
+                ...state,
+                isFlowInFlight: action.data
+        }           
         default:
             return state;
     }
