@@ -1,5 +1,4 @@
 import * as ActionType from '../Actions';
-import { stat } from 'fs';
 
 const initialState = {
     registeredFlows: [],

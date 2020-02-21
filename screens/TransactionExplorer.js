@@ -141,7 +141,7 @@ class TransactionExplorer extends Component{
             param.flowParams && param.flowParams.length > 1? 
                 this.renderParamForm(true, param.flowParams, param.paramName, deep)
             :        
-            <div key={index} style={{width: "50%", float: "left"}}>
+            <div key={index} style={{width: "50%", float: "left", marginBottom: 5}}>
                 {
                 param.paramType === 'net.corda.core.identity.Party'?
                     <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
@@ -157,6 +157,16 @@ class TransactionExplorer extends Component{
                                     }
                                 </Select>
                             </FormControl>
+                    </div>
+                :
+                param.paramType === 'java.time.LocalDateTime'?
+                    <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
+                        <TextField type="datetime-local" onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} InputLabelProps={{ shrink: true }} fullWidth/> 
+                    </div>
+                :
+                param.paramType === 'java.time.LocalDate'?
+                    <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
+                        <TextField type="date" onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} InputLabelProps={{ shrink: true }} fullWidth/> 
                     </div>
                 :
                     <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
@@ -180,6 +190,7 @@ class TransactionExplorer extends Component{
                         >
                         <div className="paper">
                             <h3 id="simple-modal-title">Please Select a Flow to Execute</h3>
+                            <div style={{color: "red"}}>{this.props.registeredFlows.length === 0? 'No Flows Found! Make sure you have the cordapp directory set in the Settings Tab':null}</div>
                             <div>
                                 <FormControl style={{minWidth: 250}}>
                                     <InputLabel id="flow-select-label">Select A Flow to Execute</InputLabel>
