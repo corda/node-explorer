@@ -38,6 +38,7 @@ ReactDOM.render(<Provider store={store}>
             transitionIn="fadeIn"
             transitionOut="fadeOut"
             progressBar
+            s
             closeOnToastrClick/>
     </div>
     </Provider>, 

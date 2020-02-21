@@ -23,13 +23,12 @@ public class SettingsController {
         }
     }
 
-    @PostMapping("settings/cordapp-dir")
-    private MessageResponseEntity<Void> updateCorDappDirectory(@RequestBody Settings settings){
+    @PostMapping("settings/{type}")
+    private MessageResponseEntity<Void> updateCorDappDirectory(@RequestBody Settings settings, @PathVariable String type){
         try{
-            return new MessageResponseEntity<>(settingsService.updateCorDappDirectory(settings.getCordappDirectory()));
+            return new MessageResponseEntity<>(settingsService.updateSettings(settings, type));
         }catch (Exception e){
             throw new GenericException(e.getMessage());
         }
     }
-
 }

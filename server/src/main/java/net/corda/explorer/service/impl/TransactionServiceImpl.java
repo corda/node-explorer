@@ -4,6 +4,7 @@ import net.corda.core.contracts.Amount;
 import net.corda.core.contracts.StateRef;
 import net.corda.core.contracts.UniqueIdentifier;
 import net.corda.core.crypto.CryptoUtils;
+import net.corda.core.internal.TransactionDeserialisationException;
 import net.corda.core.transactions.CoreTransaction;
 import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.transactions.WireTransaction;
@@ -30,6 +31,9 @@ import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -63,7 +67,9 @@ public class TransactionServiceImpl implements TransactionService {
                     "java.lang.Boolean",
                     "java.util.UUID",
                     "net.corda.core.contracts.UniqueIdentifier",
-                    "net.corda.core.contracts.Amount"
+                    "net.corda.core.contracts.Amount",
+                    "java.time.LocalDateTime",
+                    "java.time.LocalDate"
             )
     );
 
@@ -86,93 +92,95 @@ public class TransactionServiceImpl implements TransactionService {
         int initial = offset * pageSize;
         int limit = Math.min(initial + pageSize, signedTransactions.size());
         for(int i=initial; i< limit; i++){
-            CoreTransaction coreTransaction = null;
             try {
-                coreTransaction = signedTransactions.get(i).getCoreTransaction();
-            }catch (Exception  e){
-                continue;
-            }
-            TransactionList.TransactionData transactionData = new TransactionList.TransactionData();
+                CoreTransaction coreTransaction = coreTransaction = signedTransactions.get(i).getCoreTransaction();
+                TransactionList.TransactionData transactionData = new TransactionList.TransactionData();
 
-            List<TransactionList.Signer> signerList = new ArrayList<>();
-            signedTransactions.get(i).getSigs().forEach(signature -> {
-                String key = CryptoUtils.toStringShort(signature.getBy());
-                TransactionList.Signer signer = new TransactionList.Signer();
-                signer.setSignature(signature);
-                signer.setPartyName(explorerService.getPartyKeyMap().get(key));
-                signerList.add(signer);
-            });
-            transactionData.setSigners(signerList);
+                List<TransactionList.Signer> signerList = new ArrayList<>();
+                signedTransactions.get(i).getSigs().forEach(signature -> {
+                    String key = CryptoUtils.toStringShort(signature.getBy());
+                    TransactionList.Signer signer = new TransactionList.Signer();
+                    signer.setSignature(signature);
+                    signer.setPartyName(explorerService.getPartyKeyMap().get(key));
+                    signerList.add(signer);
+                });
+                transactionData.setSigners(signerList);
 
-            List<TransactionList.StateAndType> inputList = new ArrayList<>();
-            if(coreTransaction.getInputs().size()>0){
-                for(StateRef stateRef: coreTransaction.getInputs()){
-                    SignedTransaction signedTransaction = NodeRPCClient.getRpcProxy()
-                            .internalFindVerifiedTransaction(stateRef.getTxhash());
-                    if(signedTransaction!=null) {
-                        inputList.add(new TransactionList.StateAndType(
-                                signedTransaction.getCoreTransaction().getOutputStates().get(stateRef.getIndex()),
-                                signedTransaction.getCoreTransaction().getOutputStates().get(stateRef.getIndex())
-                                        .getClass().getCanonicalName()));
+                List<TransactionList.StateAndType> inputList = new ArrayList<>();
+                if (coreTransaction.getInputs().size() > 0) {
+                    for (StateRef stateRef : coreTransaction.getInputs()) {
+                        SignedTransaction signedTransaction = NodeRPCClient.getRpcProxy()
+                                .internalFindVerifiedTransaction(stateRef.getTxhash());
+                        if (signedTransaction != null) {
+                            inputList.add(new TransactionList.StateAndType(
+                                    signedTransaction.getCoreTransaction().getOutputStates().get(stateRef.getIndex()),
+                                    signedTransaction.getCoreTransaction().getOutputStates().get(stateRef.getIndex())
+                                            .getClass().getCanonicalName()));
+                        }
                     }
-                }
-                transactionData.setInputs(inputList);
+                    transactionData.setInputs(inputList);
 
-                Map<String, Integer> inputTypeMap = new HashMap<>();
-                transactionData.getInputs().forEach(stateAndType -> {
-                    String type = stateAndType.getState().getClass().toString().substring(
-                            stateAndType.getState().getClass().toString().lastIndexOf(".") + 1);
-                    if (inputTypeMap.containsKey(type)) {
-                        inputTypeMap.put(type, inputTypeMap.get(type) + 1);
+                    Map<String, Integer> inputTypeMap = new HashMap<>();
+                    transactionData.getInputs().forEach(stateAndType -> {
+                        String type = stateAndType.getState().getClass().toString().substring(
+                                stateAndType.getState().getClass().toString().lastIndexOf(".") + 1);
+                        if (inputTypeMap.containsKey(type)) {
+                            inputTypeMap.put(type, inputTypeMap.get(type) + 1);
+                        } else {
+                            inputTypeMap.put(type, 1);
+                        }
+                    });
+                    List<TransactionList.TypeCount> inputTypeCountList = new ArrayList<>();
+                    inputTypeMap.keySet().forEach(s -> {
+                        TransactionList.TypeCount typeCount = new TransactionList.TypeCount();
+                        typeCount.setType(s);
+                        typeCount.setCount(inputTypeMap.get(s));
+                        inputTypeCountList.add(typeCount);
+                    });
+                    transactionData.setInputTypes(inputTypeCountList);
+                }
+
+                List<TransactionList.StateAndType> outputList = new ArrayList<>();
+                coreTransaction.getOutputStates().forEach(contractState -> {
+                    outputList.add(new TransactionList.StateAndType(
+                            contractState,
+                            contractState.getClass().getCanonicalName()
+                    ));
+                });
+                transactionData.setOutputs(outputList);
+
+                Map<String, Integer> outputTypeMap = new HashMap<>();
+                coreTransaction.getOutputStates().forEach(contractState -> {
+                    String type = contractState.getClass().toString().substring(
+                            contractState.getClass().toString().lastIndexOf(".") + 1);
+                    if (outputTypeMap.containsKey(type)) {
+                        outputTypeMap.put(type, outputTypeMap.get(type) + 1);
                     } else {
-                        inputTypeMap.put(type, 1);
+                        outputTypeMap.put(type, 1);
                     }
                 });
-                List<TransactionList.TypeCount> inputTypeCountList = new ArrayList<>();
-                inputTypeMap.keySet().forEach(s -> {
+                List<TransactionList.TypeCount> outputTypeCountList = new ArrayList<>();
+                outputTypeMap.keySet().forEach(s -> {
                     TransactionList.TypeCount typeCount = new TransactionList.TypeCount();
                     typeCount.setType(s);
-                    typeCount.setCount(inputTypeMap.get(s));
-                    inputTypeCountList.add(typeCount);
+                    typeCount.setCount(outputTypeMap.get(s));
+                    outputTypeCountList.add(typeCount);
                 });
-                transactionData.setInputTypes(inputTypeCountList);
-            }
+                transactionData.setOutputTypes(outputTypeCountList);
 
-            List<TransactionList.StateAndType> outputList = new ArrayList<>();
-            coreTransaction.getOutputStates().forEach(contractState -> {
-                outputList.add(new TransactionList.StateAndType(
-                        contractState,
-                        contractState.getClass().getCanonicalName()
-                ));
-            });
-            transactionData.setOutputs(outputList);
+                transactionData.setTransactionId(coreTransaction.getId().toString());
+                transactionData.setCommands(((WireTransaction) coreTransaction).getCommands().stream().map(command ->
+                        command.getValue().getClass().getCanonicalName().substring(command.getValue().getClass()
+                                .getCanonicalName().lastIndexOf(".") + 1)).collect(Collectors.toList()));
 
-            Map<String, Integer> outputTypeMap = new HashMap<>();
-            coreTransaction.getOutputStates().forEach(contractState -> {
-                String type = contractState.getClass().toString().substring(
-                        contractState.getClass().toString().lastIndexOf(".") + 1);
-                if (outputTypeMap.containsKey(type)) {
-                    outputTypeMap.put(type, outputTypeMap.get(type) + 1);
-                } else {
-                    outputTypeMap.put(type, 1);
+                transactionData.setNotary(coreTransaction.getNotary().getName().getOrganisation());
+                transactionDataList.add(transactionData);
+            }catch (Exception e){
+                if(e.getClass().equals(TransactionDeserialisationException.class)){
+                    throw new GenericException("Could not deserialize transaction. " +
+                            "Make sure you have the cordapp directory set in the Settings Tab");
                 }
-            });
-            List<TransactionList.TypeCount> outputTypeCountList = new ArrayList<>();
-            outputTypeMap.keySet().forEach(s -> {
-                TransactionList.TypeCount typeCount = new TransactionList.TypeCount();
-                typeCount.setType(s);
-                typeCount.setCount(outputTypeMap.get(s));
-                outputTypeCountList.add(typeCount);
-            });
-            transactionData.setOutputTypes(outputTypeCountList);
-
-            transactionData.setTransactionId(coreTransaction.getId().toString());
-            transactionData.setCommands(((WireTransaction)coreTransaction).getCommands().stream().map(command ->
-                    command.getValue().getClass().getCanonicalName().substring(command.getValue().getClass()
-                            .getCanonicalName().lastIndexOf(".")+1)).collect(Collectors.toList()));
-
-            transactionData.setNotary(coreTransaction.getNotary().getName().getOrganisation());
-            transactionDataList.add(transactionData);
+            }
         }
         transactionList.setTransactionData(transactionDataList);
         return transactionList;
@@ -262,6 +270,12 @@ public class TransactionServiceImpl implements TransactionService {
 
             case "net.corda.core.contracts.Amount":
                 return Amount.parseCurrency(flowParam.getParamValue().toString());
+
+            case "java.time.LocalDateTime":
+                return LocalDateTime.parse(flowParam.getParamValue().toString());
+
+            case "java.time.LocalDate":
+                return LocalDate.parse(flowParam.getParamValue().toString());
 
             default:
                 throw new UnsupportedFlowParamException("Type "+ flowParam.getParamType() + " in Flow Parameter not " +

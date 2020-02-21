@@ -5,8 +5,7 @@ import net.corda.explorer.model.common.Settings;
 import java.io.IOException;
 
 public interface SettingsService {
-
     void loadApplicationSettings();
     Settings getApplicationSettings();
-    Void updateCorDappDirectory(String path) throws IOException;
+    Void updateSettings(Settings settings, String type) throws IOException;
 }

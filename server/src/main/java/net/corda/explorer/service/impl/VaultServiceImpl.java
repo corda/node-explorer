@@ -68,18 +68,12 @@ public class VaultServiceImpl implements VaultService {
                     .collect(Collectors.toList());
         }
 
-        QueryCriteria.VaultQueryCriteria queryCriteria = null;
+        QueryCriteria.VaultQueryCriteria queryCriteria =  new QueryCriteria.VaultQueryCriteria()
+                .withRelevancyStatus(relevancyStatus)
+                .withContractStateTypes(stateType)
+                .withStatus(status);
         if(parties!=null && parties.size()>0) {
-            queryCriteria = new QueryCriteria.VaultQueryCriteria()
-                    .withRelevancyStatus(relevancyStatus)
-                    .withContractStateTypes(stateType)
-                    .withStatus(status);
             queryCriteria = addParticipants(queryCriteria, parties);
-        }else{
-             queryCriteria = new QueryCriteria.VaultQueryCriteria()
-                     .withRelevancyStatus(relevancyStatus)
-                     .withContractStateTypes(stateType)
-                     .withStatus(status);
         }
 
         return NodeRPCClient.getRpcProxy()
