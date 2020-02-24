@@ -129,12 +129,6 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-    // const data = {
-    //   hostName: "localhost",
-    //   port: "10006",
-    //   username: "user1",
-    //   password: "test",
-    // }
     return {
       onLoadAction:() => dispatch(ActionType.server_awake()),
       onLoginAction:(data) => dispatch(ActionType.login(data))
