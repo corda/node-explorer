@@ -7,6 +7,10 @@ import net.corda.explorer.service.SettingsService;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.UnsupportedTemporalTypeException;
 
 @Service
 public class SettingsServiceImpl implements SettingsService {
@@ -47,21 +51,35 @@ public class SettingsServiceImpl implements SettingsService {
 
     @Override
     public Void updateSettings(Settings settings, String type) throws IOException {
+        switch (type) {
+            case "cordappDir":
+                AppConfig.getAppSettings().setCordappDirectory(settings.getCordappDirectory());
+                break;
+            case "dateFormat":
+                try {
+                    LocalDate.now().format(DateTimeFormatter.ofPattern(settings.getDateFormat()));
+                }catch (UnsupportedTemporalTypeException | IllegalArgumentException e){
+                   throw new GenericException("Unsupported Date Format");
+                }
+                AppConfig.getAppSettings().setDateFormat(settings.getDateFormat());
+                break;
+            case "dateTimeFormat":
+                try {
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern(settings.getDateTimeFormat()));
+                }catch (UnsupportedTemporalTypeException | IllegalArgumentException e){
+                    throw new GenericException("Unsupported DateTime Format");
+                }
+                AppConfig.getAppSettings().setDateTimeFormat(settings.getDateTimeFormat());
+                break;
+        }
+
         try(BufferedWriter bw = new BufferedWriter(new FileWriter("settings.conf"))){
-            switch (type) {
-                case "cordappDir":
-                    bw.append("cordapp_dir=> " + settings.getCordappDirectory());
-                    AppConfig.getAppSettings().setCordappDirectory(settings.getCordappDirectory());
-                    break;
-                case "dateFormat":
-                    bw.append("date_format=> " + settings.getDateFormat());
-                    AppConfig.getAppSettings().setDateFormat(settings.getDateFormat());
-                    break;
-                case "dateTimeFormat":
-                    bw.append("datetime_format=> " + settings.getDateTimeFormat());
-                    AppConfig.getAppSettings().setDateTimeFormat(settings.getDateTimeFormat());
-                    break;
-            }
+            bw.write("cordapp_dir=> " + settings.getCordappDirectory());
+            bw.newLine();
+            bw.write("date_format=> " + settings.getDateFormat());
+            bw.newLine();
+            bw.write("datetime_format=> " + settings.getDateTimeFormat());
+            bw.newLine();
             bw.flush();
         }catch (Exception e){
             throw new GenericException(e.getMessage());

@@ -33,7 +33,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -69,7 +69,8 @@ public class TransactionServiceImpl implements TransactionService {
                     "net.corda.core.contracts.UniqueIdentifier",
                     "net.corda.core.contracts.Amount",
                     "java.time.LocalDateTime",
-                    "java.time.LocalDate"
+                    "java.time.LocalDate",
+                    "java.time.Instant"
             )
     );
 
@@ -89,9 +90,9 @@ public class TransactionServiceImpl implements TransactionService {
         TransactionList transactionList = new TransactionList();
         List<TransactionList.TransactionData> transactionDataList = new ArrayList<>();
         transactionList.setTotalRecords(signedTransactions.size());
-        int initial = offset * pageSize;
-        int limit = Math.min(initial + pageSize, signedTransactions.size());
-        for(int i=initial; i< limit; i++){
+        int initial = signedTransactions.size() - (offset * pageSize);
+        int limit = Math.max(initial - pageSize, 0);
+        for(int i=initial; i> limit; i--){
             try {
                 CoreTransaction coreTransaction = coreTransaction = signedTransactions.get(i).getCoreTransaction();
                 TransactionList.TransactionData transactionData = new TransactionList.TransactionData();
@@ -273,6 +274,9 @@ public class TransactionServiceImpl implements TransactionService {
 
             case "java.time.LocalDateTime":
                 return LocalDateTime.parse(flowParam.getParamValue().toString());
+
+            case "java.time.Instant":
+                return LocalDateTime.parse(flowParam.getParamValue().toString()).atZone(ZoneId.systemDefault());
 
             case "java.time.LocalDate":
                 return LocalDate.parse(flowParam.getParamValue().toString());

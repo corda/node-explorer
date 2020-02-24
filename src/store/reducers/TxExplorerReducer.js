@@ -27,7 +27,8 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 trnxList: action.payload.transactionData,
                 trnxListPage: action.payload.totalRecords,
-                showTxPopup: false
+                showTxPopup: false,
+                isFlowSelected: false
             }       
         case ActionType.LOAD_PARTIES:
             return {

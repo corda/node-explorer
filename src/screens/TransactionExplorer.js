@@ -159,7 +159,7 @@ class TransactionExplorer extends Component{
                             </FormControl>
                     </div>
                 :
-                param.paramType === 'java.time.LocalDateTime'?
+                param.paramType === 'java.time.LocalDateTime' || param.paramType === 'java.time.Instant'?
                     <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
                         <TextField type="datetime-local" onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} InputLabelProps={{ shrink: true }} fullWidth/> 
                     </div>

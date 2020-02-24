@@ -21,6 +21,10 @@ class LocalDateTimeSerializer extends JsonSerializer<LocalDateTime> {
 
     @Override
     public void serialize(LocalDateTime value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-        gen.writeObject(value.format(DateTimeFormatter.ofPattern(AppConfig.getAppSettings().getDateTimeFormat())));
+        String format = AppConfig.getAppSettings().getDateTimeFormat();
+        if(format == null || format.trim().length() == 0){
+            format = "dd MMM yyyy hh:ss a";
+        }
+        gen.writeObject(value.format(DateTimeFormatter.ofPattern(format)));
     }
 }

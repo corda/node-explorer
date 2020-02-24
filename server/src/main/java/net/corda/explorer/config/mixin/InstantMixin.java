@@ -23,7 +23,11 @@ class InstantSerializer extends JsonSerializer<Instant> {
 
     @Override
     public void serialize(Instant value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+        String format = AppConfig.getAppSettings().getDateTimeFormat();
+        if(format == null || format.trim().length() == 0){
+            format = "dd MMM yyyy hh:ss a";
+        }
         gen.writeObject(LocalDateTime.ofInstant(value, ZoneId.systemDefault()).format(
-                DateTimeFormatter.ofPattern(AppConfig.getAppSettings().getDateTimeFormat())));
+                DateTimeFormatter.ofPattern(format)));
     }
 }
