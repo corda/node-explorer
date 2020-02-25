@@ -58,7 +58,7 @@ class Filter extends Component{
                     {this.props.filter && Object.keys(this.props.filter.stateTypes).length > 0?
                     <div className="filter-group">
                         <div className="filter-title">Contract State</div>
-                        <div style={{padding: "0 10px"}}>
+                        <div style={{padding: "0 10px", minHeight: 40}}>
                             <Grid container spacing={0}>
                                 {
                                     this.props.filter?
@@ -81,7 +81,7 @@ class Filter extends Component{
                     }
                     <div className="filter-group">
                         <div className="filter-title">Status</div>
-                        <div style={{padding: "4px 10px"}}>
+                        <div style={{padding: "4px 10px", minHeight: 40}}>
                             <Grid container spacing={0}>
                                 {
                                     this.props.filter?
@@ -102,7 +102,7 @@ class Filter extends Component{
                     </div>
                     <div className="filter-group">
                         <div className="filter-title">Relevancy Status</div>
-                        <div style={{padding: "4px 10px"}}>
+                        <div style={{padding: "4px 10px", minHeight: 40}}>
                             <Grid container spacing={0}>
                                     {
                                         this.props.filter?
@@ -123,7 +123,7 @@ class Filter extends Component{
                     </div>
                     <div className="filter-group">
                         <div className="filter-title">Parties</div>
-                        <div style={{padding: "0 10px"}}>
+                        <div style={{padding: "0 10px", minHeight: 40}}>
                             <Grid container spacing={0}>
                                 {
                                     this.props.filter?

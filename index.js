@@ -8,6 +8,7 @@ import commonReducer from './store/reducers/CommonReducer';
 import explorerReducer from './store/reducers/ExplorerReducer';
 import txReducer from './store/reducers/TxExplorerReducer'
 import vltReducer from './store/reducers/VaultReducer'
+import dsbdReducer from './store/reducers/DashboardReducer'
 import thunk from "redux-thunk";
 import Explorer from './Explorer';
 import './index.css';
@@ -21,7 +22,8 @@ const rootReducer = combineReducers({
     explorer: explorerReducer,
     trnx: txReducer,
     toastr: toastrReducer,
-    vault: vltReducer
+    vault: vltReducer,
+    dashboard: dsbdReducer
 });
 
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
