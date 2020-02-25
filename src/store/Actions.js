@@ -19,6 +19,7 @@ export const CLOSE_TX_MODAL = "CLOSE_TX_MODAL";
 export const OPEN_TX_MODAL = "OPEN_TX_MODAL";
 export const SET_FLOW_SELECTION_FLAG = "SET_FLOW_SELECTION_FLAG";
 export const SET_INFLIGHT_FLOW_FLAG = "SET_INFLIGHT_FLOW_FLAG";
+export const SET_LOGIN_PROCESSING_FLAG = "SET_LOGIN_PROCESSING_FLAG";
 
 export const server_awake = () => {
     // Sets flag notifying successful access to Spring server
@@ -45,6 +46,7 @@ export const server_awake = () => {
 
 export const login = (loginRequest) => {
     return function(dispatch) {
+        dispatch({type: SET_LOGIN_PROCESSING_FLAG, data: true});
         axios.post("http://localhost:8080/login", loginRequest)
         .then(({data}) => {
             if(data.status){
@@ -53,10 +55,12 @@ export const login = (loginRequest) => {
                         payload: data.data
                 })
             }else{
+                dispatch({type: SET_LOGIN_PROCESSING_FLAG, data: false});
                 errorHandler(data);
             }
         })
         .catch(error => {
+            dispatch({type: SET_LOGIN_PROCESSING_FLAG, data: false});
             errorHandler(error);
         });
     }

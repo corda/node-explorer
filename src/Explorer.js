@@ -18,7 +18,7 @@ class Explorer extends Component {
 
     render(){
       return (
-        <div>
+        <React.Fragment>
             {this.props.isLoggedIn ?
               <div>
                   <Header/>
@@ -39,7 +39,7 @@ class Explorer extends Component {
               : 
               <Login></Login>
             }
-        </div>
+        </React.Fragment>
       );
     }
 }

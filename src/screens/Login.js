@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import '../styles/Login.css';
 import * as ActionType from '../store/Actions';
 import { connect } from 'react-redux';
+import SplashScreen from '../components/Splash';
 
 class Login extends Component {
 
@@ -66,7 +67,7 @@ class Login extends Component {
 
         if (!this.props.isServerAwake) {
             this.props.onLoadAction();
-            return <div>Please wait, loading...</div>
+            return (<SplashScreen/>)
         } else {
 
             return (
@@ -111,7 +112,7 @@ class Login extends Component {
                                 </Grid>
                                 <Grid item xs={12} style={{marginTop: "20px", textAlign: "right"}}>
                                     <Button variant="contained" type="submit" color="primary" onClick={this.doLogin}
-                                            disabled={isDisabled}>Connect</Button>
+                                            disabled={isDisabled | this.props.loginProcessing}>{this.props.loginProcessing? 'Please Wait...': 'Connect'}</Button>
                                 </Grid>
                             </Grid>
                         </div>
@@ -124,7 +125,8 @@ class Login extends Component {
   
 const mapStateToProps = state => {
     return {
-        isServerAwake: state.common.isServerAwake
+        isServerAwake: state.common.isServerAwake,
+        loginProcessing: state.common.loginProcessing
     }
 }
 

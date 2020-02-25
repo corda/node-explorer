@@ -4,6 +4,7 @@ const initialState = {
     isServerAwake: false,
     isLoggedIn: false,
     currentPage: 1,
+    loginProcessing: false,
     profile: {}
 };
 
@@ -21,7 +22,8 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoggedIn: true,
-                profile: action.payload
+                profile: action.payload,
+                loginProcessing: false
             }
         case ActionType.CHANGE_SCREEN:
             sessionStorage.setItem('currentPage', action.page);    
@@ -46,6 +48,11 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 isLoggedIn: false,
                 currentPage: 0
+            }    
+        case ActionType.SET_LOGIN_PROCESSING_FLAG:
+            return{
+                ...state,
+                loginProcessing: action.data
             }    
         default:
             return state;    
