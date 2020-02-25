@@ -5,6 +5,7 @@ const initialState = {
     isLoggedIn: false,
     currentPage: 1,
     loginProcessing: false,
+    spinner: false,
     profile: {}
 };
 
@@ -53,7 +54,12 @@ const reducer = (state = initialState, action) => {
             return{
                 ...state,
                 loginProcessing: action.data
-            }    
+            }
+        case ActionType.SHOW_HIDE_SPINNER:
+            return{
+                ...state,
+                spinner: action.data
+            }     
         default:
             return state;    
     }

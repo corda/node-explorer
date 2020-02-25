@@ -20,6 +20,7 @@ export const OPEN_TX_MODAL = "OPEN_TX_MODAL";
 export const SET_FLOW_SELECTION_FLAG = "SET_FLOW_SELECTION_FLAG";
 export const SET_INFLIGHT_FLOW_FLAG = "SET_INFLIGHT_FLOW_FLAG";
 export const SET_LOGIN_PROCESSING_FLAG = "SET_LOGIN_PROCESSING_FLAG";
+export const SHOW_HIDE_SPINNER = "SHOW_HIDE_SPINNER";
 
 export const server_awake = () => {
     // Sets flag notifying successful access to Spring server
@@ -68,6 +69,7 @@ export const login = (loginRequest) => {
 
 export const fetchNetworkMap = () => {
     return function(dispatch) {
+        dispatch({type: SHOW_HIDE_SPINNER, data: true});
         axios.get("http://localhost:8080/network-map")
         .then(({data}) => {
             if(data.status){
@@ -78,8 +80,10 @@ export const fetchNetworkMap = () => {
             }else{
                 errorHandler(data);
             }
+            dispatch({type: SHOW_HIDE_SPINNER, data: false});
         })
         .catch(error => {
+            dispatch({type: SHOW_HIDE_SPINNER, data: false});
             errorHandler(error);
         });
     }
@@ -106,6 +110,7 @@ export const fetchFlows = () => {
 
 export const fetchTransactions = (page) => {
     return function(dispatch){
+        dispatch({type: SHOW_HIDE_SPINNER, data: true});
         axios.post("http://localhost:8080/transaction-list", page)
         .then(({data}) => {
             if(data.status){
@@ -116,9 +121,11 @@ export const fetchTransactions = (page) => {
             }else{
                 errorHandler(data);
             }
+            dispatch({type: SHOW_HIDE_SPINNER, data: false});
         })
         .catch(error => {
             errorHandler(error);
+            dispatch({type: SHOW_HIDE_SPINNER, data: false});
         });
     }
 }
@@ -177,6 +184,7 @@ export const startFlow = (flowInfo) => {
 
 export const fetchStates = (filters) => {
     return function(dispatch){
+        dispatch({type: SHOW_HIDE_SPINNER, data: true});
         axios.post("http://localhost:8080/vault-query", filters)
         .then(({data}) => {
             if(data.status){
@@ -187,9 +195,11 @@ export const fetchStates = (filters) => {
             }else{
                 errorHandler(data);
             }
+            dispatch({type: SHOW_HIDE_SPINNER, data: false});
         })
         .catch(error => {
             errorHandler(error);
+            dispatch({type: SHOW_HIDE_SPINNER, data: false});
         });
     }
 }

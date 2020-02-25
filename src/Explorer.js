@@ -26,6 +26,14 @@ class Explorer extends Component {
                   <div style={{marginLeft: 120}}>
                     <div className="content-pane">
                       {
+                        this.props.spinner? 
+                        <div className="spinner">
+                          <div>
+                              <img style={{width: 100}} src="spinner.svg" alt="Spinner"></img>
+                          </div>
+                          </div>:null
+                      }
+                      {
                         this.props.currentPage === 0 ? <Dashboard/>: 
                         this.props.currentPage === 1 ? <CordaNetwork/>: 
                         this.props.currentPage === 2 ? <TransactionExplorer/>:
@@ -47,7 +55,8 @@ class Explorer extends Component {
 const mapStateToProps = state => {
     return {
         isLoggedIn: state.common.isLoggedIn,
-        currentPage: state.common.currentPage
+        currentPage: state.common.currentPage,
+        spinner: state.common.spinner
     }
 }
 
