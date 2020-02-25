@@ -21,6 +21,8 @@ export const SET_FLOW_SELECTION_FLAG = "SET_FLOW_SELECTION_FLAG";
 export const SET_INFLIGHT_FLOW_FLAG = "SET_INFLIGHT_FLOW_FLAG";
 export const SET_LOGIN_PROCESSING_FLAG = "SET_LOGIN_PROCESSING_FLAG";
 export const SHOW_HIDE_SPINNER = "SHOW_HIDE_SPINNER";
+export const LOAD_NODE_DIAGNOSTIC = "LOAD_NODE_DIAGNOSTIC";
+export const LOAD_NETWORK_PARAMETERS = "LOAD_NETWORK_PARAMETERS";
 
 export const server_awake = () => {
     // Sets flag notifying successful access to Spring server
@@ -62,6 +64,44 @@ export const login = (loginRequest) => {
         })
         .catch(error => {
             dispatch({type: SET_LOGIN_PROCESSING_FLAG, data: false});
+            errorHandler(error);
+        });
+    }
+}
+
+export const fetchNodeDiagnostic = () => {
+    return function(dispatch) {
+        axios.get("http://localhost:8080/dashboard/node-diagnostics")
+        .then(({data}) => {
+            if(data.status){
+                dispatch({    
+                        type: LOAD_NODE_DIAGNOSTIC,
+                        payload: data.data
+                })
+            }else{
+                errorHandler(data);
+            }
+        })
+        .catch(error => {
+            errorHandler(error);
+        });
+    }
+}
+
+export const fetchNetworkParameter = () => {
+    return function(dispatch) {
+        axios.get("http://localhost:8080/dashboard/network-parameters")
+        .then(({data}) => {
+            if(data.status){
+                dispatch({    
+                        type: LOAD_NETWORK_PARAMETERS,
+                        payload: data.data
+                })
+            }else{
+                errorHandler(data);
+            }
+        })
+        .catch(error => {
             errorHandler(error);
         });
     }
