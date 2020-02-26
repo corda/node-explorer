@@ -1,5 +1,6 @@
 package net.corda.explorer.controller;
 
+import net.corda.client.rpc.RPCException;
 import net.corda.core.node.NetworkParameters;
 import net.corda.core.node.NodeDiagnosticInfo;
 import net.corda.explorer.exception.GenericException;
@@ -21,6 +22,12 @@ public class DashboardController {
     public MessageResponseEntity<NodeDiagnosticInfo> getNodeDiagnostics(){
         try {
             return new MessageResponseEntity<>(dashboardService.nodeDiagnosticInfo());
+        }catch (RPCException e){
+            if(e.getMessage().contains("Received RPC for unknown method nodeDiagnosticInfo")){
+                return new MessageResponseEntity<>();
+            }else{
+                throw new GenericException(e.getMessage());
+            }
         }catch (Exception e){
             throw new GenericException(e.getMessage());
         }

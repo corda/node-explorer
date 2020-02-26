@@ -30,13 +30,13 @@ const NetworkParameter = (props) => {
                 <div style={{marginTop: 10}}>
                     <div><strong>Whilelisted Contracts</strong></div>
                     {   
-                        props.data.whitelistedContractImplementations && props.data.whitelistedContractImplementations.length>0?
-                        props.data.whitelistedContractImplementations.map((contract, index) => {
+                        props.data.whitelistedContractImplementations?
+                        Object.keys(props.data.whitelistedContractImplementations).map((contract, index) => {
                             return (
-                                        <div key={index} className="appInfo-wrapper">
-                                            <div className="appInfo" style={{marginRight: index%2===0?5:0, marginLeft: index%2===0?0:5, marginTop: 5}}>
-                                                <div><span>Name: </span>{contract.identity}</div>
-                                                <div><span>Type: </span> {contract.validating?'Validating':'Non-Validating'}</div>
+                                        <div key={index} className="appInfo-wrapper" style={{width: "100%"}}>
+                                            <div className="appInfo" style={{marginTop: 5}}>
+                                                <div><span>Contract: </span>{contract}</div>
+                                                <div><span>Hash: </span> {props.data.whitelistedContractImplementations[contract]}</div>
                                             </div>
                                         </div>
                             )
