@@ -1,1 +1,1 @@
-java -jar server/build/libs/explorer-websocket-server-0.1.0.jar
+java -jar server/build/libs/explorer-server-0.1.0.jar

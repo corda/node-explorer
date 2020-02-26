@@ -16,7 +16,7 @@ function startServer(port) {
   //logger.info(`Starting server at port ${port}`)
 
   const server = `${path.join(app.getAppPath(), "src/server.sh")}`;
-  console.log("Starting Sever" + server);
+  //console.log("Starting Sever" + server);
   serverProcess = require('child_process')
     .spawn('src/server.sh');
 
