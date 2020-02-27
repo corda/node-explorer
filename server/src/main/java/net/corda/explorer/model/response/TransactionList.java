@@ -1,6 +1,7 @@
 package net.corda.explorer.model.response;
 
 import net.corda.core.contracts.ContractState;
+import net.corda.core.contracts.StateRef;
 import net.corda.core.crypto.TransactionSignature;
 
 import java.util.List;
@@ -147,10 +148,12 @@ public class TransactionList {
     public static class StateAndType{
         private ContractState state;
         private String type;
+        private StateRef stateRef;
 
-        public StateAndType(ContractState state, String type) {
+        public StateAndType(ContractState state, String type, StateRef stateRef) {
             this.state = state;
             this.type = type;
+            this.stateRef = stateRef;
         }
 
         public ContractState getState() {
@@ -167,6 +170,14 @@ public class TransactionList {
 
         public void setType(String type) {
             this.type = type;
+        }
+
+        public StateRef getStateRef() {
+            return stateRef;
+        }
+
+        public void setStateRef(StateRef stateRef) {
+            this.stateRef = stateRef;
         }
     }
 }

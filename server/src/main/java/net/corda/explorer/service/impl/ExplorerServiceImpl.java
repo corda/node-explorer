@@ -23,6 +23,8 @@ public class ExplorerServiceImpl implements ExplorerService {
     private Map<String, String> partyKeyMap = new HashMap<>();
 
     public Map<String, String> getPartyKeyMap() {
+        if(partyKeyMap.keySet().size() == 0)
+            getNetworkMap();
         return partyKeyMap;
     }
 

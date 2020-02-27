@@ -280,7 +280,10 @@ class TransactionExplorer extends Component{
                                                                         trnx.inputs.map((input, idx) => {
                                                                             return (
                                                                                 <div className="content">
-                                                                                    <div className="stitle">{input.type}</div>
+                                                                                    <div className="stitle">
+                                                                                        <div>{input.type}</div>
+                                                                                        <div style={{fontWeight: "normal", fontSize: 13}}>{input.stateRef.txhash} ({input.stateRef.index})</div>
+                                                                                    </div>
                                                                                     {this.renderJson(input.state, 0)}
                                                                                 </div>
                                                                             )
@@ -309,7 +312,10 @@ class TransactionExplorer extends Component{
                                                                     trnx.outputs.map((output, idx) => {
                                                                         return (
                                                                             <div className="content">
-                                                                                <div className="stitle">{output.type}</div>
+                                                                                <div className="stitle">
+                                                                                    <div>{output.type}</div>
+                                                                                    <div style={{fontWeight: "normal", fontSize: 13}}>{output.stateRef.txhash} ({output.stateRef.index})</div>
+                                                                                </div>
                                                                                 {this.renderJson(output.state, 0)}
                                                                             </div>    
                                                                         )
