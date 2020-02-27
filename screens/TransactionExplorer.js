@@ -26,6 +26,7 @@ class TransactionExplorer extends Component{
 
     handleOpen = () => {
         this.props.openTxModal();
+        this.props.loadFlowParams([]);
     }
 
     constructor(props){

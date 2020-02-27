@@ -30,7 +30,7 @@ const NetworkParameter = (props) => {
                 <div style={{marginTop: 10}}>
                     <div><strong>Whilelisted Contracts</strong></div>
                     {   
-                        props.data.whitelistedContractImplementations?
+                        props.data.whitelistedContractImplementations && props.data.whitelistedContractImplementations.length > 0?
                         Object.keys(props.data.whitelistedContractImplementations).map((contract, index) => {
                             return (
                                         <div key={index} className="appInfo-wrapper" style={{width: "100%"}}>
