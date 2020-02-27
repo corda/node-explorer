@@ -86,6 +86,7 @@ tr th{
     background: #ECECEC;
     font-weight: bold;
     color: #DF0B1B;
+    overflow: auto;
 }
 
 .cmd-wrapper{
@@ -122,7 +123,7 @@ tr:hover {
       border: 1px solid #CCC;
       margin: 5px;
       position: relative;
-      padding-top: 35px;
+      padding-top: 55px;
   }
 
 tr.open td {
