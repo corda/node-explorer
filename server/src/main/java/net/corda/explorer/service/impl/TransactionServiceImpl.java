@@ -67,6 +67,7 @@ public class TransactionServiceImpl implements TransactionService {
                     "java.math.BigDecimal",
                     "java.math.BigInteger",
                     "java.lang.Boolean",
+                    "boolean",
                     "java.util.UUID",
                     "net.corda.core.contracts.UniqueIdentifier",
                     "net.corda.core.contracts.Amount",
@@ -286,6 +287,7 @@ public class TransactionServiceImpl implements TransactionService {
                 return new BigInteger(flowParam.getParamValue().toString());
 
             case "java.lang.Boolean":
+            case "boolean":
                 return Boolean.valueOf(flowParam.getParamValue().toString());
 
             case "java.util.UUID":
