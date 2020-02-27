@@ -90,11 +90,11 @@ public class TransactionServiceImpl implements TransactionService {
         TransactionList transactionList = new TransactionList();
         List<TransactionList.TransactionData> transactionDataList = new ArrayList<>();
         transactionList.setTotalRecords(signedTransactions.size());
-        int initial = signedTransactions.size() - (offset * pageSize);
+        int initial = signedTransactions.size() - (offset * pageSize) - 1;
         int limit = Math.max(initial - pageSize, 0);
-        for(int i=initial; i> limit; i--){
+        for(int i=initial; i >= limit; i--){
             try {
-                CoreTransaction coreTransaction = coreTransaction = signedTransactions.get(i).getCoreTransaction();
+                CoreTransaction coreTransaction = signedTransactions.get(i).getCoreTransaction();
                 TransactionList.TransactionData transactionData = new TransactionList.TransactionData();
 
                 List<TransactionList.Signer> signerList = new ArrayList<>();
