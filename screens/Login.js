@@ -112,7 +112,7 @@ class Login extends Component {
                                 </Grid>
                                 <Grid item xs={12} style={{marginTop: "20px", textAlign: "right"}}>
                                     <Button variant="contained" type="submit" color="primary" onClick={this.doLogin}
-                                            disabled={isDisabled!==0?true:false | this.props.loginProcessing}>{this.props.loginProcessing? 'Please Wait...': 'Connect'}</Button>
+                                            disabled={isDisabled | this.props.loginProcessing}>{this.props.loginProcessing? 'Please Wait...': 'Connect'}</Button>
                                 </Grid>
                             </Grid>
                         </div>
