@@ -4,6 +4,7 @@ import com.jcraft.jsch.UserInfo;
 import net.corda.explorer.exception.ConnectionException;
 import net.corda.explorer.model.request.LoginRequest;
 import net.corda.explorer.rpc.NodeRPCClient;
+import net.corda.explorer.service.SSHService;
 
 public class TestSSHDriver {
 
@@ -33,7 +34,7 @@ public class TestSSHDriver {
             session.setConfig("StrictHostKeyChecking", "no");
             session.setPassword("Testertester!");
 
-            UserInfo ui = new LocalUserInfo();
+            UserInfo ui = new SSHService.LocalUserInfo();
             session.setUserInfo(ui);
 
             session.connect();
@@ -56,14 +57,6 @@ public class TestSSHDriver {
         }
     }
 
-    static class LocalUserInfo implements UserInfo{
-        String passwd;
-        public String getPassword(){ return passwd; }
-        public boolean promptYesNo(String str){return true;}
-        public String getPassphrase(){ return null; }
-        public boolean promptPassphrase(String message){return true; }
-        public boolean promptPassword(String message){return true;}
-        public void showMessage(String message){}
-    }
+
 }
 
