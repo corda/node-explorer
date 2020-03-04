@@ -14,7 +14,7 @@ class Login extends Component {
       password: "",
 
         ssh: {
-            hostName: "",
+            //hostName: "",
             port: "",
             username: "",
             password: "",
@@ -25,7 +25,7 @@ class Login extends Component {
         port: false,
         username: false,
         password: false,
-          sshHostName: false,
+          //sshHostName: false,
           sshPort: false,
           sshUsername: false,
           sshPassword: false,
@@ -52,8 +52,8 @@ class Login extends Component {
                 port: this.state.port.length === 0,
                 username: this.state.username.length === 0,
                 password: this.state.password.length === 0,
-                sshHostName: this.state.ssh.hostName.length === 0,
-                sshPort: this.state.ssh.port.length === 0,
+                //sshHostName: this.state.ssh.hostName.length === 0,
+                //sshPort: this.state.ssh.port.length === 0,
                 sshUsername: this.state.ssh.username.length === 0,
                 sshPassword: this.state.ssh.password.length === 0
             }
@@ -95,17 +95,17 @@ class Login extends Component {
             // user, password/key, host, port
             if (this.state.sshChecked) {
                 return (
-                    <div>SSH tunnel configuration
+                    <div>
                     <Grid container>
+                        {/*<Grid item xs={6}>*/}
+                        {/*    <TextField label="ssh Hostname" value={this.state.ssh.hostName}*/}
+                        {/*               onChange={e => this.setState({ssh: {...this.state.ssh, hostName: e.target.value}})}*/}
+                        {/*               error={this.shouldMarkError("sshHostName")}*/}
+                        {/*               helperText={this.shouldMarkError("sshHostName") ? 'Please Enter ssh Hostname' : ''}*/}
+                        {/*               onBlur={this.handleBlur("sshHostName")}/>*/}
+                        {/*</Grid>*/}
                         <Grid item xs={6}>
-                            <TextField label="ssh Hostname" value={this.state.ssh.hostName}
-                                       onChange={e => this.setState({ssh: {...this.state.ssh, hostName: e.target.value}})}
-                                       error={this.shouldMarkError("sshHostName")}
-                                       helperText={this.shouldMarkError("sshHostName") ? 'Please Enter ssh Hostname' : ''}
-                                       onBlur={this.handleBlur("sshHostName")}/>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <TextField label="ssh Port" type="number" value={this.state.ssh.port}
+                            <TextField label="SSH Port" type="number" value={this.state.ssh.port}
                                        onChange={e => this.setState({ssh: {...this.state.ssh, port: e.target.value}})}
                                        error={this.shouldMarkError("sshPort")}
                                        helperText={this.shouldMarkError("sshPort") ? 'Please Enter Port Number' : ''}
@@ -113,14 +113,14 @@ class Login extends Component {
                         </Grid>
                         <Grid container>
                             <Grid item xs={12}>
-                                <TextField label="ssh Username" fullWidth value={this.state.ssh.username}
+                                <TextField label="SSH Username" fullWidth value={this.state.ssh.username}
                                            onChange={e => this.setState({ssh: {...this.state.ssh, username: e.target.value}})}
                                            error={this.shouldMarkError("sshUsername")}
                                            helperText={this.shouldMarkError("sshUsername") ? 'Please Enter Username' : ''}
                                            onBlur={this.handleBlur("sshUsername")}/>
                             </Grid>
                             <Grid item xs={12}>
-                                <TextField label="ssh Password" type="password" fullWidth
+                                <TextField label="SSH Password" type="password" fullWidth
                                            onInput={e => this.setState({ssh: {...this.state.ssh, password: e.target.value}})}
                                            error={this.shouldMarkError("sshPassword")}
                                            helperText={this.shouldMarkError("sshPassword") ? 'Please Enter Password' : ''}
@@ -149,14 +149,14 @@ class Login extends Component {
                             </div>
                             <Grid container style={{marginTop: "20px"}}>
                                 <Grid item xs={6}>
-                                    <TextField label="Hostname" value={this.state.hostName}
+                                    <TextField label="Node Hostname" value={this.state.hostName}
                                                onChange={e => this.setState({hostName: e.target.value})}
                                                error={this.shouldMarkError("hostName")}
                                                helperText={this.shouldMarkError("hostName") ? 'Please Enter Hostname' : ''}
                                                onBlur={this.handleBlur("hostName")}/>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <TextField label="Port" type="number"
+                                    <TextField label="Node Port" type="number"
                                                onChange={e => this.setState({port: e.target.value})}
                                                error={this.shouldMarkError("port")}
                                                helperText={this.shouldMarkError("port") ? 'Please Enter Port Number' : ''}
@@ -164,14 +164,14 @@ class Login extends Component {
                                 </Grid>
                                 <Grid container>
                                     <Grid item xs={12}>
-                                        <TextField label="Username" fullWidth
+                                        <TextField label="Node Username" fullWidth
                                                    onChange={e => this.setState({username: e.target.value})}
                                                    error={this.shouldMarkError("username")}
                                                    helperText={this.shouldMarkError("username") ? 'Please Enter Username' : ''}
                                                    onBlur={this.handleBlur("username")}/>
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <TextField label="Password" type="password" fullWidth
+                                        <TextField label="Node Password" type="password" fullWidth
                                                    onInput={e => this.setState({password: e.target.value})}
                                                    error={this.shouldMarkError("password")}
                                                    helperText={this.shouldMarkError("password") ? 'Please Enter Password' : ''}
@@ -185,7 +185,7 @@ class Login extends Component {
                                             onChange={e => this.setState({sshChecked: e.target.checked})}
                                             value="primary"
                                         />
-                                    } label={"Secure"} />
+                                    } label={"Use SSH"} />
                                     {sshCredentials()}
                                 </Grid>
                                 <Grid item xs={12} style={{marginTop: "20px", textAlign: "right"}}>
