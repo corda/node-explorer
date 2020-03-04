@@ -39,12 +39,25 @@ class Login extends Component {
     };
 
     validate = () => {
-      return {
-        hostName: this.state.hostName.length === 0,
-        port: this.state.port.length === 0,
-        username: this.state.username.length === 0,
-        password: this.state.password.length === 0
-      };
+        if (!this.state.sshChecked) {
+            return {
+                hostName: this.state.hostName.length === 0,
+                port: this.state.port.length === 0,
+                username: this.state.username.length === 0,
+                password: this.state.password.length === 0
+            };
+        } else {
+            return {
+                hostName: this.state.hostName.length === 0,
+                port: this.state.port.length === 0,
+                username: this.state.username.length === 0,
+                password: this.state.password.length === 0,
+                sshHostName: this.state.ssh.hostName.length === 0,
+                sshPort: this.state.ssh.port.length === 0,
+                sshUsername: this.state.ssh.username.length === 0,
+                sshPassword: this.state.ssh.password.length === 0
+            }
+        }
     }
 
     handleBlur = field => evt => {
@@ -68,7 +81,7 @@ class Login extends Component {
         let data = {...this.state};
         delete data.touched;
         delete data.sshChecked;
-        delete data.ssh;
+        if (!this.state.sshChecked) delete data.ssh;
         this.props.onLoginAction(data);
       }
     }
@@ -177,7 +190,7 @@ class Login extends Component {
                                 </Grid>
                                 <Grid item xs={12} style={{marginTop: "20px", textAlign: "right"}}>
                                     <Button variant="contained" type="submit" color="primary" onClick={this.doLogin}
-                                            disabled={isDisabled!==0?true:false | this.props.loginProcessing}>{this.props.loginProcessing? 'Please Wait...': 'Connect'}</Button>
+                                            disabled={isDisabled || this.props.loginProcessing}>{this.props.loginProcessing? 'Please Wait...': 'Connect'}</Button>
                                 </Grid>
                             </Grid>
                         </div>
