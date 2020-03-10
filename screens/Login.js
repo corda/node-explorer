@@ -1,4 +1,4 @@
-import { Button, Grid, TextField } from '@material-ui/core';
+import {Button, Grid, TextField, Checkbox, FormControlLabel} from '@material-ui/core';
 import React, { Component } from 'react';
 import '../styles/Login.css';
 import * as ActionType from '../store/Actions';
@@ -13,12 +13,23 @@ class Login extends Component {
       username: "",
       password: "",
 
+        ssh: {
+            //hostName: "",
+            port: "",
+            username: "",
+            password: "",
+        },
+        sshChecked: false,
       touched: {
         hostName: false,
         port: false,
         username: false,
-        password: false
-      }
+        password: false,
+          //sshHostName: false,
+          sshPort: false,
+          sshUsername: false,
+          sshPassword: false,
+      },
     };
 
     handleBlur = field => evt => {
@@ -28,12 +39,25 @@ class Login extends Component {
     };
 
     validate = () => {
-      return {
-        hostName: this.state.hostName.length === 0,
-        port: this.state.port.length === 0,
-        username: this.state.username.length === 0,
-        password: this.state.password.length === 0
-      };
+        if (!this.state.sshChecked) {
+            return {
+                hostName: this.state.hostName.length === 0,
+                port: this.state.port.length === 0,
+                username: this.state.username.length === 0,
+                password: this.state.password.length === 0
+            };
+        } else {
+            return {
+                hostName: this.state.hostName.length === 0,
+                port: this.state.port.length === 0,
+                username: this.state.username.length === 0,
+                password: this.state.password.length === 0,
+                //sshHostName: this.state.ssh.hostName.length === 0,
+                sshPort: this.state.ssh.port.length === 0,
+                sshUsername: this.state.ssh.username.length === 0,
+                sshPassword: this.state.ssh.password.length === 0
+            }
+        }
     }
 
     handleBlur = field => evt => {
@@ -56,6 +80,8 @@ class Login extends Component {
       if(!hasErrors){
         let data = {...this.state};
         delete data.touched;
+        delete data.sshChecked;
+        if (!this.state.sshChecked) delete data.ssh;
         this.props.onLoginAction(data);
       }
     }
@@ -64,6 +90,48 @@ class Login extends Component {
 
         const errors = this.validate();
         const isDisabled = Object.keys(errors).some(x => errors[x]);
+
+        const sshCredentials = () => {
+            // user, password/key, host, port
+            if (this.state.sshChecked) {
+                return (
+                    <div>
+                    <Grid container>
+                        {/*<Grid item xs={6}>*/}
+                        {/*    <TextField label="ssh Hostname" value={this.state.ssh.hostName}*/}
+                        {/*               onChange={e => this.setState({ssh: {...this.state.ssh, hostName: e.target.value}})}*/}
+                        {/*               error={this.shouldMarkError("sshHostName")}*/}
+                        {/*               helperText={this.shouldMarkError("sshHostName") ? 'Please Enter ssh Hostname' : ''}*/}
+                        {/*               onBlur={this.handleBlur("sshHostName")}/>*/}
+                        {/*</Grid>*/}
+                        <Grid item xs={6}>
+                            <TextField label="SSH Port" type="number" value={this.state.ssh.port}
+                                       onChange={e => this.setState({ssh: {...this.state.ssh, port: e.target.value}})}
+                                       error={this.shouldMarkError("sshPort")}
+                                       helperText={this.shouldMarkError("sshPort") ? 'Please Enter SSH Port Number' : ''}
+                                       onBlur={this.handleBlur("sshPort")}/>
+                        </Grid>
+                        <Grid container>
+                            <Grid item xs={12}>
+                                <TextField label="SSH Username" fullWidth value={this.state.ssh.username}
+                                           onChange={e => this.setState({ssh: {...this.state.ssh, username: e.target.value}})}
+                                           error={this.shouldMarkError("sshUsername")}
+                                           helperText={this.shouldMarkError("sshUsername") ? 'Please Enter SSH Username' : ''}
+                                           onBlur={this.handleBlur("sshUsername")}/>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField label="SSH Password" type="password" fullWidth
+                                           onInput={e => this.setState({ssh: {...this.state.ssh, password: e.target.value}})}
+                                           error={this.shouldMarkError("sshPassword")}
+                                           helperText={this.shouldMarkError("sshPassword") ? 'Please Enter SSH Password' : ''}
+                                           onBlur={this.handleBlur("sshPassword")}/>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    </div>
+                )
+            }
+        }
 
         if (!this.props.isServerAwake) {
             this.props.onLoadAction();
@@ -79,36 +147,46 @@ class Login extends Component {
                                 <img src="crda-logo.svg" alt="Corda Logo" width="250px"></img>
                                 <div className="explorer-text">Node Explorer</div>
                             </div>
-                            <Grid container style={{marginTop: "20px"}}>
+                            <Grid container style={{marginTop: "20px"}} spacing={1}>
                                 <Grid item xs={6}>
-                                    <TextField label="Hostname" value={this.state.hostName}
+                                    <TextField label="Node Hostname" value={this.state.hostName}
                                                onChange={e => this.setState({hostName: e.target.value})}
                                                error={this.shouldMarkError("hostName")}
-                                               helperText={this.shouldMarkError("hostName") ? 'Please Enter Hostname' : ''}
+                                               helperText={this.shouldMarkError("hostName") ? 'Please Enter Node Hostname' : ''}
                                                onBlur={this.handleBlur("hostName")}/>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <TextField label="Port" type="number"
+                                    <TextField label="Node Port" type="number"
                                                onChange={e => this.setState({port: e.target.value})}
                                                error={this.shouldMarkError("port")}
-                                               helperText={this.shouldMarkError("port") ? 'Please Enter Port Number' : ''}
+                                               helperText={this.shouldMarkError("port") ? 'Please Enter Node Port Number' : ''}
                                                onBlur={this.handleBlur("port")}/>
                                 </Grid>
                                 <Grid container>
                                     <Grid item xs={12}>
-                                        <TextField label="Username" fullWidth
+                                        <TextField label="RPC Username" fullWidth
                                                    onChange={e => this.setState({username: e.target.value})}
                                                    error={this.shouldMarkError("username")}
-                                                   helperText={this.shouldMarkError("username") ? 'Please Enter Username' : ''}
+                                                   helperText={this.shouldMarkError("username") ? 'Please Enter RPC Username' : ''}
                                                    onBlur={this.handleBlur("username")}/>
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <TextField label="Password" type="password" fullWidth
+                                        <TextField label="RPC Password" type="password" fullWidth
                                                    onInput={e => this.setState({password: e.target.value})}
                                                    error={this.shouldMarkError("password")}
-                                                   helperText={this.shouldMarkError("password") ? 'Please Enter Password' : ''}
+                                                   helperText={this.shouldMarkError("password") ? 'Please Enter RPC Password' : ''}
                                                    onBlur={this.handleBlur("password")}/>
                                     </Grid>
+                                </Grid>
+                                <Grid item xs={12} style={{marginTop: "5px", textAlign: "left"}}>
+                                    <FormControlLabel control={
+                                        <Checkbox
+                                            checked={this.sshChecked}
+                                            onChange={e => this.setState({sshChecked: e.target.checked})}
+                                            value="primary"
+                                        />
+                                    } label={"Use SSH"} />
+                                    {sshCredentials()}
                                 </Grid>
                                 <Grid item xs={12} style={{marginTop: "20px", textAlign: "right"}}>
                                     <Button variant="contained" type="submit" color="primary" onClick={this.doLogin}
