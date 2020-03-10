@@ -35,6 +35,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
+    compile 'com.jcraft:jsch:0.1.55'
     compile "$corda_release_group:corda-rpc:$corda_release_version"
     compile ("$corda_release_group:corda-jackson:$corda_release_version"){
         exclude group: 'com.fasterxml.jackson.module', module: 'jackson-module-kotlin'
