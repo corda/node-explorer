@@ -53,7 +53,7 @@ class Login extends Component {
                 username: this.state.username.length === 0,
                 password: this.state.password.length === 0,
                 //sshHostName: this.state.ssh.hostName.length === 0,
-                //sshPort: this.state.ssh.port.length === 0,
+                sshPort: this.state.ssh.port.length === 0,
                 sshUsername: this.state.ssh.username.length === 0,
                 sshPassword: this.state.ssh.password.length === 0
             }
@@ -108,7 +108,7 @@ class Login extends Component {
                             <TextField label="SSH Port" type="number" value={this.state.ssh.port}
                                        onChange={e => this.setState({ssh: {...this.state.ssh, port: e.target.value}})}
                                        error={this.shouldMarkError("sshPort")}
-                                       helperText={this.shouldMarkError("sshPort") ? 'Please Enter Port Number' : ''}
+                                       helperText={this.shouldMarkError("sshPort") ? 'Please Enter SSH Port Number' : ''}
                                        onBlur={this.handleBlur("sshPort")}/>
                         </Grid>
                         <Grid container>
@@ -116,14 +116,14 @@ class Login extends Component {
                                 <TextField label="SSH Username" fullWidth value={this.state.ssh.username}
                                            onChange={e => this.setState({ssh: {...this.state.ssh, username: e.target.value}})}
                                            error={this.shouldMarkError("sshUsername")}
-                                           helperText={this.shouldMarkError("sshUsername") ? 'Please Enter Username' : ''}
+                                           helperText={this.shouldMarkError("sshUsername") ? 'Please Enter SSH Username' : ''}
                                            onBlur={this.handleBlur("sshUsername")}/>
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField label="SSH Password" type="password" fullWidth
                                            onInput={e => this.setState({ssh: {...this.state.ssh, password: e.target.value}})}
                                            error={this.shouldMarkError("sshPassword")}
-                                           helperText={this.shouldMarkError("sshPassword") ? 'Please Enter Password' : ''}
+                                           helperText={this.shouldMarkError("sshPassword") ? 'Please Enter SSH Password' : ''}
                                            onBlur={this.handleBlur("sshPassword")}/>
                             </Grid>
                         </Grid>
@@ -147,34 +147,34 @@ class Login extends Component {
                                 <img src="crda-logo.svg" alt="Corda Logo" width="250px"></img>
                                 <div className="explorer-text">Node Explorer</div>
                             </div>
-                            <Grid container style={{marginTop: "20px"}}>
+                            <Grid container style={{marginTop: "20px"}} spacing={1}>
                                 <Grid item xs={6}>
                                     <TextField label="Node Hostname" value={this.state.hostName}
                                                onChange={e => this.setState({hostName: e.target.value})}
                                                error={this.shouldMarkError("hostName")}
-                                               helperText={this.shouldMarkError("hostName") ? 'Please Enter Hostname' : ''}
+                                               helperText={this.shouldMarkError("hostName") ? 'Please Enter Node Hostname' : ''}
                                                onBlur={this.handleBlur("hostName")}/>
                                 </Grid>
                                 <Grid item xs={6}>
                                     <TextField label="Node Port" type="number"
                                                onChange={e => this.setState({port: e.target.value})}
                                                error={this.shouldMarkError("port")}
-                                               helperText={this.shouldMarkError("port") ? 'Please Enter Port Number' : ''}
+                                               helperText={this.shouldMarkError("port") ? 'Please Enter Node Port Number' : ''}
                                                onBlur={this.handleBlur("port")}/>
                                 </Grid>
                                 <Grid container>
                                     <Grid item xs={12}>
-                                        <TextField label="Node Username" fullWidth
+                                        <TextField label="RPC Username" fullWidth
                                                    onChange={e => this.setState({username: e.target.value})}
                                                    error={this.shouldMarkError("username")}
-                                                   helperText={this.shouldMarkError("username") ? 'Please Enter Username' : ''}
+                                                   helperText={this.shouldMarkError("username") ? 'Please Enter RPC Username' : ''}
                                                    onBlur={this.handleBlur("username")}/>
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <TextField label="Node Password" type="password" fullWidth
+                                        <TextField label="RPC Password" type="password" fullWidth
                                                    onInput={e => this.setState({password: e.target.value})}
                                                    error={this.shouldMarkError("password")}
-                                                   helperText={this.shouldMarkError("password") ? 'Please Enter Password' : ''}
+                                                   helperText={this.shouldMarkError("password") ? 'Please Enter RPC Password' : ''}
                                                    onBlur={this.handleBlur("password")}/>
                                     </Grid>
                                 </Grid>
