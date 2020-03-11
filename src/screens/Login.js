@@ -162,21 +162,19 @@ class Login extends Component {
                                                helperText={this.shouldMarkError("port") ? 'Please Enter Node Port Number' : ''}
                                                onBlur={this.handleBlur("port")}/>
                                 </Grid>
-                                <Grid container>
-                                    <Grid item xs={12}>
-                                        <TextField label="RPC Username" fullWidth
-                                                   onChange={e => this.setState({username: e.target.value})}
-                                                   error={this.shouldMarkError("username")}
-                                                   helperText={this.shouldMarkError("username") ? 'Please Enter RPC Username' : ''}
-                                                   onBlur={this.handleBlur("username")}/>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField label="RPC Password" type="password" fullWidth
-                                                   onInput={e => this.setState({password: e.target.value})}
-                                                   error={this.shouldMarkError("password")}
-                                                   helperText={this.shouldMarkError("password") ? 'Please Enter RPC Password' : ''}
-                                                   onBlur={this.handleBlur("password")}/>
-                                    </Grid>
+                                <Grid item xs={12}>
+                                    <TextField label="RPC Username" fullWidth
+                                                onChange={e => this.setState({username: e.target.value})}
+                                                error={this.shouldMarkError("username")}
+                                                helperText={this.shouldMarkError("username") ? 'Please Enter RPC Username' : ''}
+                                                onBlur={this.handleBlur("username")}/>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField label="RPC Password" type="password" fullWidth
+                                                onInput={e => this.setState({password: e.target.value})}
+                                                error={this.shouldMarkError("password")}
+                                                helperText={this.shouldMarkError("password") ? 'Please Enter RPC Password' : ''}
+                                                onBlur={this.handleBlur("password")}/>
                                 </Grid>
                                 <Grid item xs={12} style={{marginTop: "5px", textAlign: "left"}}>
                                     <FormControlLabel control={
