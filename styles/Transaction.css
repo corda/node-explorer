@@ -103,7 +103,7 @@ tr:hover {
 
 .stripe {
     color: black;
-    height: calc(100% - 90px);
+    height: calc(100% - 110px);
     background: repeating-linear-gradient(
       45deg,
       transparent,
