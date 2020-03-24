@@ -465,17 +465,20 @@ public class TransactionServiceImpl implements TransactionService {
                 flowParam.setParamName(param.getName());
                 flowParam.setParamType(param.getType());
 
-                if(!typeList.contains(param.getType().toString()) && param.getType().getConstructors().length != 0){
-                    if(param.getType().getConstructors().length==1){
-                        flowParam.setFlowParams(
-                                collectObjectTypes(param.getType().getConstructors()[0].getParameters()));
-                    }else {
-                        for (int i = 0; i < param.getType().getConstructors().length; i++) {
-
+                if(!typeList.contains(param.getType().getCanonicalName())){
+                    for (int i = 0; i < param.getType().getConstructors().length; i++) {
+                        // TODO: Remove when multiple constructor supprt os added
+                        boolean collected = false;
+                        if(param.getType().getConstructors()[i].getParameters().length > 0 &&
+                                param.getType().getConstructors()[i].getParameters()[0].isNamePresent() && !collected) {
+                            flowParam.setFlowParams(
+                                    collectObjectTypes(param.getType().getConstructors()[0].getParameters()));
+                            collected = true;
+                        }else{
+                            continue;
                         }
                     }
                 }
-
                 flowParamList.add(flowParam);
             }
         }
