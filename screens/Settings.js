@@ -23,7 +23,7 @@ class Settings extends Component{
     }
 
     loadSettings = () => {
-        axios.get("http://localhost:8080/settings")
+        axios.get( ActionType.SERVER_BASE_URL + "/settings")
         .then(({data}) => {
             if(data.status){
                 const settings = data.data;
