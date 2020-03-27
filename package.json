@@ -1,7 +1,14 @@
 {
   "name": "node-explorer",
+  "description": "The node explorer provides views into a node’s vault and transaction data using Corda’s RPC framework.",
+  "displayName": "Node Explorer",
+  "publisher": "R3",
+  "author": "R3",
   "version": "0.1.0",
-  "private": true,
+  "license": "Apache-2.0",
+  "main": "public/electron.js",
+  "electron-dev": "ELECTRON_START_URL=http://localhost:3000 electron .",
+  "homepage": "./",
   "dependencies": {
     "@material-ui/core": "^4.8.2",
     "@material-ui/icons": "^4.5.1",
@@ -16,17 +23,54 @@
     "react-scripts": "3.2.0",
     "redux": "^4.0.4",
     "redux-devtools-extension": "^2.13.8",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "tree-kill": "^1.2.2"
   },
-  "main": "src/electron-starter.js",
-  "electron-dev": "ELECTRON_START_URL=http://localhost:3000 electron .",
-  "homepage": "./",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "electron": "electron ."
+    "electron": "electron .",
+    "preelectron-pack": "yarn build",
+    "electron-pack": "electron-builder"
+  },
+  "build": {
+    "appId": "net.corda.tools.electron.node.explorer",
+    "productName": "Corda Node Explorer",
+    "extraFiles": [
+      "explorer-server-0.1.0.jar"
+    ],
+    "dmg": {
+      "background": "background.png",
+      "icon":  "icon.icns",
+      "iconSize": 100,
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "msi"
+      ]
+    },
+    "linux": {
+      "target": [
+        "deb",
+        "rpm",
+        "AppImage"
+      ]
+    }
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -44,6 +88,7 @@
     ]
   },
   "devDependencies": {
-    "electron": "^7.1.2"
+    "electron": "^7.1.2",
+    "electron-builder": "^22.4.1"
   }
 }

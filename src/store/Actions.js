@@ -2,6 +2,7 @@ import axios from 'axios';
 import axiosRetry from "axios-retry";
 import {toastr} from 'react-redux-toastr'
 
+export const SERVER_BASE_URL = "http://localhost:8580";
 export const LOAD_APP_STATE = "LOAD_APP_STATE";
 export const SERVER_AWAKE = 'SERVER_AWAKE';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -27,7 +28,7 @@ export const LOAD_NETWORK_PARAMETERS = "LOAD_NETWORK_PARAMETERS";
 export const server_awake = () => {
     // Sets flag notifying successful access to Spring server
     return function(dispatch) {
-        const retryClient = axios.create({ baseURL: 'http://localhost:8080' })
+        const retryClient = axios.create({ baseURL: SERVER_BASE_URL })
         axiosRetry(retryClient, { retries: 5, retryDelay: (retryCount) => {
                 return retryCount * 2000;
             }});
@@ -50,7 +51,7 @@ export const server_awake = () => {
 export const login = (loginRequest) => {
     return function(dispatch) {
         dispatch({type: SET_LOGIN_PROCESSING_FLAG, data: true});
-        axios.post("http://localhost:8080/login", loginRequest)
+        axios.post(SERVER_BASE_URL + "/login", loginRequest)
         .then(({data}) => {
             if(data.status){
                 dispatch({
@@ -71,7 +72,7 @@ export const login = (loginRequest) => {
 
 export const fetchNodeDiagnostic = () => {
     return function(dispatch) {
-        axios.get("http://localhost:8080/dashboard/node-diagnostics")
+        axios.get(SERVER_BASE_URL + "/dashboard/node-diagnostics")
         .then(({data}) => {
             if(data.status){
                 dispatch({    
@@ -90,7 +91,7 @@ export const fetchNodeDiagnostic = () => {
 
 export const fetchNetworkParameter = () => {
     return function(dispatch) {
-        axios.get("http://localhost:8080/dashboard/network-parameters")
+        axios.get(SERVER_BASE_URL + "/dashboard/network-parameters")
         .then(({data}) => {
             if(data.status){
                 dispatch({    
@@ -110,7 +111,7 @@ export const fetchNetworkParameter = () => {
 export const fetchNetworkMap = () => {
     return function(dispatch) {
         dispatch({type: SHOW_HIDE_SPINNER, data: true});
-        axios.get("http://localhost:8080/network-map")
+        axios.get(SERVER_BASE_URL + "/network-map")
         .then(({data}) => {
             if(data.status){
                 dispatch({    
@@ -131,7 +132,7 @@ export const fetchNetworkMap = () => {
 
 export const fetchFlows = () => {
     return function(dispatch){
-        axios.get("http://localhost:8080/flow-list")
+        axios.get(SERVER_BASE_URL + "/flow-list")
         .then(({data}) => {
             if(data.status){
                 dispatch({    
@@ -151,7 +152,7 @@ export const fetchFlows = () => {
 export const fetchTransactions = (page) => {
     return function(dispatch){
         dispatch({type: SHOW_HIDE_SPINNER, data: true});
-        axios.post("http://localhost:8080/transaction-list", page)
+        axios.post(SERVER_BASE_URL + "/transaction-list", page)
         .then(({data}) => {
             if(data.status){
                 dispatch({    
@@ -172,7 +173,7 @@ export const fetchTransactions = (page) => {
 
 export const fetchParties = () => {
     return function(dispatch){
-        axios.get("http://localhost:8080/party-list")
+        axios.get(SERVER_BASE_URL + "/party-list")
         .then(({data}) => {
             if(data.status){
                 dispatch({    
@@ -191,12 +192,12 @@ export const fetchParties = () => {
 
 export const startFlow = (flowInfo) => {
     return function(dispatch){
-        axios.post("http://localhost:8080/start-flow", flowInfo)
+        axios.post(SERVER_BASE_URL + "/start-flow", flowInfo)
         .then(({data}) => {
             if(data.status){
                 toastr.success("Flow completed successfully!");
                 dispatch({type: SET_INFLIGHT_FLOW_FLAG, data: false});
-                axios.post("http://localhost:8080/transaction-list", {pageSize: 10, offset: 0})
+                axios.post(SERVER_BASE_URL + "/transaction-list", {pageSize: 10, offset: 0})
                 .then(({data}) => {
                     if(data.status){
                         dispatch({    
@@ -225,7 +226,7 @@ export const startFlow = (flowInfo) => {
 export const fetchStates = (filters) => {
     return function(dispatch){
         dispatch({type: SHOW_HIDE_SPINNER, data: true});
-        axios.post("http://localhost:8080/vault-query", filters)
+        axios.post(SERVER_BASE_URL + "/vault-query", filters)
         .then(({data}) => {
             if(data.status){
                 dispatch({    
@@ -246,7 +247,7 @@ export const fetchStates = (filters) => {
 
 export const fetchVaultFilters = () => {
     return function(dispatch){
-        axios.get("http://localhost:8080/vault-filter")
+        axios.get(SERVER_BASE_URL + "/vault-filter")
         .then(({data}) => {
             if(data.status){
                 dispatch({    
@@ -264,7 +265,7 @@ export const fetchVaultFilters = () => {
 }
 
 export const updateSettings = (settings, type) => {
-    axios.post("http://localhost:8080/settings/"+ type, settings)
+    axios.post(SERVER_BASE_URL + "/settings/"+ type, settings)
     .then(({data}) => {
         if(data.status){
             toastr.success("Settings updated successfully!");
