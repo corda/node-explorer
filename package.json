@@ -45,6 +45,10 @@
       "background": "background.png",
       "icon":  "icon.icns",
       "iconSize": 100,
+      "window": {
+        "width": 520,
+        "height": 360
+      },
       "contents": [
         {
           "x": 130,
