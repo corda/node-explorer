@@ -1,9 +1,9 @@
 # Node-Explorer
 
-####Description: 
+#### Description: 
 Stand alone desktop app for Win/Osx/Linux that allows connecting to a local or remote Corda node. Examine transactions, run flows and view node and network properties in a few simple clicks.
 
-####Installation:
+#### Installation:
 Requirements: NodeJS and Npm package manager.
 
 1) ``git clone <this repo> <optional: target dir>``
