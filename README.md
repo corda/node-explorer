@@ -21,21 +21,13 @@ Note this project uses the node-server submodule available at https://github.com
 **Other submodule commands:**
 
 * Fetch and merge the latest node-server submodule code
-
-```
-git submodule update --remote
-```
+  - ``git submodule update --remote``
 
 * Doing work on the submodule i.e. changing files in ./server
- 
-```
-// submodules default to a detached head, so change to server directory and checkout a branch
-
-cd ./server
-git checkout master
-
-// Add or commit your changes as usual.
-```
+  - submodules default to a detached head, so change to server directory and checkout a branch
+  - ``cd ./server``
+  - ``git checkout master``
+  - Add or commit your changes as usual.
 
 * To PULL submodule updates from server side, if there are changes on your local branch either merge or rebase with the pull
   - From MAIN project directory
