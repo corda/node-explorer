@@ -140,3 +140,7 @@ tr.open {
     width: 100%;
     float: left;
 }
+
+label.MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLabel-animated{
+    text-transform: capitalize;
+}

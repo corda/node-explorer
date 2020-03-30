@@ -1,4 +1,4 @@
-import { Button, FormControl, Grid, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField } from '@material-ui/core';
+import { Button, FormControl, Grid, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, FormHelperText } from '@material-ui/core';
 import Modal from '@material-ui/core/Modal';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -157,12 +157,14 @@ class TransactionExplorer extends Component{
                                         })
                                     }
                                 </Select>
+                                <FormHelperText>Select Party</FormHelperText>
                             </FormControl>
                     </div>
                 :
                 param.paramType === 'java.time.LocalDateTime' || param.paramType === 'java.time.Instant'?
                     <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
-                        <TextField type="datetime-local" onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} InputLabelProps={{ shrink: true }} fullWidth/> 
+                        <TextField type="datetime-local" onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} InputLabelProps={{ shrink: true }} 
+                        helperText={this.getHelperText(param.paramType)} fullWidth/> 
                     </div>
                 :
                 param.paramType === 'java.time.LocalDate'?
@@ -171,11 +173,29 @@ class TransactionExplorer extends Component{
                     </div>
                 :
                     <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
-                        <TextField onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} fullWidth/> 
+                        <TextField onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} helperText={this.getHelperText(param.paramType)} fullWidth/> 
                     </div>
                 }
             </div> 
         );
+    }
+
+    getHelperText(paramType){
+        switch(paramType){
+            case 'net.corda.core.contracts.Amount':
+                return 'Param Type: ' + paramType + ' eg: 100 USD';
+            
+            case 'java.lang.Boolean':
+            case 'boolean':
+                return 'Param Type: ' + paramType + ' eg: true or false';
+            
+            case 'java.time.LocalDateTime':
+            case 'java.time.Instant':    
+                return 'Param Type: ' + paramType + ' eg: 10/02/2020 10:12:30 AM';
+
+            default:
+                return 'Param Type: ' + paramType;
+        }
     }
 
     render(){
