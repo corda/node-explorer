@@ -18,12 +18,12 @@ class CordaNetwork extends Component{
   screenWidth = 0;
   
   update(){
-    this.forceUpdate();
-    this.updateWindowDimensions();
+      this.forceUpdate();
+      this.updateWindowDimensions();
   }
 
   updateWindowDimensions() {
-    this.screenWidth = window.innerWidth - 120;
+    this.screenWidth = this.refs.mapPane.clientWidth;
     this.screenHeight = this.screenWidth;
   }
 
