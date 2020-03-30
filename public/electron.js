@@ -9,19 +9,25 @@ let mainWindow
 
 let serverProcess;
 
-const jarFile = url.format({
+let jarFile = url.format({
   pathname: path.join(__dirname, '../../../explorer-server-0.1.0.jar'),
   //pathname: path.join(__dirname, '../explorer-server-0.1.0.jar'), // -- For local testing
   protocol: 'file:',
   slashes: true
 });
 
+if(process.platform === 'darwin' || process.platform === 'linux'){
+  jarFile = jarFile.substring(7);
+}else if(process.platform === 'win32'){
+  jarFile = jarFile.substring(8);
+}
+
 function startServer(port) {
   serverProcess = require('child_process')
     //.spawn('java', ['-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=y', '-jar', jarFile.substring(7)]);
-    .spawn('java', ['-jar', jarFile.substring(7)]);
+    .spawn('java', ['-jar', jarFile]);
 
-    serverProcess.stdout.on('data', function (data) {``
+    serverProcess.stdout.on('data', function (data) {
       console.log('Electron Server Log: ' + data);
     });
 

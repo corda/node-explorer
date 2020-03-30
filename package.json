@@ -3,7 +3,7 @@
   "description": "The node explorer provides views into a node’s vault and transaction data using Corda’s RPC framework.",
   "displayName": "Node Explorer",
   "publisher": "R3",
-  "author": "R3",
+  "author": "R3 <devrel@r3.com>",
   "version": "0.1.0",
   "license": "Apache-2.0",
   "main": "public/electron.js",
@@ -63,16 +63,17 @@
       ]
     },
     "win": {
-      "target": [
-        "nsis",
-        "msi"
-      ]
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "createStartMenuShortcut": true
     },
     "linux": {
       "target": [
         "deb",
-        "rpm",
-        "AppImage"
+        "rpm"
       ]
     }
   },
