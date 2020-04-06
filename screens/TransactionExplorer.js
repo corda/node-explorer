@@ -230,16 +230,27 @@ class TransactionExplorer extends Component{
                                 {
                                     this.renderParamForm(false)
                                 }
+                                
+                                        <div style={{width: "100%", float:"left", marginTop: 10}}>
+                                            {
+                                            this.props.flowResultMsg    ?
+                                                <div style={{float: "left"}}>
+                                                    <p style={{color: this.props.flowResultMsgType?"green":"red"}}>
+                                                        <span>{this.props.flowResultMsgType?'Flow Successful :': 'Flow Errored :'}</span>
+                                                        {this.props.flowResultMsg}
+                                                    </p>
+                                                </div>
+                                                :null
+                                            }
                                 {
                                     this.props.flowSelected?
-                                    <div style={{width: "100%", float:"left", marginTop: 10}}>
-                                        <Button onClick={() => this.prepareFlowDataToStart()} style={{float: "right", marginTop: 10}} 
-                                                variant="contained" color="primary" disabled={this.props.flowInFlight}>
-                                            {this.props.flowInFlight?'Please Wait...':'Execute'}
-                                        </Button>
-                                    </div>
+                                            <Button onClick={() => this.prepareFlowDataToStart()} style={{float: "right", marginTop: 10}} 
+                                                    variant="contained" color="primary" disabled={this.props.flowInFlight}>
+                                                {this.props.flowInFlight?'Please Wait...':'Execute'}
+                                            </Button>
                                     :null
                                 }
+                                        </div>
                             </div>
                         </div>
                     </Modal>
@@ -356,7 +367,6 @@ class TransactionExplorer extends Component{
                                                                         })
                                                                         :
                                                                         <div>Transaction has no signatures</div>
-
                                                                     }
                                                                 </div>
                                                             </div>
@@ -407,7 +417,9 @@ const mapStateToProps = state => {
         parties: state.trnx.parties,
         open: state.trnx.showTxPopup,
         flowSelected: state.trnx.isFlowSelected,
-        flowInFlight: state.trnx.isFlowInFlight
+        flowInFlight: state.trnx.isFlowInFlight,
+        flowResultMsg: state.trnx.flowMessage,
+        flowResultMsgType: state.trnx.messageType
     }
 }
 

@@ -7,7 +7,9 @@ const initialState = {
     parties: [],
     showTxPopup: false,
     isFlowSelected: false,
-    isFlowInFlight: false
+    isFlowInFlight: false,
+    flowMessage: "",
+    messageType: true
 };
 
 const reducer = (state = initialState, action) => {
@@ -20,15 +22,17 @@ const reducer = (state = initialState, action) => {
         case ActionType.LOAD_FLOW_PARAMS:
             return {
                 ...state,
-                flowParams: action.data
+                flowParams: action.data,
+                flowMessage: "",
+                messageType: true
             }
         case ActionType.LOAD_TRNXS:
             return {
                 ...state,
                 trnxList: action.payload.transactionData,
                 trnxListPage: action.payload.totalRecords,
-                showTxPopup: false,
-                isFlowSelected: false
+                //showTxPopup: false,
+                //isFlowSelected: false
             }       
         case ActionType.LOAD_PARTIES:
             return {
@@ -44,12 +48,14 @@ const reducer = (state = initialState, action) => {
             return{
                 ...state,
                 showTxPopup: false,
-                isFlowSelected: false
+                isFlowSelected: false,
+                flowMessage: "",
+                messageType: true
             } 
         case ActionType.OPEN_TX_MODAL:
             return{
                 ...state,
-                showTxPopup: true
+                showTxPopup: true       
             }
         case ActionType.SET_FLOW_SELECTION_FLAG:
             return{
@@ -59,7 +65,9 @@ const reducer = (state = initialState, action) => {
         case ActionType.SET_INFLIGHT_FLOW_FLAG:
             return{
                 ...state,
-                isFlowInFlight: action.data
+                isFlowInFlight: action.data,
+                flowMessage: action.message,
+                messageType: action.messageType
         }           
         default:
             return state;
