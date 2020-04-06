@@ -195,8 +195,8 @@ export const startFlow = (flowInfo) => {
         axios.post(SERVER_BASE_URL + "/start-flow", flowInfo)
         .then(({data}) => {
             if(data.status){
-                toastr.success("Flow completed successfully!");
-                dispatch({type: SET_INFLIGHT_FLOW_FLAG, data: false});
+                //toastr.success("Flow completed successfully!");
+                dispatch({type: SET_INFLIGHT_FLOW_FLAG, data: false, message: data.data, messageType: true});
                 axios.post(SERVER_BASE_URL + "/transaction-list", {pageSize: 10, offset: 0})
                 .then(({data}) => {
                     if(data.status){

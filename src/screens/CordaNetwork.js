@@ -23,8 +23,10 @@ class CordaNetwork extends Component{
   }
 
   updateWindowDimensions() {
-    this.screenWidth = this.refs.mapPane.clientWidth;
-    this.screenHeight = this.screenWidth;
+    try{
+      this.screenWidth = this.refs.mapPane.clientWidth;
+      this.screenHeight = this.screenWidth;
+    }catch(e){}
   }
 
   getScreenXPos(posX){
