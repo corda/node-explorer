@@ -139,8 +139,41 @@ tr.open {
     margin: 10px 0;
     width: 100%;
     float: left;
+    position: relative;
 }
 
 label.MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLabel-animated{
     text-transform: capitalize;
+}
+
+.list-selection{
+    background: #DF0B1B;
+    color: #fff;
+    padding: 5px 20px 5px 10px;
+    border-radius: 15px;
+    display: inline-block;
+    position: relative;
+    margin: 0 4px 4px 0px;
+}
+
+.list-selection > span {
+    position: absolute;
+    right: 1px;
+    top: 7px;
+    padding: 1px 4px;
+    background: #EDEDED;
+    color: #000;
+    border-radius: 15px;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+.inner-form-close{
+    position: absolute;
+    right: 4px;
+    top: 5px;
+    background: #FFF;
+    padding: 3px 5px;
+    cursor: pointer;
+    border: 1px solid #CCC;
 }
