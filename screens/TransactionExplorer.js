@@ -15,11 +15,13 @@ class TransactionExplorer extends Component{
             offset: 0
         },
         flowInfo: {},
-        selectedFlow: "",
-        trnxDetail: []
+        selectedFlow: {},
+        trnxDetail: [],
+        paramList: []
     }
 
     handleClose = () => {
+        this.setState({paramList: [], selectedFlow: {}})
         this.props.loadFlowParams([]);
         this.props.closeTxModal();
     }
@@ -40,13 +42,28 @@ class TransactionExplorer extends Component{
         for(var i=0; i<this.props.registeredFlows.length;i++){
             const flow = this.props.registeredFlows[i];
             if(flow.flowName === event.target.value){
-                this.props.loadFlowParams(flow.flowParams);
+                this.props.loadFlowParams(flow.flowParamsMap.Constructor_1);
+                this.setState({
+                    selectedFlow: {
+                        name: event.target.value,
+                        constructors: flow.flowParamsMap,
+                        activeConstructor: 'Constructor_1'
+                    }
+                });
                 break;
             }
         }
         this.props.setFlowSelectionFlag();
+    }
+
+    handleFlowConstructorSelection = (event) => {   
+        this.props.loadFlowParams(this.state.selectedFlow.constructors[event.target.value]);
         this.setState({
-            selectedFlow: event.target.value
+            selectedFlow: {
+                name: this.state.selectedFlow.name,
+                constructors: this.state.selectedFlow.constructors,
+                activeConstructor: event.target.value
+            }
         });
     }
 
@@ -81,7 +98,7 @@ class TransactionExplorer extends Component{
         this.props.inFlightFLow(true);
         this.setState({
             flowInfo: {
-                flowName: this.state.selectedFlow,
+                flowName: this.state.selectedFlow.name,
                 flowParams: this.props.flowParams
             },
         }, () => this.props.startFlow(this.state.flowInfo));
@@ -117,12 +134,15 @@ class TransactionExplorer extends Component{
         )
     }
 
-    renderParamForm(innerForm, paramList, title, deep){
+    renderParamForm(innerForm, paramList, title, deep, delIdx, param, key){
         return(
             <React.Fragment>
             {
                 innerForm? 
-                    <div className="inner-form" style={{padding: deep? "10px 0px 0px 0px":  "10px 0"}}>
+                    <div className="inner-form" style={{padding: deep? "10px 0px 0px 0px":  "10px 0"}} key={key}>
+                        {
+                            delIdx>=0?<div className="inner-form-close" onClick={()=> this.updateCmplxListParam(param, false, delIdx)}>X</div>:null
+                        }
                         <div style={{padding: deep? 0:  "0 10px"}}>
                             <div style={{textTransform:"capitalize"}}><strong>{title}</strong></div>
                             {
@@ -139,9 +159,25 @@ class TransactionExplorer extends Component{
 
     renderInnerForm(param, index, deep){
         return(
-            param.flowParams && param.flowParams.length > 1? 
+            param.flowParams && param.flowParams.length > 1 && !(param.hasParameterizedType && (param.paramType === 'java.util.List' || param.paramType === 'java.util.Set'))? 
                 this.renderParamForm(true, param.flowParams, param.paramName, deep)
-            :        
+            : // List of complex object
+            param.flowParams && param.flowParams.length > 1 && (param.hasParameterizedType && (param.paramType === 'java.util.List' || param.paramType === 'java.util.Set'))? 
+                <React.Fragment>
+                    {/* {
+                        this.renderParamForm(true, param.paramValue[0].params, param.paramName, deep, -1, param, -1)
+                    }
+                    {
+                        this.state.paramList[param.paramName]?
+                        this.state.paramList[param.paramName].map((value, idx) => {
+                            return this.renderParamForm(true, value.params, param.paramName, deep, idx, param, value.key)
+                        }):null
+                    }
+                    <div style={{cursor: "pointer"}} onClick={()=> this.updateCmplxListParam(param, true)}>Add</div> */}
+                    <div style={{color: 'red', marginTop: 10}}>List of Complex Object is not supported</div>
+                </React.Fragment>
+            :
+            <React.Fragment>   
             <div key={index} style={{width: "50%", float: "left", marginBottom: 5}}>
                 {
                 param.paramType === 'net.corda.core.identity.Party'?
@@ -172,12 +208,150 @@ class TransactionExplorer extends Component{
                         <TextField type="date" onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} InputLabelProps={{ shrink: true }} fullWidth/> 
                     </div>
                 :
+                param.hasParameterizedType && (param.paramType === 'java.util.List' || param.paramType === 'java.util.Set') ?
+                    this.renderListParam(param, index)
+                :
                     <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
                         <TextField onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} helperText={this.getHelperText(param.paramType)} fullWidth/> 
                     </div>
                 }
             </div> 
+            {
+                index%2 === 1? <div style={{clear: "both"}}></div>: null
+            }
+            </React.Fragment>
         );
+    }
+
+    renderListParam(param, index){
+        return (
+            <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
+                {
+                    param.parameterizedType === 'net.corda.core.identity.Party'?
+                        <React.Fragment>
+                            <FormControl fullWidth>
+                                <InputLabel>{param.paramName}</InputLabel>
+                                <Select onChange={e => this.updateListParam(param, e.target.value, true)} autoWidth>
+                                    {
+                                        this.props.parties.map((party, index) => {
+                                            return(
+                                                <MenuItem key={index} value={party}>{party}</MenuItem>
+                                            );
+                                        })
+                                    }
+                                </Select>
+                                <FormHelperText>Select Parties</FormHelperText>
+                            </FormControl>
+                            {
+                                this.state.paramList[param.paramName]?
+                                this.state.paramList[param.paramName].map((value, idx) => {
+                                        return (<div key={idx} className="list-selection">{value}<span onClick={()=>this.updateListParam(param, "", false, idx)}>X</span></div>)
+                                    })
+                                :null
+                            }
+                        </React.Fragment>
+                    : param.parameterizedType === 'java.time.LocalDateTime' || param.parameterizedType === 'java.time.Instant'?
+                        <React.Fragment>
+                            <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
+                                <TextField type="datetime-local" onBlur={e => this.updateListParam(param, e.target.value, true)} label={param.paramName} InputLabelProps={{ shrink: true }} 
+                                helperText={this.getHelperText(param.paramType)} fullWidth/> 
+                            </div>
+                            {
+                                this.state.paramList[param.paramName]?
+                                this.state.paramList[param.paramName].map((value, idx) => {
+                                        return (<div key={idx} className="list-selection">{value}<span onClick={()=>this.updateListParam(param, "", false, idx)}>X</span></div>)
+                                    })
+                                :null
+                            }
+                        </React.Fragment>    
+                    :
+                    param.parameterizedType === 'java.time.LocalDate'?
+                        <React.Fragment>
+                            <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
+                                <TextField type="date" onBlur={e => this.updateListParam(param, e.target.value, true)} label={param.paramName} InputLabelProps={{ shrink: true }} fullWidth/> 
+                            </div>
+                            {
+                                this.state.paramList[param.paramName]?
+                                this.state.paramList[param.paramName].map((value, idx) => {
+                                        return (<div key={idx} className="list-selection">{value}<span onClick={()=>this.updateListParam(param, "", false, idx)}>X</span></div>)
+                                    })
+                                :null
+                            }
+                        </React.Fragment>
+                    :
+                    param.hasParameterizedType && (param.paramType === 'java.util.List' || param.paramType === 'java.util.Set') ?
+                        <div style={{color: 'red', marginTop: 10}}>Nested List Param is not supported!</div>
+                    :
+                        <React.Fragment>
+                            <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
+                               <TextField onBlur={e => this.updateListParam(param, e.target.value, true)} label={param.paramName} helperText={this.getHelperText(param.paramType)} fullWidth/> 
+                            </div>
+                            {
+                                this.state.paramList[param.paramName]?
+                                this.state.paramList[param.paramName].map((value, idx) => {
+                                        return (<div key={idx} className="list-selection">{value}<span onClick={()=>this.updateListParam(param, "", false, idx)}>X</span></div>)
+                                    })
+                                :null
+                            }
+                        </React.Fragment>
+                    }
+            </div>
+        );
+    }
+
+    // updateCmplxListParam(param, flag, idx){
+    //     if(flag){
+    //         let obj = JSON.parse(JSON.stringify(param.paramValue[0]));
+    //         param.paramValue.push(obj);
+
+    //         let keyVal = [];
+    //         if(!(this.state.paramList[param.paramName] === undefined || this.state.paramList[param.paramName] === null)){
+    //             keyVal[param.paramName] = this.state.paramList[param.paramName];
+    //         }else{
+    //             keyVal[param.paramName] = [];
+    //         }
+    //         if(keyVal[param.paramName].length === 0){
+    //             obj.key = 0;
+    //         }else{
+    //             obj.key = keyVal[param.paramName][keyVal[param.paramName].length -1].key + 1;
+    //         }
+    //         keyVal[param.paramName].push(obj);
+    //         this.setState({
+    //             paramList: keyVal
+    //         });
+    //     }else{
+    //         param.paramValue.splice(idx+1, 1);
+    //         this.state.paramList[param.paramName].splice(idx, 1);
+    //         let keyVal = [];
+    //         keyVal[param.paramName] = this.state.paramList[param.paramName];
+    //         this.setState({
+    //             paramList: keyVal
+    //         });
+    //     }
+    // }
+
+
+    updateListParam(param, val, flag, idx) {
+        if(flag){
+            if(param.paramValue === undefined || param.paramValue === null)
+                param.paramValue = []
+            
+                param.paramValue.push(val);
+                let keyVal = [];
+                keyVal[param.paramName] = param.paramValue;
+                this.setState({
+                    paramList: keyVal
+                });
+        }else{
+            param.paramValue.splice(idx, 1);
+            this.state.paramList[param.paramName].splice(idx, 1)
+            let keyVal = [];
+            keyVal[param.paramName] = this.state.paramList[param.paramName];
+            this.setState({
+                paramList: keyVal
+            });
+
+        }
     }
 
     getHelperText(paramType){
@@ -192,6 +366,9 @@ class TransactionExplorer extends Component{
             case 'java.time.LocalDateTime':
             case 'java.time.Instant':    
                 return 'Param Type: ' + paramType + ' eg: 10/02/2020 10:12:30 AM';
+
+            case 'net.corda.core.utilities.OpaqueBytes':
+                return 'Param Type: ' + paramType + ', Enter String value';
 
             default:
                 return 'Param Type: ' + paramType;
@@ -226,15 +403,34 @@ class TransactionExplorer extends Component{
                                     </Select>
                                 </FormControl>
                             </div>
+                            {   
+                                this.state.selectedFlow.constructors && Object.keys(this.state.selectedFlow.constructors).length>0?
+                                <div>
+                                    <FormControl style={{minWidth: 250}}>
+                                        <InputLabel id="flow-cons-select-label">Select A Constructor Type</InputLabel>
+                                        <Select labelId="flow-cons-select-label" onChange={this.handleFlowConstructorSelection} 
+                                        value={this.state.selectedFlow.activeConstructor} autoWidth>
+                                            {
+                                                Object.keys(this.state.selectedFlow.constructors).map((constructor, index) => {
+                                                    return(
+                                                        <MenuItem key={index} value={constructor}>{constructor}</MenuItem>
+                                                    );
+                                                })
+                                            }
+                                        </Select>
+                                    </FormControl>
+                                </div>:null
+                            }
+
                             <div>
                                 {
                                     this.renderParamForm(false)
                                 }
                                 
-                                        <div style={{width: "100%", float:"left", marginTop: 10}}>
+                                        <div style={{width: "100%", float:"left", marginTop: 10, scroll: "auto"}}>
                                             {
                                             this.props.flowResultMsg    ?
-                                                <div style={{float: "left"}}>
+                                                <div style={{float: "left", fontSize: 14}}>
                                                     <p style={{color: this.props.flowResultMsgType?"green":"red"}}>
                                                         <span>{this.props.flowResultMsgType?'Flow Successful :': 'Flow Errored :'}</span>
                                                         {this.props.flowResultMsg}
