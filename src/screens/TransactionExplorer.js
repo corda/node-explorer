@@ -390,26 +390,28 @@ class TransactionExplorer extends Component{
                             <h3 id="simple-modal-title">Please Select a Flow to Execute</h3>
                             <div style={{color: "red"}}>{this.props.registeredFlows.length === 0? 'No Flows Found! Make sure you have the cordapp directory set in the Settings Tab':null}</div>
                             <div>
-                                <FormControl style={{minWidth: 250}}>
-                                    <InputLabel id="flow-select-label">Select A Flow to Execute</InputLabel>
-                                    <Select labelId="flow-select-label" onChange={this.handleFlowSelection} autoWidth>
-                                        {
-                                            this.props.registeredFlows.map((flow, index) => {
-                                                return(
-                                                    <MenuItem key={index} value={flow.flowName}>{flow.flowName}</MenuItem>
-                                                );
-                                            })
-                                        }
-                                    </Select>
+                            <div style={{width: "70%", float:"left"}}>
+                                <FormControl style={{minWidth: 250, maxWidth:"100%", paddingRight: 10}}>
+                                        <InputLabel id="flow-select-label">Select A Flow to Execute</InputLabel>
+                                        <Select labelId="flow-select-label" onChange={this.handleFlowSelection}>
+                                            {
+                                                this.props.registeredFlows.map((flow, index) => {
+                                                    return(
+                                                        <MenuItem key={index} value={flow.flowName}>{flow.flowName}</MenuItem>
+                                                    );
+                                                })
+                                            }
+                                        </Select>
                                 </FormControl>
                             </div>
                             {   
                                 this.state.selectedFlow.constructors && Object.keys(this.state.selectedFlow.constructors).length>0?
-                                <div>
-                                    <FormControl style={{minWidth: 250}}>
-                                        <InputLabel id="flow-cons-select-label">Select A Constructor Type</InputLabel>
+                                <div style={{width: "30%", float: "left"}}>
+                                    <FormControl style={{width:"100%"}}>
+                                        <div style={{paddingLeft: 10}}>
+                                        <InputLabel id="flow-cons-select-label" style={{paddingLeft: 10}}>Select A Constructor Type</InputLabel>
                                         <Select labelId="flow-cons-select-label" onChange={this.handleFlowConstructorSelection} 
-                                        value={this.state.selectedFlow.activeConstructor} autoWidth>
+                                        value={this.state.selectedFlow.activeConstructor} fullWidth>
                                             {
                                                 Object.keys(this.state.selectedFlow.constructors).map((constructor, index) => {
                                                     return(
@@ -418,9 +420,11 @@ class TransactionExplorer extends Component{
                                                 })
                                             }
                                         </Select>
+                                        </div>
                                     </FormControl>
                                 </div>:null
                             }
+                            </div>
 
                             <div>
                                 {
