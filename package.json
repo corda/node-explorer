@@ -24,7 +24,8 @@
     "redux": "^4.0.4",
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
-    "tree-kill": "^1.2.2"
+    "tree-kill": "^1.2.2",
+    "yarn": "^1.22.4"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -43,7 +44,7 @@
     ],
     "dmg": {
       "background": "background.png",
-      "icon":  "icon.icns",
+      "icon": "icon.icns",
       "iconSize": 100,
       "window": {
         "width": 520,
@@ -72,9 +73,10 @@
     },
     "linux": {
       "target": [
-        "deb",
-        "rpm"
-      ]
+        "AppImage",
+        "deb"
+      ],
+      "category": "Utility"
     }
   },
   "eslintConfig": {
