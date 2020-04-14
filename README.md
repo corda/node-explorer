@@ -38,5 +38,10 @@ Note this project uses the node-server submodule available at https://github.com
   - From MAIN project directory
   - ``git push --recurse-submodules=on-demand``
 
+#### Packaging electron installers / app files
 
+Note: You must have a compiled server jar in the directory root 
+ - `cd ./server && ./gradlew bootJar`, move compiled jar in `./server/build/libs` to the root.
+
+Then run: ``npm run electron-pack``
 
