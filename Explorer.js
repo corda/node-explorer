@@ -9,8 +9,13 @@ import * as ActionType from './store/Actions';
 import VaultExplorer from './screens/VaultExplorer';
 import Dashboard from './screens/Dashboard';
 import Settings from './screens/Settings';
+import Spinner from './assets/spinner.svg';
 
 class Explorer extends Component {
+
+    componentWillMount() {
+        this.props.saveGradleNodesList();
+    }
 
     componentDidMount(){
         this.props.getApplicationState();
@@ -29,7 +34,7 @@ class Explorer extends Component {
                         this.props.spinner? 
                         <div className="spinner">
                           <div>
-                              <img style={{width: 100}} src="spinner.svg" alt="Spinner"></img>
+                              <img style={{width: 100}} src={Spinner} alt="Spinner"></img>
                           </div>
                           </div>:null
                       }
@@ -45,7 +50,7 @@ class Explorer extends Component {
                   </div> 
               </div> 
               : 
-              <Login></Login>
+                <Login/>
             }
         </React.Fragment>
       );
@@ -56,14 +61,14 @@ const mapStateToProps = state => {
     return {
         isLoggedIn: state.common.isLoggedIn,
         currentPage: state.common.currentPage,
-        spinner: state.common.spinner
+        spinner: state.common.spinner,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-      onLoginSuccess: () => dispatch({type: ActionType.LOGIN_SUCCESS}),
-      getApplicationState: () => dispatch({type: ActionType.LOAD_APP_STATE}),
+      saveGradleNodesList: () => dispatch({type: ActionType.UPDATE_GRADLE_NODES_LIST}),
+      getApplicationState: () => dispatch({type: ActionType.LOAD_APP_STATE}), // for memory
     }
 }
 

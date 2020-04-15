@@ -9,6 +9,16 @@ import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
 import '../styles/SideMenu.css';
 
 const sideMenu = (props) => {
+    const settingsOption = () => {
+        return (
+            <li className={props.currentPage === 4? "active":""} onClick={() => props.changeScreen(4)}>
+            <div>
+                <SettingsApplicationsIcon fontSize="large"></SettingsApplicationsIcon>
+            </div>
+            <span>Settings</span>
+            </li>
+        );
+    }
     return (
         <div className="SideMenu">
             <ul>
@@ -36,12 +46,7 @@ const sideMenu = (props) => {
                     </div>
                     <span>Vault</span>
                 </li>
-                <li className={props.currentPage === 4? "active":""} onClick={() => props.changeScreen(4)}>
-                    <div>
-                        <SettingsApplicationsIcon fontSize="large"></SettingsApplicationsIcon>
-                    </div>
-                    <span>Settings</span>
-                </li>
+                {props.remoteLogin ? settingsOption() : null}
             </ul>
         </div>
     );
@@ -50,7 +55,8 @@ const sideMenu = (props) => {
 
 const mapStateToProps = state => {
     return {
-        currentPage: state.common.currentPage
+        currentPage: state.common.currentPage,
+        remoteLogin: state.common.remoteLogin // adds settings option for non-build.gradle logins
     }
   }
   

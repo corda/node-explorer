@@ -5,7 +5,8 @@ import '../styles/Network.css';
 import BoxWithTitle from '../components/BoxWithTitle';
 import ListBoxWithTitle from '../components/ListBoxWithTitle';
 import Pin from '../components/Pin';
- 
+import WorldMapSquare from '../assets/WorldMapSquare.png';
+
 class CordaNetwork extends Component{
   
   constructor(props){
@@ -53,7 +54,7 @@ class CordaNetwork extends Component{
   render(){
     return (
       <div style={{position: "relative", height:window.outerHeight, overflowY: "auto"}} ref="mapPane">
-        <img src="WorldMapSquare.png" alt="World Map" width="100%" onLoad={this.handleImageLoaded.bind(this)}></img>
+        <img src={WorldMapSquare} alt="World Map" width="100%" onLoad={this.handleImageLoaded.bind(this)}></img>
         <div style={{position: "absolute", top: "0"}}>
           <div className="side-panel" style={{height:window.innerHeight - 60}}>
               <BoxWithTitle node={this.props.self}/>
