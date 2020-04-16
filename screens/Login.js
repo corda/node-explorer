@@ -131,11 +131,13 @@ class Login extends Component {
             this.props.onLoadAction();
             return (<SplashScreen/>)
         } 
-        else { // Show manual login screen
-            if (!this.props.remoteLogin && this.props.currentNodeChanged) {
+        else { 
+            // first attempt to connect to default gradle nodes if available and user hasn't requested
+            // explict remote login
+            if (!this.props.remoteLogin && this.props.currentNodeChanged && this.props.gradleNodesRunning) {
                 this.props.onLoginAction(this.props.currentNode);
             }
-            return (
+            return ( // else Show manual login screen
                 <div style={{position: 'relative'}}>
                     <img src={GlobalMap} alt="Global Map" width="100%"></img>
                     <div className="center-container">
@@ -212,7 +214,8 @@ const mapStateToProps = state => {
         gradleNodesList: state.common.gradleNodesList,
         currentNode: state.common.currentNode,
         remoteLogin: state.common.remoteLogin,
-        currentNodeChanged: state.common.currentNodeChanged
+        currentNodeChanged: state.common.currentNodeChanged,
+        gradleNodesRunning: state.common.gradleNodesRunning
     }
 }
 

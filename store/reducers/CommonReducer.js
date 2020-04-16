@@ -11,7 +11,8 @@ const initialState = {
     currentNode: {},
     currentCorDappDir: "",
     currentNodeChanged: false,
-    remoteLogin: false
+    remoteLogin: false,
+    gradleNodesRunning: false
 };
 
 const getNodeData = () => {
@@ -72,8 +73,9 @@ const reducer = (state = initialState, action) => {
                 remoteLogin: false
             }
         case ActionType.UPDATE_GRADLE_NODES_LIST:
-            // console.log("in the reducer " + action.payload[Object.keys(action.payload)[0]]);
             const nodes = getNodeData();
+            const gradleNodesRunning = JSON.parse(document.getElementById('gradleNodesRunning').innerHTML);
+            console.log("gradle nodes running " + gradleNodesRunning);
             if (nodes != undefined) {
                 const currentNode = nodes[Object.keys(nodes)[0]];
                 const hostNameSplit = currentNode.host.split(":");
@@ -88,7 +90,8 @@ const reducer = (state = initialState, action) => {
                     gradleNodesList: {...nodes},
                     currentNode: data,
                     currentNodeChanged: true,
-                    currentCorDappDir: currentNode.cordappDir
+                    currentCorDappDir: currentNode.cordappDir,
+                    gradleNodesRunning: gradleNodesRunning
                 }
             } else return state;
         case ActionType.SERVER_AWAKE:

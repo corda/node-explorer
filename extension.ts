@@ -188,7 +188,7 @@ function launchView(context: any, view: string){
 		retainContextWhenHidden: true,
 		localResourceRoots: [ vscode.Uri.file(path.join(context.extensionPath, 'out')) ]
 	});
-
+	
 	panel.webview.html = `
 		<!DOCTYPE html>
 		<html lang="en">
@@ -202,6 +202,7 @@ function launchView(context: any, view: string){
 		<body>
 			<div id="nodeDefaults" style="display:none">${JSON.stringify(nodeDefaults)}</div>
 			<div id="nodeList" style="display:none">${JSON.stringify(nodeConfig)}</div>
+			<div id="gradleNodesRunning" style="display:none">${JSON.stringify(isGradleNodeAvailable())}</div>
 			<div id="root"></div>
 			${loadScript(context,locationOfViews + 'index' + '.js') /* e.g /out/transactionExplorer.js */}
 			
@@ -234,6 +235,19 @@ function launchViewBackend() {
 		console.log("Client Launch successful");
 	} else {
 		console.log("Client already up");
+	}
+}
+
+function isGradleNodeAvailable() {
+	var nodeName = nodeConfig[0].name.match("O=(.*),L")![1];
+	if (vscode.window.terminals.find((value) => {
+		return value.name === nodeName;
+	}) === undefined) {
+		console.log("Nodes are NOT running");
+		return false;
+	} else {
+		console.log("Nodes are running");
+		return true;
 	}
 }
 
