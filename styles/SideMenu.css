@@ -16,11 +16,12 @@
 }
 
 .SideMenu ul li:hover{
-    background-color: #ec908e;
+    background-color: var(--vscode-sideBar-background);
+    color: var(--vscode-editor-foreground);
 }
 
 .SideMenu{
-    border-right: 1px solid #DDDDDD;
+    border-right: 1px solid var(--vscode-sideBarSectionHeader-background);
     height: 100%;
     width: 120px;
     position: fixed;

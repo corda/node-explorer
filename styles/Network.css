@@ -18,10 +18,10 @@
 
   .side-panel{
     position: fixed;
-    color: #FFFFFF;
     overflow: auto;
     width: 350px;
     padding-bottom: 10px;
+    color: #FFFFFF;
   }
 
   .node-container {

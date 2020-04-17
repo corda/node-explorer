@@ -3,16 +3,18 @@
     left: 50%;
     top: 5%;
     margin-left: -200px;
+    color: var(--vscode-sideBarSectionHeader-foreground) !important;
 }
 
 .center-container > div {
     width: 340px;
     text-align: center;
     padding: 20px;
-    border: 1px solid #CCCCCC;
-    box-shadow: 1px 1px 1px #CCCCCC;
+    border: 1px solid var(--vscode-sideBarSectionHeader-background);
+    box-shadow: 1px 1px 1px var(--vscode-sideBarSectionHeader-background);
     border-radius: 5px;
-    background-color: #EEEEEE;
+    background-color: var(--vscode-sideBar-background);
+    opacity: 1;
 }
 
 .explorer-text{

@@ -7,20 +7,20 @@
 
 .filter-title{
     padding: 5px 10px;
-    background: #DF0B1B;
-    color: #FFFFFF;
+    background: var(--vscode-sideBarSectionHeader-background);
+    color: var(--vscode-sideBarSectionHeader-foreground);
     font-weight: bold;
 }
 
 .filter-group{
     margin-bottom: 10px;
-    border: 1px solid #DF0B1B;
-    background: #FAFAFA;
+    border: 1px solid var(--vscode-sideBarSectionHeader-background);
+    background: var(--vscode-sideBar-background);
     margin: 0 20px 10px 20px;
 }
 
 .state-title{
-    background: #EEEEEE;
+    background: var(--vscode-sideBarSectionHeader-background);
     border-bottom: 1px solid #CCCCCC;
     padding: 10px 20px;
     display: flex;

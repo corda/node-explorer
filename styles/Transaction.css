@@ -48,11 +48,11 @@
 }
 
 table tr:hover {
-    background-color: #FAFAFA;
+    background-color: var(--vscode-badge-background);
 }
 
 tr th{
-    background-color: #EEEEEE !important;
+    background-color: var(--vscode-editor-foreground);
     font-weight: bold !important;
 }
 
@@ -60,6 +60,7 @@ tr th{
     display: inline-block;
     width: 100%;
     text-align: left;
+    color: #000000;
     border: 1px solid #CCCCCC;
     vertical-align: middle;
     background: #F1F1F1;
@@ -127,11 +128,11 @@ tr:hover {
   }
 
 tr.open td {
-    color: #FFFFFF;
+    color: var(--vscode-sideBar-background);
 }
 
 tr.open {
-    background: #DF0B1B !important;
+    background: var(--vscode-button-hoverBackground) !important;
 }
 
 .inner-form {

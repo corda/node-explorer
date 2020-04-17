@@ -6,6 +6,58 @@ import { connect } from 'react-redux';
 import SplashScreen from '../components/Splash';
 import GlobalMap from '../assets/global-map.png';
 import CrdaLogo from '../assets/crda-logo.svg';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core';
+
+const theme = createMuiTheme({
+    palette: {
+        action: {
+          disabledBackground: 'var(--vscode-button-background)'
+        }
+      },
+    overrides: {
+        MuiButton: {
+            containedPrimary: {
+                backgroundColor: 'var(--vscode-button-hoverBackground)',
+                color: '#FFFFFF',
+                '&:hover': {
+                    backgroundColor: 'var(--vscode-list-highlightForeground)',
+                    color: '#FFFFFF'
+                },
+            },
+            containedSecondary: {
+                backgroundColor: 'var(--vscode-list-highlightForeground)',
+                color: 'var(--vscode-sideBarSectionHeader-foreground)'
+            }
+        },
+        MuiInputBase: {
+            root: {
+                color: 'var(--vscode-sideBarSectionHeader-foreground)'
+            }
+        },
+        MuiInputLabel: { 
+            root: { 
+                color: 'var(--vscode-sideBarSectionHeader-foreground)'
+            }
+        },
+        MuiFormControlLabel: { 
+            root: { 
+                color: 'var(--vscode-sideBarSectionHeader-foreground)'
+            }
+        },
+        MuiInput: {
+            underline: {
+              "&:before": {
+                borderBottom: '1px solid #FFFFFF'
+              }
+            }
+        },
+        MuiCheckbox: {
+            root: {
+                color: 'var(--vscode-sideBarSectionHeader-foreground)'
+            }
+        }
+    }
+});
 
 class Login extends Component {
 
@@ -90,7 +142,6 @@ class Login extends Component {
     }
 
     render() {
-
         const errors = this.validate();
         const isDisabled = Object.keys(errors).some(x => errors[x]);
 
@@ -98,6 +149,7 @@ class Login extends Component {
             // user, password/key, host, port
             if (this.state.sshChecked) {
                 return (
+                    <ThemeProvider theme={theme}>
                     <Grid container>
                         <Grid item xs={6}>
                             <TextField label="SSH Port" type="number" value={this.state.ssh.port}
@@ -123,6 +175,7 @@ class Login extends Component {
                             </Grid>
                         </Grid>
                     </Grid>
+                    </ThemeProvider>
                 )
             }
         }
@@ -138,6 +191,7 @@ class Login extends Component {
                 this.props.onLoginAction(this.props.currentNode);
             }
             return ( // else Show manual login screen
+                <ThemeProvider theme={theme}>
                 <div style={{position: 'relative'}}>
                     <img src={GlobalMap} alt="Global Map" width="100%"></img>
                     <div className="center-container">
@@ -185,10 +239,7 @@ class Login extends Component {
                                             onChange={e => this.setState({sshChecked: e.target.checked})}
                                             value="primary"
                                         />
-                                        } label="Use SSH" 
-                                            style={{
-                                                color: "#757575"
-                                            }}/>
+                                        } label="Use SSH" />
                                     {sshCredentials()}
                                 </Grid>
                                 <Grid container justify="center" spacing={3}>
@@ -205,6 +256,7 @@ class Login extends Component {
                         </div>
                     </div>
                 </div>
+                </ThemeProvider>
             );
         }
     }

@@ -4,7 +4,7 @@
     box-shadow: 0 0 4px 3px rgba(0,0,0,.16);
     position: fixed;
     top: 0;
-    background-color: #ffffff;
+    background-color: var(--vscode-statusBar-background);
     z-index: 999;
 }
 

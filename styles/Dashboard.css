@@ -1,15 +1,15 @@
 .widget {
-    background: #EEEEEE;
+    background: var(--vscode-sideBar-background);
     height: 350px;
     margin: 20px;
-    border: 1px solid #DF0B1B;
+    border: 1px solid var(--vscode-sideBarSectionHeader-background);
     font-size: 14px;
     overflow: auto;
 }
 
 .title{
-    background: #DF0B1B;
-    color: #FFFFFF;
+    background: var(--vscode-sideBarSectionHeader-background);
+    color: var(--vscode-sideBarSectionHeader-foreground);
     padding: 8px 10px;
     font-weight: bold;
     text-transform: uppercase;
@@ -21,20 +21,20 @@
 }
 
 .appInfo{
-    background: #FFFFFF;
+    background: var(--vscode-sideBar-background);
     padding: 8px;
     margin-top: 10px;
-    border: 1px solid #CCCCCC;
+    border: 1px solid var(--vscode-sideBarSectionHeader-background);
 }
 
 .appInfo > div > span {
-    color: #DF0B1B;
+    color: var(--vscode-statusBarItem-remoteBackground);
     font-family: monospace;
 }
 
 .app-title{
-    background: #555;
-    color: #FFF;
+    background: var(--vscode-sideBarSectionHeader-background);
+    color: var(--vscode-sideBarSectionHeader-foreground);
     padding: 4px 8px 4px 8px;
     margin: -9px -9px 2px -9px;
 }

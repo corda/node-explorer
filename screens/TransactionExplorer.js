@@ -7,6 +7,46 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as ActionType from '../store/Actions';
 import '../styles/Transaction.css';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core';
+
+const theme = createMuiTheme({
+
+    overrides: {
+        MuiTableCell: {
+            stickyHeader: {
+                backgroundColor: 'var(--vscode-sideBarSectionHeader-background)',
+                color: 'var(--vscode-editor-foreground)'
+            },
+            body: {
+                color: 'var(--vscode-editor-foreground)'
+            }
+        },
+        MuiButton: {
+            outlinedPrimary: {
+                backgroundColor: 'var(--vscode-button-hoverBackground)',
+                color: '#FFFFFF',
+                border: '0px',
+                '&:hover': {
+                    backgroundColor: 'var(--vscode-list-highlightForeground)',
+                    border: '0px',
+                    color: '#FFFFFF'
+                },
+            },
+            containedPrimary: {
+                backgroundColor: 'var(--vscode-button-hoverBackground)',
+                color: '#FFFFFF',
+                '&:hover': {
+                    backgroundColor: 'var(--vscode-list-highlightForeground)',
+                    color: '#FFFFFF'
+                },
+            },
+            containedSecondary: {
+                backgroundColor: 'var(--vscode-list-highlightForeground)',
+                color: 'var(--vscode-sideBarSectionHeader-foreground)'
+            }
+        }
+    }
+});
 
 class TransactionExplorer extends Component{
     state = {
@@ -377,6 +417,7 @@ class TransactionExplorer extends Component{
 
     render(){
         return(
+            <ThemeProvider theme={theme}>
             <div style={{padding: 20}}>
                 <div className="page-title">
                     <span>Transaction Explorer</span>
@@ -499,7 +540,7 @@ class TransactionExplorer extends Component{
                                             </TableRow>
                                             {
                                                 this.state.trnxDetail[index]?
-                                                <TableRow style={{backgroundColor: "#EEEEEE"}}>
+                                                <TableRow style={{backgroundColor: 'var(--vscode-sideBar-background)'}}>
                                                     <TableCell colSpan="5">
                                                     <div style={{textAlign: "center", padding: "0 30px"}}>
                                                         <Grid container spacing={0}>
@@ -557,7 +598,7 @@ class TransactionExplorer extends Component{
                                                             <Grid item xs={12}>
                                                             <div className="wrapper" style={{marginTop: 20, minWidth: "auto", height: "auto"}}>
                                                                 <div className="wtitle">Signatures</div>
-                                                                <div style={{padding: "10px", backgroundColor: "#FFFFFF"}}>
+                                                                <div style={{padding: "10px", backgroundColor: "#FFFFFF", color: "#000000"}}>
                                                                     {
                                                                         trnx.signers && trnx.signers.length > 0?
                                                                         trnx.signers.map((sig, idx) => {
@@ -604,6 +645,7 @@ class TransactionExplorer extends Component{
                     }
                 </div>
             </div>
+            </ThemeProvider>
         );
     }
 }

@@ -4,6 +4,29 @@ import { Button, Popper, Paper, Grow, ClickAwayListener, MenuList, MenuItem } fr
 import * as ActionType from '../store/Actions'
 import { connect } from 'react-redux';
 import CrdaLogo from '../assets/crda-logo.svg';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core';
+
+const theme = createMuiTheme({
+
+    overrides: {
+        MuiButton: {
+            outlinedPrimary: {
+                backgroundColor: 'var(--vscode-button-hoverBackground)',
+                color: '#FFFFFF',
+                border: '0px',
+                '&:hover': {
+                    backgroundColor: 'var(--vscode-list-highlightForeground)',
+                    border: '0px',
+                    color: '#FFFFFF'
+                },
+            },
+            outlinedSecondary: {
+                backgroundColor: 'var(--vscode-list-highlightForeground)',
+                color: 'var(--vscode-sideBarSectionHeader-foreground)'
+            }
+        }
+    }
+});
 
 const Header = (props) => {
 
@@ -63,11 +86,12 @@ const Header = (props) => {
     }
   
     return(
+      <ThemeProvider theme={theme}>
       <div className="Header">
           <div>
                 <img src={CrdaLogo} width="100%" alt="Corda Logo" className="Logo"/>
                 <div className="profile">
-                  <Button variant="outlined" ref={anchorRef} onClick={handleToggle}>
+                  <Button color="primary" variant="outlined" ref={anchorRef} onClick={handleToggle}>
                     {props.profile.name} - ({serverLocation})
                   </Button>
                   <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
@@ -97,6 +121,7 @@ const Header = (props) => {
                 </div>
           </div>
       </div>
+      </ThemeProvider>
     );
 }
 
