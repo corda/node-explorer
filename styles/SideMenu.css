@@ -32,3 +32,8 @@
     background-color: #DF0A1B;
     color: #FFFFFF;
 }
+
+.SideMenu li.active:hover{
+    background-color: #DF0A1B;
+    color: #FFFFFF;
+}
