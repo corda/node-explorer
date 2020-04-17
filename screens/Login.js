@@ -185,7 +185,10 @@ class Login extends Component {
                                             onChange={e => this.setState({sshChecked: e.target.checked})}
                                             value="primary"
                                         />
-                                    } label={"Use SSH"} />
+                                        } label="Use SSH" 
+                                            style={{
+                                                color: "#757575"
+                                            }}/>
                                     {sshCredentials()}
                                 </Grid>
                                 <Grid container justify="center" spacing={3}>
