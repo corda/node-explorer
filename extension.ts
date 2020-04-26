@@ -53,23 +53,12 @@ function loadScript(context: vscode.ExtensionContext, path: string) {
  * @param context - Container for the extensions context
  */
 export function activate(context: vscode.ExtensionContext) {
-	console.log('vscode-corda is now active');
-	//vscode.window.showInformationMessage("Corda project detected - Features available in Command Palette");
-
-	// monitor workspace folder changes so we can parse the corda gradle config
-	//context.subscriptions.push(vscode.workspace.onDidChangeWorkspaceFolders(e => updateWorkspaceFolders()));
 
 	// initialize
 	updateWorkspaceFolders();
 
 	let cordaClean = vscode.commands.registerCommand('extension.cordaClean', () => {		
-		console.log("Removing all existing node windows...");
-		// dispose any terminals if exist
-		disposeRunningNodes();
-		console.log("Execute 'Clean'...");
-
 		vscode.window.setStatusBarMessage('Running gradlew clean', 4000);
-		
 		gradleRun('clean');
 	});
 
@@ -120,27 +109,6 @@ export function activate(context: vscode.ExtensionContext) {
 		  }
 	});
 
-	/**
-	 * Ensure that all of the node details have been read from the gradle file before allowing the 
-	 * user to run the extensions for the Vault Query view and the Flow view.
-	 */
-	// let cordaShowVaultQuery = vscode.commands.registerCommand('extension.cordaShowVaultQuery', () =>{
-	// 	vscode.window.setStatusBarMessage('Displaying Corda Vault Query View', 5000);
-	// 	var viewIsLaunched = false;
-	// 	for (var i = 0; i < 10; i++) {
-	// 		(function (i) {
-	// 		  setTimeout(function () {
-	// 			if(nodeLoaded){
-	// 				if(!viewIsLaunched){
-	// 					viewIsLaunched = true;
-	// 					launchView(context, "vaultQuery");
-	// 				}
-	// 			}
-	// 		  }, 3000*i);
-	// 		})(i);
-	// 	  }
-	// });
-
 	let cordaShowNodeExplorerView = vscode.commands.registerCommand('extension.cordaShowNodeExplorer', () => {
 		vscode.window.setStatusBarMessage('Displaying Corda Node Explorer', 5000);
 		var viewIsLaunched = false;
@@ -168,11 +136,35 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(cordaTest);
 	context.subscriptions.push(cordaDeployNodes);
 	context.subscriptions.push(cordaRunNodes);
-	//context.subscriptions.push(cordaShowVaultQuery);
 	context.subscriptions.push(cordaShowNodeExplorerView);
 	context.subscriptions.push(cordaNoGradle);
 	
 }
+
+function gradleRun(param : string) {
+	console.log(gradleTerminal);
+	//dispose any running terminals
+	disposeRunningNodes();
+
+	var cmd;
+	
+	if(winPlatform){
+		if(shellExecPath.includes("powershell")){
+			cmd = "cd \"" + projectCwd + "\" ; ./gradlew " + param;
+		}else{
+			cmd = "cd " + projectCwd + " && gradlew " + param;
+		}
+	}else{
+		cmd = 'cd ' + projectCwd + ' && ./gradlew ' + param;
+	}
+	if (gradleTerminal === null) {
+		vscode.workspace.getConfiguration().get('terminal');
+		gradleTerminal = vscode.window.createTerminal('Gradle', shellExecPath);
+	}
+	gradleTerminal.show(true);
+	gradleTerminal.sendText(cmd);	
+}
+
 
 /**
  * launchView creates the HTML file that the react code will be hooked into. 
@@ -345,32 +337,6 @@ function runNodes() {
 	}
 }
 
-
-function gradleRun(param : string) {
-	//dispose any running terminals
-	disposeRunningNodes();
-
-	var cmd;
-	
-	if(winPlatform){
-		if(shellExecPath.includes("powershell")){
-			cmd = "cd \"" + projectCwd + "\" ; ./gradlew " + param;
-		}else{
-			cmd = "cd " + projectCwd + " && gradlew " + param;
-		}
-	}else{
-		cmd = 'cd ' + projectCwd + ' && ./gradlew ' + param;
-	}
-	if (gradleTerminal === null) {
-		var shellArgs = [] as any;
-		vscode.workspace.getConfiguration().get('terminal');
-		gradleTerminal = vscode.window.createTerminal('Gradle', shellExecPath, shellArgs);
-	}
-	gradleTerminal.show(true);
-	gradleTerminal.sendText(cmd);	
-}
-
-
 /**
  * scanGradleFile uses the imported parser to scan through a passed in file. 
  * If it detects that the parse has returned attributes that we'd expect in the gradle file that defines the nodes, 
@@ -457,6 +423,10 @@ function updateWorkspaceFolders(): any {
 }
 
 function disposeRunningNodes(){
+	if (gradleTerminal !== null) {
+		gradleTerminal.dispose();
+		gradleTerminal = null;
+	}
 	if (clientTerminal !== null) { // remove client terminal
 		clientTerminal.dispose();
 		clientTerminal = null;
