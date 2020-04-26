@@ -27,11 +27,12 @@ if(process.platform.includes("win32") || process.platform.includes("win64")){
 var nodeConfig = [] as cordaNodeConfig;
 var nodeDefaults: cordaNodeDefaultConfig;
 var nodeDir = ''; // holds dir of build.gradle for referencing relative node dir
-var openTerminals = [] as any; // terminals holding run-node instances
 var nodeLoaded = false;
-var gradleTerminal = null as any;
-var clientTerminal = null as any;
 var webViewPanels = [] as any;
+
+// var openTerminals = [] as any; // terminals holding run-node instances
+// var gradleTerminal = null as any;
+// var clientTerminal = null as any;
 
 var projectCwd = '';
 
@@ -141,13 +142,16 @@ export function activate(context: vscode.ExtensionContext) {
 	
 }
 
-function gradleRun(param : string) {
-	console.log(gradleTerminal);
-	//dispose any running terminals
-	disposeRunningNodes();
+function findTerminal(termName : string) {
+	const terminals = <vscode.Terminal[]>(<any>vscode.window).terminals;
+	const terminal : any = terminals.filter(t => {
+		return t.name == termName;
+	});
+	return terminal.length > 0 ? terminal[0] : undefined;
+}
 
+function gradleRun(param : string) {
 	var cmd;
-	
 	if(winPlatform){
 		if(shellExecPath.includes("powershell")){
 			cmd = "cd \"" + projectCwd + "\" ; ./gradlew " + param;
@@ -157,12 +161,12 @@ function gradleRun(param : string) {
 	}else{
 		cmd = 'cd ' + projectCwd + ' && ./gradlew ' + param;
 	}
-	if (gradleTerminal === null) {
-		vscode.workspace.getConfiguration().get('terminal');
-		gradleTerminal = vscode.window.createTerminal('Gradle', shellExecPath);
-	}
-	gradleTerminal.show(true);
-	gradleTerminal.sendText(cmd);	
+
+	const foundTerminal = findTerminal('Gradle');	
+	const terminal = foundTerminal ? foundTerminal : vscode.window.createTerminal(`Gradle`);
+		terminal.show();
+		terminal.sendText('clear');
+		terminal.sendText(cmd);
 }
 
 
@@ -210,24 +214,24 @@ function launchView(context: any, view: string){
  */
 function launchViewBackend() {
 
-	// update cordapp dirs on nodes in node config
-	for (var index in nodeConfig) {
-		var name = nodeConfig[index].name.match("O=(.*),L")![1];
-		if (winPlatform) {
-			nodeConfig[index].cordappDir = nodeDir + "build\\nodes\\" + name + "\\cordapps";
-		} else {
-			nodeConfig[index].cordappDir = nodeDir + "build/nodes/" + name + "/cordapps";
-		}
-	}
+	// // update cordapp dirs on nodes in node config
+	// for (var index in nodeConfig) {
+	// 	var name = nodeConfig[index].name.match("O=(.*),L")![1];
+	// 	if (winPlatform) {
+	// 		nodeConfig[index].cordappDir = nodeDir + "build\\nodes\\" + name + "\\cordapps";
+	// 	} else {
+	// 		nodeConfig[index].cordappDir = nodeDir + "build/nodes/" + name + "/cordapps";
+	// 	}
+	// }
 
-	if (vscode.window.terminals.find((value) => {
-		return value.name === "Client Launcher";
-	}) === undefined) {
-		clientTerminal = launchClient();
-		console.log("Client Launch successful");
-	} else {
-		console.log("Client already up");
-	}
+	// if (vscode.window.terminals.find((value) => {
+	// 	return value.name === "Client Launcher";
+	// }) === undefined) {
+	// 	clientTerminal = launchClient();
+	// 	console.log("Client Launch successful");
+	// } else {
+	// 	console.log("Client already up");
+	// }
 }
 
 function isGradleNodeAvailable() {
@@ -267,6 +271,51 @@ function launchClient() {
 }
 
 /**
+ * checks if nodes are already deployed
+ */
+function areNodesDeployed() {
+	const fs = require('fs');
+	let path = nodeDir + 'build/nodes/';
+	if (winPlatform) {
+		path = nodeDir + 'build\\nodes\\';
+	}
+	return fs.existsSync(path);
+}
+
+/**
+ * runNodes goes through the list of valid nodes collected from the gradle and runs them one by one.
+ * Requires: deployNodes must have been run at least once - checked by presence of relative nodes directory!
+ */
+function runNodes() {
+	// //console.log("the node config");
+	// var port = 5005;
+	// var logPort = 7005;
+
+	// // check condition that deployNodes has been run at some point
+	// // if not, offer to deploy or do nothing.
+	// // else continue running nodes.
+	// if (!areNodesDeployed()) {
+	// 	vscode.window.showInformationMessage("Cannot run nodes until they have been deployed - Deploy Nodes then try again.", 'Click to Deploy Nodes')
+	// 		.then(selection => {
+	// 			console.log(selection);
+	// 			if (selection === 'Click to Deploy Nodes') {
+	// 				vscode.commands.executeCommand('extension.cordaDeployNodes');
+	// 			}
+	// 		});
+		
+	// } else {
+
+	// 	// dispose if terminals exist
+	// 	disposeRunningNodes();
+
+	// 	// push new terminals
+	// 	for(var index in nodeConfig){
+	// 		openTerminals.push(runNode(nodeConfig[index].name.match("O=(.*),L")![1], (port++).toString(), (logPort++).toString()));
+	// 	}
+	// }
+}
+
+/**
  * 
  * @param name - name of the node being run
  * @param port - address that the RPCClient is listening to for connections
@@ -292,80 +341,27 @@ function runNode(name : string, port : string, logPort : string) {
 	return terminal;
 }
 
-/**
- * checks if nodes are already deployed
- */
-function areNodesDeployed() {
-	const fs = require('fs');
-	let path = nodeDir + 'build/nodes/';
-	if (winPlatform) {
-		path = nodeDir + 'build\\nodes\\';
-	}
-	return fs.existsSync(path);
+function disposeRunningNodes(){
+	// if (gradleTerminal !== null) {
+	// 	gradleTerminal.dispose();
+	// 	gradleTerminal = null;
+	// }
+	// if (clientTerminal !== null) { // remove client terminal
+	// 	clientTerminal.dispose();
+	// 	clientTerminal = null;
+	// }
+	// for (var j = 0; j < openTerminals.length; j++) { // remove all running node terminals
+	// 	openTerminals[j].dispose();
+	// 	openTerminals[j] = null;
+	// }
+	// openTerminals = [] as any;
+	// for (var i = 0; i < webViewPanels.length; i++) { // close open webview panels
+	// 	webViewPanels[i].dispose();
+	// 	webViewPanels[i] = null;
+	// }
+	// webViewPanels = [] as any;
 }
 
-/**
- * runNodes goes through the list of valid nodes collected from the gradle and runs them one by one.
- * Requires: deployNodes must have been run at least once - checked by presence of relative nodes directory!
- */
-function runNodes() {
-	//console.log("the node config");
-	var port = 5005;
-	var logPort = 7005;
-
-	// check condition that deployNodes has been run at some point
-	// if not, offer to deploy or do nothing.
-	// else continue running nodes.
-	if (!areNodesDeployed()) {
-		vscode.window.showInformationMessage("Cannot run nodes until they have been deployed - Deploy Nodes then try again.", 'Click to Deploy Nodes')
-			.then(selection => {
-				console.log(selection);
-				if (selection === 'Click to Deploy Nodes') {
-					vscode.commands.executeCommand('extension.cordaDeployNodes');
-				}
-			});
-		
-	} else {
-
-		// dispose if terminals exist
-		disposeRunningNodes();
-
-		// push new terminals
-		for(var index in nodeConfig){
-			openTerminals.push(runNode(nodeConfig[index].name.match("O=(.*),L")![1], (port++).toString(), (logPort++).toString()));
-		}
-	}
-}
-
-/**
- * scanGradleFile uses the imported parser to scan through a passed in file. 
- * If it detects that the parse has returned attributes that we'd expect in the gradle file that defines the nodes, 
- * it will load the contents of that file into the nodeConfig variable (which will then be used to 
- * pass connection information up to the views).
- * @param fileName - location of the file to parse
- * @param last - boolean that indicates whether this is the last file that needs to be scanned
- */
-function scanGradleFile(fileName : String, last: boolean): any {
-	
-	gjs.parseFile(fileName).then(function (representation : cordaTaskConfig) {
-		// Pick up any other configuration we might need in this parse loop and assign it to our globals
-		if (representation.task !== undefined && representation.task.node !== undefined) {
-			if(representation.task.nodeDefaults){
-				nodeDefaults = representation.task.nodeDefaults as cordaNodeDefaultConfig;
-			}else{
-				nodeDefaults = {rpcUsers : {} };
-			}
-			nodeConfig = representation.task.node as cordaNodeConfig;
-			nodeDir = fileName.replace('build.gradle','');
-		}
-		
-		if(last){
-			nodeLoaded = true;
-		}
-	});
-}
-
- 
 /**
  * updateWorkspaceFolders looks through the currently active workspace for gradle files and then passes these to be scanned.
  */ 
@@ -422,25 +418,32 @@ function updateWorkspaceFolders(): any {
 	}
 }
 
-function disposeRunningNodes(){
-	if (gradleTerminal !== null) {
-		gradleTerminal.dispose();
-		gradleTerminal = null;
-	}
-	if (clientTerminal !== null) { // remove client terminal
-		clientTerminal.dispose();
-		clientTerminal = null;
-	}
-	for (var j = 0; j < openTerminals.length; j++) { // remove all running node terminals
-		openTerminals[j].dispose();
-		openTerminals[j] = null;
-	}
-	openTerminals = [] as any;
-	for (var i = 0; i < webViewPanels.length; i++) { // close open webview panels
-		webViewPanels[i].dispose();
-		webViewPanels[i] = null;
-	}
-	webViewPanels = [] as any;
+/**
+ * scanGradleFile uses the imported parser to scan through a passed in file. 
+ * If it detects that the parse has returned attributes that we'd expect in the gradle file that defines the nodes, 
+ * it will load the contents of that file into the nodeConfig variable (which will then be used to 
+ * pass connection information up to the views).
+ * @param fileName - location of the file to parse
+ * @param last - boolean that indicates whether this is the last file that needs to be scanned
+ */
+function scanGradleFile(fileName : String, last: boolean): any {
+	
+	gjs.parseFile(fileName).then(function (representation : cordaTaskConfig) {
+		// Pick up any other configuration we might need in this parse loop and assign it to our globals
+		if (representation.task !== undefined && representation.task.node !== undefined) {
+			if(representation.task.nodeDefaults){
+				nodeDefaults = representation.task.nodeDefaults as cordaNodeDefaultConfig;
+			}else{
+				nodeDefaults = {rpcUsers : {} };
+			}
+			nodeConfig = representation.task.node as cordaNodeConfig;
+			nodeDir = fileName.replace('build.gradle','');
+		}
+		
+		if(last){
+			nodeLoaded = true;
+		}
+	});
 }
    
 // tslint:disable-next-line: class-name
