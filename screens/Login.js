@@ -243,10 +243,12 @@ class Login extends Component {
                                     {sshCredentials()}
                                 </Grid>
                                 <Grid container justify="center" spacing={3}>
-                                    <Grid item> 
-                                            <Button variant="contained" type="submit" color="primary" onClick={this.useGradle}
-                                                    disabled={!this.props.remoteLogin || this.props.loginProcessing}>{this.props.loginProcessing? 'Please Wait...': 'Use Gradle Nodes'}</Button>
-                                    </Grid>
+                                    {this.props.remoteLogin && 
+                                        <Grid item> 
+                                        <Button variant="contained" type="submit" color="primary" onClick={this.useGradle}
+                                                disabled={!this.props.remoteLogin || this.props.loginProcessing}>{this.props.loginProcessing? 'Please Wait...': 'Use Gradle Nodes'}</Button>
+                                        </Grid>
+                                    }
                                     <Grid item>
                                             <Button variant="contained" type="submit" color="primary" onClick={this.doLogin}
                                                     disabled={isDisabled || this.props.loginProcessing}>{this.props.loginProcessing? 'Please Wait...': 'Connect'}</Button>

@@ -262,7 +262,7 @@ function findTerminal(termName : string) {
  * @param view - Name of the view being loaded 
  */
 function launchView(context: any, view: string){
-	const nodeExplorerPanel = vscode.window.createWebviewPanel('reactView', view, vscode.ViewColumn.Active, {
+	const nodeExplorerPanel = vscode.window.createWebviewPanel('reactView', 'Corda ' + view, vscode.ViewColumn.Active, {
 		enableScripts: true,
 		retainContextWhenHidden: true,
 		localResourceRoots: [ vscode.Uri.file(path.join(context.extensionPath, 'out')) ]
