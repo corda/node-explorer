@@ -2,8 +2,6 @@ import * as vscode from 'vscode';
 import { fileSync } from 'find';
 import * as path from 'path';
 
-// var terminals = vscode.workspace.getConfiguration().get('terminal') as any;
-
 //Import the parser used to scan the local gradle files and set platform specific paths
 var gjs = require('../parser');
 var winPlatform = false;
@@ -11,38 +9,8 @@ var winPlatform = false;
 var nodeConfig = [] as cordaNodeConfig;
 var nodeDefaults: cordaNodeDefaultConfig;
 var nodeDir = ''; // holds dir of build.gradle for referencing relative node dir
-var nodeLoaded = false;
-var webViewPanels = [] as any;
 var nodeNames = [] as any;
-
-var projectCwd = '';
-
-/** 
- * loadScript is used to load the react files into the view html
- * @param context - Container for the extensions context
- * @param path - location of the react js files
- */
-function loadScript(context: vscode.ExtensionContext, path: string) {
-	if(winPlatform){
-		path = path.replace(/\//g, "\\");
-	}
-    return `<script src="${vscode.Uri.file(context.asAbsolutePath(path)).with({ scheme: 'vscode-resource'}).toString()}"></script>`;
-}
-
-/**
- * waitForGlobal delays a callback until a variable has been defined
- * @param key
- * @param callback 
- */
-var waitForGlobal = function(key : any, callback : any) {
-	if (key.length > 0) {
-	  callback();
-	} else {
-	  setTimeout(function() {
-		waitForGlobal(key, callback);
-	  }, 100);
-	}
-  };
+var webViewPanels = [] as any;
 
 /**
  * activate runs when the extension is first loaded. 
@@ -56,9 +24,10 @@ export function activate(context: vscode.ExtensionContext) {
 		gradleCmd = "gradlew ";
 	}
 
-	// initialize
+	// initialize vars and parse build.gradle
 	updateWorkspaceFolders();
 
+	// clean project files
 	let cordaClean = vscode.commands.registerCommand('extension.cordaClean', () => {		
 		vscode.window.setStatusBarMessage('Running gradlew clean', 4000);
 		// clean will break running nodes - must dispose
@@ -68,6 +37,15 @@ export function activate(context: vscode.ExtensionContext) {
 			"Corda Clean", "Corda Command", execution));
 	});
 
+	// assmble the project - this is like build w/o test
+	let cordaAssemble = vscode.commands.registerCommand('extension.cordaAssemble', () => {
+		vscode.window.setStatusBarMessage('Running gradlew assemble', 4000);
+		const execution = new vscode.ShellExecution(gradleCmd + 'assemble');
+		vscode.tasks.executeTask(new vscode.Task({type: "cordaGradle"}, vscode.TaskScope.Workspace,
+			"Corda Assemble", "Corda Command", execution));
+	});
+
+	// build the project - assemble + test
 	let cordaBuild = vscode.commands.registerCommand('extension.cordaBuild', () => {		
 		vscode.window.setStatusBarMessage('Running gradlew build', 4000);
 		const execution = new vscode.ShellExecution(gradleCmd + 'build');
@@ -75,6 +53,7 @@ export function activate(context: vscode.ExtensionContext) {
 			"Corda Build", "Corda Command", execution));
 	});
 
+	// test
 	let cordaTest = vscode.commands.registerCommand('extension.cordaTest', () => {		
 		vscode.window.setStatusBarMessage('Running gradlew test', 4000);
 		const execution = new vscode.ShellExecution(gradleCmd + 'test');
@@ -82,6 +61,7 @@ export function activate(context: vscode.ExtensionContext) {
 			"Corda Test", "Corda Command", execution));
 	});
 
+	// deploys persistent test nodes defined in build.gradle
 	let cordaDeployNodes = vscode.commands.registerCommand('extension.cordaDeployNodes', () => {		
 		vscode.window.setStatusBarMessage('Running gradlew deployNodes', 4000);
 		const execution = new vscode.ShellExecution(gradleCmd + 'deployNodes');
@@ -104,6 +84,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
+	// runs nodes which have been deployed
 	let cordaRunNodes = vscode.commands.registerCommand('extension.cordaRunNodes', () => {		
 		vscode.window.setStatusBarMessage('Running gradlew cordaRunNodes', 4000);
 
@@ -141,29 +122,46 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
+	// opens up webview for interacting with nodes (local or remote)
 	let cordaShowNodeExplorerView = vscode.commands.registerCommand('extension.cordaShowNodeExplorer', () => {
 		vscode.window.setStatusBarMessage('Displaying Corda Node Explorer', 5000);
-		var viewIsLaunched = false;
-		for (var i = 0; i < 10; i++) {
-			(function (i) {
-			  setTimeout(function () {
-				if(nodeLoaded){
-					if(!viewIsLaunched){
-						viewIsLaunched = true;
-						launchView(context, "Node Explorer");
-					}
-				}
-			  }, 3000*i);
-			})(i);
-		  }	
+		
+		// Launch client
+		const name = 'Node Client Server'
+		var terminal : vscode.Terminal = findTerminal(name);
+		if (!terminal) { // check if client already launched
+			const jarPath = vscode.extensions.getExtension("R3.vscode-corda")?.extensionPath;
+			const cmd1 = 'cd ' + jarPath;
+			const cmd2 = 'java -jar explorer-server-0.1.0.jar';
+			terminal = vscode.window.createTerminal(name);
+			terminal.show();
+			terminal.sendText(cmd1);
+			terminal.sendText(cmd2);
+			console.log("Client Launch Successful");
+		} else {
+			console.log("Client Already Up");
+		}
+
+		// Update CorDapp dirs for nodes in nodeConfig
+		waitForGlobal(nodeConfig, () => {
+			for (var index in nodeConfig) {
+				var name = nodeConfig[index].name.match("O=(.*),L")![1];
+				nodeConfig[index].cordappDir = path.join(nodeDir, 'build/nodes', name, 'cordapps');
+			}
+		})
+
+		launchView(context, 'Node Explorer'); // launch the node-explorer webview
+
 	});
 
+	// notification that current project isn't Corda
 	let cordaNoGradle = vscode.commands.registerCommand('extension.cordaNoGradle', () => {
 		vscode.window.showInformationMessage('Current folder does not contain a valid build.gradle for Corda.');
 	});
 
 	// Context Subscriptions
 	context.subscriptions.push(cordaClean);
+	context.subscriptions.push(cordaAssemble);
 	context.subscriptions.push(cordaBuild);
 	context.subscriptions.push(cordaTest);
 	context.subscriptions.push(cordaDeployNodes);
@@ -173,38 +171,58 @@ export function activate(context: vscode.ExtensionContext) {
 	
 }
 
+/**
+ * waitForGlobal delays a callback until a variable has been defined
+ * @param key
+ * @param callback 
+ */
+var waitForGlobal = function(key : any, callback : any) {
+	if (key.length > 0) {
+	  callback();
+	} else {
+	  setTimeout(function() {
+		waitForGlobal(key, callback);
+	  }, 100);
+	}
+  };
+
+/**
+ * areNodesDeployed checks if nodes are already deployed in project
+ */
+function areNodesDeployed() {
+	const fs = require('fs');
+	const nodePath = path.join(nodeDir, 'build/nodes')
+	return fs.existsSync(nodePath);
+}
+
+/**
+ * disposeRunningNodes is for disposing terminals/views where it makes sense - i.e.
+ * a command will fundamentally change or break the current state
+ */
 function disposeRunningNodes(){
 	console.log("Disposing runningNode terminals");
 	var terminals = [] as vscode.Terminal[];
 	for(var index in nodeNames) {
-		const terminal = findTerminal(nodeNames[index]);
+		const terminal : vscode.Terminal = findTerminal(nodeNames[index]);
 		if (terminal !== undefined) {
+			terminal.sendText('bye'); // graceful node shutdown
 			terminals.push(terminal);
 		}
 	}
 	if (terminals.length > 0) {
 		terminals.map(t => {t.dispose()})
 	}
-	// if (gradleTerminal !== null) {
-	// 	gradleTerminal.dispose();
-	// 	gradleTerminal = null;
-	// }
-	// if (clientTerminal !== null) { // remove client terminal
-	// 	clientTerminal.dispose();
-	// 	clientTerminal = null;
-	// }
-	// for (var j = 0; j < openTerminals.length; j++) { // remove all running node terminals
-	// 	openTerminals[j].dispose();
-	// 	openTerminals[j] = null;
-	// }
-	// openTerminals = [] as any;
-	// for (var i = 0; i < webViewPanels.length; i++) { // close open webview panels
-	// 	webViewPanels[i].dispose();
-	// 	webViewPanels[i] = null;
-	// }
-	// webViewPanels = [] as any;
+	for (var i = 0; i < webViewPanels.length; i++) { // close all open webview panels
+		webViewPanels[i].dispose();
+		webViewPanels[i] = null;
+	}
+	webViewPanels = [] as any;
 }
 
+/**
+ * findTerminal returns the instance of the terminal identified by the argument
+ * @param termName - terminal to find
+ */
 function findTerminal(termName : string) {
 	const terminals = <vscode.Terminal[]>(<any>vscode.window).terminals;
 	const terminal : any = terminals.filter(t => {
@@ -219,16 +237,13 @@ function findTerminal(termName : string) {
  * @param view - Name of the view being loaded 
  */
 function launchView(context: any, view: string){
-	// LAUNCH BACKEND
-	launchViewBackend();
-
-	const panel = vscode.window.createWebviewPanel('reactView', "Corda View " + view, vscode.ViewColumn.Active, {
+	const nodeExplorerPanel = vscode.window.createWebviewPanel('reactView', view, vscode.ViewColumn.Active, {
 		enableScripts: true,
 		retainContextWhenHidden: true,
 		localResourceRoots: [ vscode.Uri.file(path.join(context.extensionPath, 'out')) ]
 	});
 	
-	panel.webview.html = `
+	nodeExplorerPanel.webview.html = `
 		<!DOCTYPE html>
 		<html lang="en">
 		<head>
@@ -248,35 +263,26 @@ function launchView(context: any, view: string){
 		</body>
 		</html>
 	`;
+	webViewPanels.push(nodeExplorerPanel);
+}
 
-	webViewPanels.push(panel); // store panel in global
+/** 
+ * loadScript is used to load the react files into the view html
+ * @param context - Container for the extensions context
+ * @param path - location of the react js files
+ */
+function loadScript(context: vscode.ExtensionContext, path: string) {
+    return `<script src="${vscode.Uri.file(context.asAbsolutePath(path)).with({ scheme: 'vscode-resource'}).toString()}"></script>`;
 }
 
 /**
- * launchViewBackend runs the server used by the views.
+ * isGradleNodeAvailable checks to see if the first node defined in the gradle is currently running so that the Node Explorer
+ * view can auto-connect
+ * 
+ * TODO: this method has a bug in that, it will still LIST all nodes in the drop-down connector of the node-explorer
+ * (even if 'some' of the gradle nodes are not currently running). The fix should be to pass the filter the launchView props
+ * 'nodeDefaults' to ONLY contain nodes that are currently running.
  */
-function launchViewBackend() {
-
-	// // update cordapp dirs on nodes in node config
-	// for (var index in nodeConfig) {
-	// 	var name = nodeConfig[index].name.match("O=(.*),L")![1];
-	// 	if (winPlatform) {
-	// 		nodeConfig[index].cordappDir = nodeDir + "build\\nodes\\" + name + "\\cordapps";
-	// 	} else {
-	// 		nodeConfig[index].cordappDir = nodeDir + "build/nodes/" + name + "/cordapps";
-	// 	}
-	// }
-
-	// if (vscode.window.terminals.find((value) => {
-	// 	return value.name === "Client Launcher";
-	// }) === undefined) {
-	// 	clientTerminal = launchClient();
-	// 	console.log("Client Launch successful");
-	// } else {
-	// 	console.log("Client already up");
-	// }
-}
-
 function isGradleNodeAvailable() {
 	var nodeName = nodeConfig[0].name.match("O=(.*),L")![1];
 	if (vscode.window.terminals.find((value) => {
@@ -291,38 +297,6 @@ function isGradleNodeAvailable() {
 }
 
 /**
- * launchClient runs the server jar that is packaged with the extension
- */
-function launchClient() {
-	var shellArgs = [] as any;
-	var cmd = "";
-
-	// if(winPlatform){
-	// 	if(shellExecPath.includes("powershell")){
-	// 		cmd = "cd \"" + jarDir + "; java -jar explorer-server-0.1.0.jar"; 
-	// 	}else{
-	// 		cmd = "cd " + jarDir + " && java -jar explorer-server-0.1.0.jar";
-	// 	}
-	// }else{
-	// 	cmd = 'cd ' + jarDir + ' && java -jar explorer-server-0.1.0.jar';
-	// }
-	
-	// let terminal = vscode.window.createTerminal("Client Launcher", shellExecPath, shellArgs);
-	// terminal.show(true);
-	// terminal.sendText(cmd);
-	// return terminal;
-}
-
-/**
- * checks if nodes are already deployed
- */
-function areNodesDeployed() {
-	const fs = require('fs');
-	const nodePath = path.join(nodeDir, 'build/nodes')
-	return fs.existsSync(nodePath);
-}
-
-/**
  * updateWorkspaceFolders looks through the currently active workspace for gradle files and then passes these to be scanned.
  */ 
 function updateWorkspaceFolders(): any {
@@ -332,22 +306,18 @@ function updateWorkspaceFolders(): any {
 	}
 
 	//TODO Only supports one workspace folder for now, add support for multiple (named targets)
-	projectCwd = vscode.workspace.workspaceFolders[0].uri.path;
-	let path = projectCwd + '/build.gradle'; // path for checking if corda project
-	if(winPlatform){
-		projectCwd = projectCwd.replace(/\//g, "\\").slice(1);
-		path = projectCwd + '\\build.gradle';
-	}
+	const projectCwd = vscode.workspace.workspaceFolders[0].uri.path;
+	let pCwdPath = path.join(projectCwd, '/build.gradle'); // path for checking if corda project
 
 	const fs = require('fs');
-	console.log(path);
+	console.log(pCwdPath);
 
 	// enable or disable corda commands based on whether build.gradle exists in workspace dir
 	// and whether the gradle is 'related' to a corda deploy (assessed by keyword 'corda')
 	var gradleIsCorda = false;
 	try {
-		if (fs.existsSync(path)) {
-			let contents = fs.readFileSync(path);
+		if (fs.existsSync(pCwdPath)) {
+			let contents = fs.readFileSync(pCwdPath);
 			if (contents.includes('corda')) {
 				gradleIsCorda = true;
 				console.log("gradleIsCorda is True");
@@ -401,7 +371,6 @@ function scanGradleFile(fileName : String, last: boolean): any {
 		}
 		
 		if(last){
-			nodeLoaded = true;
 			for(var index in nodeConfig) {
 				nodeNames.push(nodeConfig[index].name.match("O=(.*),L")![1]);
 			}
