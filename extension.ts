@@ -63,12 +63,18 @@ export function activate(context: vscode.ExtensionContext) {
 			"Corda Test", "Corda Command", execution));
 	});
 
-	// deploys persistent test nodes defined in build.gradle
+	// deploys persistent test nodes defined in build.gradle - DependsOn: build.gradle deployNodes (nodeConfig)
 	let cordaDeployNodes = vscode.commands.registerCommand('extension.cordaDeployNodes', () => {		
 		vscode.window.setStatusBarMessage('Running gradlew deployNodes', 4000);
 		const execution = new vscode.ShellExecution(gradleCmd + 'deployNodes');
 		const deployNodeTask = new vscode.Task({type: "cordaGradle"}, vscode.TaskScope.Workspace,
 			"Corda Deploy Nodes", "Corda Command", execution);
+
+		if ((nodeConfig as []).length == 0) { // no nodes in deployNodes task
+			vscode.window.showInformationMessage("Ensure there are nodes defined " +
+			"in your build.gradle deployNodes task");
+			return 0;
+		}
 		if (areNodesDeployed()) {
 			vscode.window.showInformationMessage("Nodes are already deployed, Re-Deploy?", 'Yes', 'No')
 			.then(selection => {
@@ -86,7 +92,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	// runs nodes which have been deployed
+	// runs nodes which have been deployed - DependsOn: deployNodes
 	let cordaRunNodes = vscode.commands.registerCommand('extension.cordaRunNodes', () => {		
 		vscode.window.setStatusBarMessage('Running gradlew cordaRunNodes', 4000);
 
@@ -94,7 +100,7 @@ export function activate(context: vscode.ExtensionContext) {
 		// if not, offer to deploy or do nothing.
 		// else continue running nodes.
 		if (!areNodesDeployed()) {
-			vscode.window.showInformationMessage("Cannot run nodes until they have been deployed - Deploy Nodes then try again.", 'Click to Deploy Nodes')
+			vscode.window.showInformationMessage("Please deploy nodes first then try again.", 'Click to Deploy Nodes')
 				.then(selection => {
 					console.log(selection);
 					if (selection === 'Click to Deploy Nodes') {
@@ -103,44 +109,55 @@ export function activate(context: vscode.ExtensionContext) {
 				});
 			
 		} else {
-			
-			waitForGlobal(nodeNames, () => {
-				disposeRunningNodes();
-				// set port start points
-				let port = 5005;
-				let logPort = 7005;
-				for (let index in nodeNames) { // create new terminals
-					const name = nodeNames[index];
-					const cmd1 = 'cd ' + path.join('build/nodes', name);
-					// const cmd2 = 'java -Dcapsule.jvm.args=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=' + port + ' -javaagent:drivers/jolokia-jvm-1.6.0-agent.jar=port=' + logPort + ',logHandlerClass=net.corda.node.JolokiaSlf4jAdapter -Dname=' + name + ' -jar ' + 'corda.jar';
-					const cmd2 = 'java -jar corda.jar';
-					let terminal = vscode.window.createTerminal(name);
-					terminal.show();
-					terminal.sendText(cmd1);
-					terminal.sendText(cmd2);
-					port++;
-					logPort++;
-					runningNodeTerminals.push(terminal); // add to global list
-				}
-			});
+
+			if (filterNodeConfigToActive().length > 0) { // nodes are already running
+				vscode.window.showInformationMessage("Nodes are already running, Re-Run?", 'Yes', 'No')
+				.then(selection => {
+					console.log(selection);
+					if (selection === 'No') {
+						return 0;
+					} else runNodes();
+				});
+			} else runNodes();
+
+			function runNodes() {
+				waitForGlobal(nodeNames, () => {
+					disposeRunningNodes();
+					// set port start points
+					let port = 5005;
+					let logPort = 7005;
+					for (let index in nodeNames) { // create new terminals
+						const name = nodeNames[index];
+						const cmd1 = 'cd ' + path.join('build/nodes', name);
+						// const cmd2 = 'java -Dcapsule.jvm.args=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=' + port + ' -javaagent:drivers/jolokia-jvm-1.6.0-agent.jar=port=' + logPort + ',logHandlerClass=net.corda.node.JolokiaSlf4jAdapter -Dname=' + name + ' -jar ' + 'corda.jar';
+						const cmd2 = 'java -jar corda.jar';
+						let terminal = vscode.window.createTerminal(name);
+						terminal.show();
+						terminal.sendText(cmd1);
+						terminal.sendText(cmd2);
+						port++;
+						logPort++;
+						runningNodeTerminals.push(terminal); // add to global list
+					}
+				});
+			}
 		}
 	});
 
-	// opens up webview for interacting with nodes (local or remote)
+	// opens up webview for interacting with nodes (local or remote) - DependsOn: runNodes (optional)
 	let cordaShowNodeExplorerView = vscode.commands.registerCommand('extension.cordaShowNodeExplorer', () => {
 		vscode.window.setStatusBarMessage('Displaying Corda Node Explorer', 4000);
 		
 		// check if local nodes are already running
 		if (areNodesDeployed() && filterNodeConfigToActive().length == 0) { // filterNodeConfigToActive represents what nodes are running TODO: change this var.
-			vscode.window.showInformationMessage("Local nodes are deployed but not running, would you like to RunNodes? Selecting 'No'" +
-			" will still allow you to connect to a remote node.", 'Yes', 'No')
+			vscode.window.showInformationMessage("Local nodes deployed but not running.", 'Run Local Nodes', 'Use Remote Node')
 			.then(selection => {
 				console.log(selection);
-				if (selection === 'No') {
+				if (selection === 'Use Remote Node') {
 					launchClient();
-				} else if (selection === 'Yes') {
+				} else if (selection === 'Run Local Nodes') {
 					vscode.commands.executeCommand('extension.cordaRunNodes');
-					vscode.window.showInformationMessage("Nodes are being run. Relauch the Node Explorer after completion");
+					vscode.window.showInformationMessage("Local nodes starting up. Re-launch the Node Explorer after completion");
 				}
 			});
 		} else {
