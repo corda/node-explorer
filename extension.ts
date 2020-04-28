@@ -13,6 +13,8 @@ var nodeNames = [] as any;
 var webViewPanels = [] as any;
 var runningNodeTerminals = [] as vscode.Terminal[];
 
+var watcher: vscode.FileSystemWatcher;
+
 
 /**
  * activate runs when the extension is first loaded. 
@@ -387,7 +389,7 @@ function updateWorkspaceFolders(): any {
 	let pCwdPath = path.join(projectCwd, '/build.gradle'); // path for checking if corda project
 
 	const fs = require('fs');
-	console.log(pCwdPath);
+	console.log('Root gradle file at ' + pCwdPath);
 
 	// TestRunner JDT fix - injects a prefs file for proper compilation when going through JDT compiler
 	function setJDTpref() {
@@ -405,7 +407,15 @@ function updateWorkspaceFolders(): any {
 	}
 	setJDTpref();
 
-	// console.log("testing the search for file " + setJDTpref());
+	// Watcher for gradle.build refresh
+	let pattern = new vscode.RelativePattern(projectCwd, '**/*.gradle');
+    watcher = vscode.workspace.createFileSystemWatcher(pattern);
+	watcher.onDidChange((event) => { 
+		watcher.dispose();
+		console.log(`gradle file changed: ${event.fsPath}`); 
+		updateWorkspaceFolders();
+		vscode.window.showInformationMessage("build.gradle was updated. Re-deploy nodes if needed.");
+	})
 
 	// enable or disable corda commands based on whether build.gradle exists in workspace dir
 	// and whether the gradle is 'related' to a corda deploy (assessed by keyword 'corda')
@@ -466,10 +476,12 @@ function scanGradleFile(fileName : String, last: boolean): any {
 		}
 		
 		if(last){
+			// reset nodeNames
+			nodeNames = [] as any;
 			for(let index in nodeConfig) {
 				nodeNames.push(nodeConfig[index].name.match("O=(.*),L")![1]);
 			}
-			console.log(JSON.stringify(nodeNames));
+			console.log('Node names are: ' + JSON.stringify(nodeNames));
 		}
 	});
 }
