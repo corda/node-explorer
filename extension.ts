@@ -368,6 +368,24 @@ function updateWorkspaceFolders(): any {
 	const fs = require('fs');
 	console.log(pCwdPath);
 
+	// TestRunner JDT fix - injects a prefs file for proper compilation when going through JDT compiler
+	function setJDTpref() {
+		const filePath = path.resolve(projectCwd,'.settings','org.eclipse.jdt.core.prefs');
+		if (!fs.existsSync(filePath)) {
+			const content = 'org.eclipse.jdt.core.compiler.codegen.methodParameters=generate';
+
+			fs.writeFile(filePath, content, (err : any) => {
+				if (err) {
+					console.error(err)
+					return
+				}
+			});
+		}
+	}
+	setJDTpref();
+
+	// console.log("testing the search for file " + setJDTpref());
+
 	// enable or disable corda commands based on whether build.gradle exists in workspace dir
 	// and whether the gradle is 'related' to a corda deploy (assessed by keyword 'corda')
 	var gradleIsCorda = false;
