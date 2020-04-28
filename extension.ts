@@ -274,6 +274,11 @@ function launchView(context: any, view: string){
 		retainContextWhenHidden: true,
 		localResourceRoots: [ vscode.Uri.file(path.join(context.extensionPath, 'out')) ]
 	});
+
+	// filter nodeList (nodeConfig) to only running nodes for props to UI. - isGradleNodeAvailble should only check size.
+	let nodeList = filterNodeConfigToActive();
+	let gradleNodesRunning : boolean = (nodeList.length > 0);
+	
 	
 	nodeExplorerPanel.webview.html = `
 		<!DOCTYPE html>
@@ -287,8 +292,8 @@ function launchView(context: any, view: string){
 		</head>
 		<body>
 			<div id="nodeDefaults" style="display:none">${JSON.stringify(nodeDefaults)}</div>
-			<div id="nodeList" style="display:none">${JSON.stringify(nodeConfig)}</div>
-			<div id="gradleNodesRunning" style="display:none">${JSON.stringify(isGradleNodeAvailable())}</div>
+			<div id="nodeList" style="display:none">${JSON.stringify(nodeList)}</div>
+			<div id="gradleNodesRunning" style="display:none">${JSON.stringify(gradleNodesRunning)}</div>
 			<div id="root"></div>
 			${loadScript(context,path.normalize('out/') + 'index' + '.js') /* e.g /out/transactionExplorer.js */}
 			
@@ -307,25 +312,12 @@ function loadScript(context: vscode.ExtensionContext, path: string) {
     return `<script src="${vscode.Uri.file(context.asAbsolutePath(path)).with({ scheme: 'vscode-resource'}).toString()}"></script>`;
 }
 
-/**
- * isGradleNodeAvailable checks to see if the first node defined in the gradle is currently running so that the Node Explorer
- * view can auto-connect
- * 
- * TODO: this method has a bug in that, it will still LIST all nodes in the drop-down connector of the node-explorer
- * (even if 'some' of the gradle nodes are not currently running). The fix should be to pass the filter the launchView props
- * 'nodeDefaults' to ONLY contain nodes that are currently running.
- */
-function isGradleNodeAvailable() {
-	let nodeName = nodeConfig[0].name.match("O=(.*),L")![1];
-	if (vscode.window.terminals.find((value) => {
-		return value.name === nodeName;
-	}) === undefined) {
-		console.log("Nodes are NOT running");
-		return false;
-	} else {
-		console.log("Nodes are running");
-		return true;
-	}
+function filterNodeConfigToActive() : cordaNodeConfig[] {
+	// filter out notary as well as we won't establish connection to notaries.
+	let activeNodeConfig = (nodeConfig as []).filter((node : any) => {
+		return findTerminal(node.name.match("O=(.*),L")![1]) && !node.notary;
+	});
+	return activeNodeConfig;
 }
 
 /**
