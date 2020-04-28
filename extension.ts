@@ -107,9 +107,9 @@ export function activate(context: vscode.ExtensionContext) {
 			waitForGlobal(nodeNames, () => {
 				disposeRunningNodes();
 				// set port start points
-				var port = 5005;
-				var logPort = 7005;
-				for (var index in nodeNames) { // create new terminals
+				let port = 5005;
+				let logPort = 7005;
+				for (let index in nodeNames) { // create new terminals
 					const name = nodeNames[index];
 					const cmd1 = 'cd ' + path.join('build/nodes', name);
 					// const cmd2 = 'java -Dcapsule.jvm.args=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=' + port + ' -javaagent:drivers/jolokia-jvm-1.6.0-agent.jar=port=' + logPort + ',logHandlerClass=net.corda.node.JolokiaSlf4jAdapter -Dname=' + name + ' -jar ' + 'corda.jar';
@@ -128,7 +128,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// opens up webview for interacting with nodes (local or remote)
 	let cordaShowNodeExplorerView = vscode.commands.registerCommand('extension.cordaShowNodeExplorer', () => {
-		vscode.window.setStatusBarMessage('Displaying Corda Node Explorer', 5000);
+		vscode.window.setStatusBarMessage('Displaying Corda Node Explorer', 4000);
 		
 		// check if local nodes are already running
 		if (areNodesDeployed() && runningNodeTerminals.length === 0) {
@@ -150,7 +150,7 @@ export function activate(context: vscode.ExtensionContext) {
 		function launchClient() {
 			// Launch client
 			const name = 'Node Client Server'
-			var terminal : vscode.Terminal = findTerminal(name);
+			let terminal : vscode.Terminal = findTerminal(name);
 			if (!terminal) { // check if client already launched
 				const jarPath = vscode.extensions.getExtension("R3.vscode-corda")?.extensionPath;
 				const cmd1 = 'cd ' + jarPath;
@@ -166,8 +166,8 @@ export function activate(context: vscode.ExtensionContext) {
 
 			// Update CorDapp dirs for nodes in nodeConfig
 			waitForGlobal(nodeConfig, () => {
-				for (var index in nodeConfig) {
-					var name = nodeConfig[index].name.match("O=(.*),L")![1];
+				for (let index in nodeConfig) {
+					let name = nodeConfig[index].name.match("O=(.*),L")![1];
 					nodeConfig[index].cordappDir = path.join(nodeDir, 'build/nodes', name, 'cordapps');
 				}
 			})
@@ -197,8 +197,8 @@ export function activate(context: vscode.ExtensionContext) {
  * getTerminalsForNodes returns a list of all running nodes (if exists)
  */
 function getTerminalsForNodes() : vscode.Terminal[] | undefined {
-	var terminals = [] as vscode.Terminal[];
-	for(var index in nodeNames) {
+	let terminals = [] as vscode.Terminal[];
+	for(let index in nodeNames) {
 		const terminal : vscode.Terminal = findTerminal(nodeNames[index]);
 		if (terminal !== undefined) {
 			terminals.push(terminal);
@@ -238,11 +238,11 @@ function areNodesDeployed() {
  */
 function disposeRunningNodes(){
 	console.log("Disposing runningNode terminals");
-	for (var i = 0; i < runningNodeTerminals.length; i++) {
+	for (let i = 0; i < runningNodeTerminals.length; i++) {
 		runningNodeTerminals[i].sendText('bye');
 		runningNodeTerminals[i].dispose();
 	}
-	for (var i = 0; i < webViewPanels.length; i++) { // close all open webview panels
+	for (let i = 0; i < webViewPanels.length; i++) { // close all open webview panels
 		webViewPanels[i].dispose();
 		webViewPanels[i] = null;
 	}
@@ -316,7 +316,7 @@ function loadScript(context: vscode.ExtensionContext, path: string) {
  * 'nodeDefaults' to ONLY contain nodes that are currently running.
  */
 function isGradleNodeAvailable() {
-	var nodeName = nodeConfig[0].name.match("O=(.*),L")![1];
+	let nodeName = nodeConfig[0].name.match("O=(.*),L")![1];
 	if (vscode.window.terminals.find((value) => {
 		return value.name === nodeName;
 	}) === undefined) {
@@ -367,7 +367,7 @@ function updateWorkspaceFolders(): any {
 		} else {
 			// Search for build.gradle files & scan them for node config's
 			let files = fileSync(/build.gradle$/, projectCwd);
-			for(var i = 0; i < files.length; i++){
+			for(let i = 0; i < files.length; i++){
 				scanGradleFile(files[i], i === files.length - 1);
 			}
 			console.log("gradle file found enabling corda commands");
@@ -403,7 +403,7 @@ function scanGradleFile(fileName : String, last: boolean): any {
 		}
 		
 		if(last){
-			for(var index in nodeConfig) {
+			for(let index in nodeConfig) {
 				nodeNames.push(nodeConfig[index].name.match("O=(.*),L")![1]);
 			}
 			console.log(JSON.stringify(nodeNames));
