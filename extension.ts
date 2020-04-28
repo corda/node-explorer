@@ -29,6 +29,9 @@ export function activate(context: vscode.ExtensionContext) {
 	// initialize vars and parse build.gradle
 	updateWorkspaceFolders();
 
+	// launch client at startup
+	launchClient();
+
 	// clean project files
 	let cordaClean = vscode.commands.registerCommand('extension.cordaClean', () => {		
 		vscode.window.setStatusBarMessage('Running gradlew clean', 4000);
@@ -164,38 +167,31 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.setStatusBarMessage('Displaying Corda Node Explorer', 4000);
 		
 		// check if local nodes are already running
-		if (areNodesDeployed() && filterNodeConfigToActive().length == 0) { // filterNodeConfigToActive represents what nodes are running TODO: change this var.
+		if (!areNodesDeployed()) { // nodes aren't deployed
+			vscode.window.showInformationMessage("Local nodes available in build.gradle but not deployed. Deploy and run first; or use a remote node.", 'Cancel', 'Use Remote Node')
+			.then(selection => {
+				console.log(selection);
+				if (selection === 'Use Remote Node') {
+					launchClient();
+					launchView(context, 'Node Explorer');
+				} else if (selection === 'Cancel') {
+					return 0;
+				}
+			});
+		} else if (areNodesDeployed() && filterNodeConfigToActive().length == 0) { // filterNodeConfigToActive represents what nodes are running TODO: change this var.
 			vscode.window.showInformationMessage("Local nodes deployed but not running.", 'Run Local Nodes', 'Use Remote Node')
 			.then(selection => {
 				console.log(selection);
 				if (selection === 'Use Remote Node') {
 					launchClient();
+					launchView(context, 'Node Explorer');
 				} else if (selection === 'Run Local Nodes') {
 					vscode.commands.executeCommand('extension.cordaRunNodes');
 					vscode.window.showInformationMessage("Local nodes starting up. Re-launch the Node Explorer after completion");
 				}
 			});
-		} else {
-			launchClient()
-		}
-
-		function launchClient() {
-			// Launch client
-			const name = 'Node Client Server'
-			let terminal : vscode.Terminal = findTerminal(name);
-			if (!terminal) { // check if client already launched
-				const jarPath = vscode.extensions.getExtension("R3.vscode-corda")?.extensionPath;
-				const cmd1 = 'cd ' + jarPath;
-				const cmd2 = 'java -jar explorer-server-0.1.0.jar';
-				terminal = vscode.window.createTerminal(name);
-				terminal.show();
-				terminal.sendText(cmd1);
-				terminal.sendText(cmd2);
-				console.log("Client Launch Successful");
-			} else {
-				console.log("Client Already Up");
-			}
-
+		} else { // nodes deployed and running
+			launchClient();
 			// Update CorDapp dirs for nodes in nodeConfig
 			waitForGlobal(nodeConfig, () => {
 				for (let index in nodeConfig) {
@@ -203,8 +199,7 @@ export function activate(context: vscode.ExtensionContext) {
 					nodeConfig[index].cordappDir = path.join(nodeDir, 'build/nodes', name, 'cordapps');
 				}
 			})
-
-			launchView(context, 'Node Explorer'); // launch the node-explorer webview
+			launchView(context, 'Node Explorer');
 		}
 	});
 
@@ -223,6 +218,23 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(cordaShowNodeExplorerView);
 	context.subscriptions.push(cordaNoGradle);
 	
+}
+
+function launchClient() {
+	// Launch client
+	const name = 'Node Client Server'
+	let terminal : vscode.Terminal = findTerminal(name);
+	if (!terminal) { // check if client already launched
+		const jarPath = vscode.extensions.getExtension("R3.vscode-corda")?.extensionPath;
+		const cmd1 = 'cd ' + jarPath;
+		const cmd2 = 'java -jar explorer-server-0.1.0.jar';
+		terminal = vscode.window.createTerminal(name);
+		terminal.sendText(cmd1);
+		terminal.sendText(cmd2);
+		console.log("Client Launch Successful");
+	} else {
+		console.log("Client Already Up");
+	}
 }
 
 /**
