@@ -131,7 +131,7 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.setStatusBarMessage('Displaying Corda Node Explorer', 4000);
 		
 		// check if local nodes are already running
-		if (areNodesDeployed() && runningNodeTerminals.length === 0) {
+		if (areNodesDeployed() && filterNodeConfigToActive().length == 0) { // filterNodeConfigToActive represents what nodes are running TODO: change this var.
 			vscode.window.showInformationMessage("Local nodes are deployed but not running, would you like to RunNodes? Selecting 'No'" +
 			" will still allow you to connect to a remote node.", 'Yes', 'No')
 			.then(selection => {
