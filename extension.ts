@@ -157,6 +157,7 @@ export function activate(context: vscode.ExtensionContext) {
 						logPort++;
 						runningNodeTerminals.push(terminal); // add to global list
 					}
+					vscode.workspace.getConfiguration('vscode-corda').update("nodesAreRunning", true); // update setting
 				});
 			}
 		}
@@ -203,6 +204,12 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
+	// stop all running nodes - available when there are local nodes running
+	let cordaStopRunningNodes = vscode.commands.registerCommand('extension.cordaStopRunningNodes', () => {
+		vscode.window.setStatusBarMessage('Stopping all local Corda Nodes', 4000);
+		disposeRunningNodes();
+	});
+
 	// notification that current project isn't Corda
 	let cordaNoGradle = vscode.commands.registerCommand('extension.cordaNoGradle', () => {
 		vscode.window.showInformationMessage('Current folder does not contain a valid build.gradle for Corda.');
@@ -216,6 +223,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(cordaDeployNodes);
 	context.subscriptions.push(cordaRunNodes);
 	context.subscriptions.push(cordaShowNodeExplorerView);
+	context.subscriptions.push(cordaStopRunningNodes);
 	context.subscriptions.push(cordaNoGradle);
 	
 }
@@ -293,6 +301,7 @@ function disposeRunningNodes(){
 
 	runningNodeTerminals = [] as vscode.Terminal[];
 	webViewPanels = [] as any;
+	vscode.workspace.getConfiguration('vscode-corda').update("nodesAreRunning", false); // update setting
 }
 
 /**
