@@ -11,6 +11,8 @@ var nodeDefaults: cordaNodeDefaultConfig;
 var nodeDir = ''; // holds dir of build.gradle for referencing relative node dir
 var nodeNames = [] as any;
 var webViewPanels = [] as any;
+var runningNodeTerminals = [] as vscode.Terminal[];
+
 
 /**
  * activate runs when the extension is first loaded. 
@@ -103,20 +105,22 @@ export function activate(context: vscode.ExtensionContext) {
 		} else {
 			
 			waitForGlobal(nodeNames, () => {
-				disposeRunningNodes(); // If runningNode terminals are open, dispose.
+				disposeRunningNodes();
 				// set port start points
 				var port = 5005;
 				var logPort = 7005;
 				for (var index in nodeNames) { // create new terminals
 					const name = nodeNames[index];
 					const cmd1 = 'cd ' + path.join('build/nodes', name);
-					const cmd2 = 'java -Dcapsule.jvm.args=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=' + port + ' -javaagent:drivers/jolokia-jvm-1.6.0-agent.jar=port=' + logPort + ',logHandlerClass=net.corda.node.JolokiaSlf4jAdapter -Dname=' + name + ' -jar ' + 'corda.jar';
+					// const cmd2 = 'java -Dcapsule.jvm.args=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=' + port + ' -javaagent:drivers/jolokia-jvm-1.6.0-agent.jar=port=' + logPort + ',logHandlerClass=net.corda.node.JolokiaSlf4jAdapter -Dname=' + name + ' -jar ' + 'corda.jar';
+					const cmd2 = 'java -jar corda.jar';
 					let terminal = vscode.window.createTerminal(name);
 					terminal.show();
 					terminal.sendText(cmd1);
 					terminal.sendText(cmd2);
 					port++;
 					logPort++;
+					runningNodeTerminals.push(terminal); // add to global list
 				}
 			});
 		}
@@ -126,15 +130,8 @@ export function activate(context: vscode.ExtensionContext) {
 	let cordaShowNodeExplorerView = vscode.commands.registerCommand('extension.cordaShowNodeExplorer', () => {
 		vscode.window.setStatusBarMessage('Displaying Corda Node Explorer', 5000);
 		
-		// check if local nodes are already running - TODO: move to function
-		var terminals = [] as vscode.Terminal[];
-		for(var index in nodeNames) {
-			const terminal : vscode.Terminal = findTerminal(nodeNames[index]);
-			if (terminal !== undefined) {
-				terminals.push(terminal);
-			}
-		}
-		if (areNodesDeployed() && terminals.length == 0) {
+		// check if local nodes are already running
+		if (areNodesDeployed() && runningNodeTerminals.length === 0) {
 			vscode.window.showInformationMessage("Local nodes are deployed but not running, would you like to RunNodes? Selecting 'No'" +
 			" will still allow you to connect to a remote node.", 'Yes', 'No')
 			.then(selection => {
@@ -197,6 +194,21 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 /**
+ * getTerminalsForNodes returns a list of all running nodes (if exists)
+ */
+function getTerminalsForNodes() : vscode.Terminal[] | undefined {
+	var terminals = [] as vscode.Terminal[];
+	for(var index in nodeNames) {
+		const terminal : vscode.Terminal = findTerminal(nodeNames[index]);
+		if (terminal !== undefined) {
+			terminals.push(terminal);
+		}
+	}
+	if (terminals.length == 0) return undefined;
+	return terminals;
+}
+
+/**
  * waitForGlobal delays a callback until a variable has been defined
  * @param key
  * @param callback 
@@ -226,21 +238,16 @@ function areNodesDeployed() {
  */
 function disposeRunningNodes(){
 	console.log("Disposing runningNode terminals");
-	var terminals = [] as vscode.Terminal[];
-	for(var index in nodeNames) {
-		const terminal : vscode.Terminal = findTerminal(nodeNames[index]);
-		if (terminal !== undefined) {
-			terminal.sendText('bye'); // graceful node shutdown
-			terminals.push(terminal);
-		}
-	}
-	if (terminals.length > 0) {
-		terminals.map(t => {t.dispose()})
+	for (var i = 0; i < runningNodeTerminals.length; i++) {
+		runningNodeTerminals[i].sendText('bye');
+		runningNodeTerminals[i].dispose();
 	}
 	for (var i = 0; i < webViewPanels.length; i++) { // close all open webview panels
 		webViewPanels[i].dispose();
 		webViewPanels[i] = null;
 	}
+
+	runningNodeTerminals = [] as vscode.Terminal[];
 	webViewPanels = [] as any;
 }
 
