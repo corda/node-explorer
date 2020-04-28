@@ -32,11 +32,26 @@ export function activate(context: vscode.ExtensionContext) {
 	// clean project files
 	let cordaClean = vscode.commands.registerCommand('extension.cordaClean', () => {		
 		vscode.window.setStatusBarMessage('Running gradlew clean', 4000);
-		// clean will break running nodes - must dispose
-		disposeRunningNodes();
-		const execution = new vscode.ShellExecution(gradleCmd + 'clean');
-		vscode.tasks.executeTask(new vscode.Task({type: "cordaGradle"}, vscode.TaskScope.Workspace,
-			"Corda Clean", "Corda Command", execution));
+		if (areNodesDeployed() || filterNodeConfigToActive().length > 0) {
+			vscode.window.showInformationMessage("Nodes are deployed and/or running. Clean will removes deployedNodes, and exits node explorer views.", 'Continue', 'Cancel')
+			.then(selection => {
+				console.log(selection);
+				if (selection === 'Cancel') {
+					return 0;
+				} else if (selection === 'Continue') {
+					// deploy will break running nodes - must dispose
+					clean();
+				}
+			});
+		} else clean(); // default case
+
+		function clean() {
+			// clean will break running nodes - must dispose
+			disposeRunningNodes();
+			const execution = new vscode.ShellExecution(gradleCmd + 'clean');
+			vscode.tasks.executeTask(new vscode.Task({type: "cordaGradle"}, vscode.TaskScope.Workspace,
+				"Corda Clean", "Corda Command", execution));
+		}
 	});
 
 	// assmble the project - this is like build w/o test
@@ -76,12 +91,12 @@ export function activate(context: vscode.ExtensionContext) {
 			return 0;
 		}
 		if (areNodesDeployed()) {
-			vscode.window.showInformationMessage("Nodes are already deployed, Re-Deploy?", 'Yes', 'No')
+			vscode.window.showInformationMessage("Nodes already deployed. Any running nodes or node explorer views will exit, Re-Deploy?", 'Continue', 'Cancel')
 			.then(selection => {
 				console.log(selection);
-				if (selection === 'No') {
+				if (selection === 'Cancel') {
 					return 0;
-				} else if (selection === 'Yes') {
+				} else if (selection === 'Continue') {
 					// deploy will break running nodes - must dispose
 					disposeRunningNodes();
 					vscode.tasks.executeTask(deployNodeTask);
