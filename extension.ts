@@ -25,14 +25,11 @@ export function activate(context: vscode.ExtensionContext) {
 	var gradleCmd = "./gradlew ";
 	if(process.platform.includes("win32") || process.platform.includes("win64")){
 		winPlatform = true;
-		gradleCmd = "gradlew ";
+		gradleCmd = ".\\gradlew.bat ";
 	}
 
 	// initialize vars and parse build.gradle
 	updateWorkspaceFolders();
-
-	// launch client at startup
-	launchClient();
 
 	// clean project files
 	let cordaClean = vscode.commands.registerCommand('extension.cordaClean', () => {		
@@ -40,7 +37,6 @@ export function activate(context: vscode.ExtensionContext) {
 		if (areNodesDeployed() || filterNodeConfigToActive().length > 0) {
 			vscode.window.showInformationMessage("Nodes are deployed and/or running. Clean will removes deployedNodes, and exits node explorer views.", 'Continue', 'Cancel')
 			.then(selection => {
-				console.log(selection);
 				if (selection === 'Cancel') {
 					return 0;
 				} else if (selection === 'Continue') {
@@ -52,6 +48,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 		function clean() {
 			// clean will break running nodes - must dispose
+			const name = 'Node Client Server'
+			let terminal : vscode.Terminal = findTerminal(name);
+			if (terminal) terminal.dispose();
 			disposeRunningNodes();
 			const execution = new vscode.ShellExecution(gradleCmd + 'clean');
 			vscode.tasks.executeTask(new vscode.Task({type: "cordaGradle"}, vscode.TaskScope.Workspace,
@@ -103,6 +102,9 @@ export function activate(context: vscode.ExtensionContext) {
 					return 0;
 				} else if (selection === 'Continue') {
 					// deploy will break running nodes - must dispose
+					const name = 'Node Client Server'
+					let terminal : vscode.Terminal = findTerminal(name);
+					if (terminal) terminal.dispose();
 					disposeRunningNodes();
 					vscode.tasks.executeTask(deployNodeTask);
 				}
@@ -385,7 +387,7 @@ function updateWorkspaceFolders(): any {
 	}
 
 	//TODO Only supports one workspace folder for now, add support for multiple (named targets)
-	const projectCwd = vscode.workspace.workspaceFolders[0].uri.path;
+	const projectCwd = vscode.workspace.workspaceFolders[0].uri.fsPath;   //.uri.path;
 	let pCwdPath = path.join(projectCwd, '/build.gradle'); // path for checking if corda project
 
 	const fs = require('fs');
@@ -438,6 +440,8 @@ function updateWorkspaceFolders(): any {
 			vscode.workspace.getConfiguration('vscode-corda').update("isCordaProject", false);
 			return 1;
 		} else {
+			// launch client at startup
+			launchClient();
 			// Search for build.gradle files & scan them for node config's
 			let files = fileSync(/build.gradle$/, projectCwd);
 			for(let i = 0; i < files.length; i++){
