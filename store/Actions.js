@@ -1,8 +1,7 @@
 import axios from 'axios';
 import axiosRetry from "axios-retry";
 import {toastr} from 'react-redux-toastr'
-
-export const SERVER_BASE_URL = "http://localhost:8580";
+export const SERVER_BASE_URL = window.location.href.startsWith("data:") ? "http://localhost:8580" : "/explorer";
 export const LOAD_APP_STATE = "LOAD_APP_STATE";
 export const SERVER_AWAKE = 'SERVER_AWAKE';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
