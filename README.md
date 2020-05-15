@@ -1,7 +1,16 @@
 # Node-Explorer
 
-#### Description: 
 Stand alone desktop app for Win/Osx/Linux that allows connecting to a local or remote Corda node. Examine transactions, run flows and view node and network properties in a few simple clicks.
+
+### Downloading the Node Explorer 
+
+If you're looking to download the node explorer and get started using it; download the latest packaged release on this repo's [releases](./releases) page. 
+
+You can find the releases page [here](./releases), there are packages for Linux, OSX and Windows. 
+
+
+### Setting up for Node Explorer for Development 
+
 
 #### Installation:
 Requirements: NodeJS and Npm package manager.
