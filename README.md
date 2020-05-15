@@ -4,9 +4,9 @@ Stand alone desktop app for Win/Osx/Linux that allows connecting to a local or r
 
 ### Downloading the Node Explorer 
 
-If you're looking to download the node explorer and get started using it; download the latest packaged release on this repo's [releases](./releases) page. 
+If you're looking to download the node explorer and get started using it; download the latest packaged release on this repo's [releases](https://github.com/corda/node-explorer/releases) page. 
 
-You can find the releases page [here](./releases), there are packages for Linux, OSX and Windows. 
+You can find the releases page [here](https://github.com/corda/node-explorer/releases), there are packages for Linux, OSX and Windows. 
 
 
 ### Setting up for Node Explorer for Development 
