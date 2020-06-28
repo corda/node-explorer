@@ -33,3 +33,12 @@ explorer runs at port 3000
 ```
 http://localhost:3000/
 ```
+
+
+##### explorer cordapps settings
+
+Provide cordapps path as /cordapps in settings tab.
+
+```
+/cordapps
+```
