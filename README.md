@@ -1,47 +1,35 @@
 # Node-Explorer
 
-#### Description: 
-Stand alone desktop app for Win/Osx/Linux that allows connecting to a local or remote Corda node. Examine transactions, run flows and view node and network properties in a few simple clicks.
+NOTE: The node-explorer original repo can be found here --> https://github.com/corda/node-explorer
 
-#### Installation:
-Requirements: NodeJS and Npm package manager.
+The original app is standalone. I have made a docker-compose file so that it can be run on cloud machines as webapp.
 
-1) ``git clone <this repo> <optional: target dir>``
-2) ``cd node-explorer (or target directory)``
-3) ``npm install``
+Web application app for Win/Osx/Linux that allows connecting to a local or remote Corda node. Examine transactions, run flows and view node and network properties in a few simple clicks.
 
-Note this project uses the node-server submodule available at https://github.com/corda/node-server this must be initialised with the following commands.
+### Starting node-explorer as docker
 
-1) ``git submodule init``
-2) ``git submodule update``* 
+##### Set cordapps path
 
-*this command must also be run after any pull request which includes updates to the submodule. An alternative is to do pull requests with the following option:
-``git pull --recurse-submodules``
+```
+export CORDAPPS_PATH=Your cordapps path here
+```
+example
 
-**Other submodule commands:**
+```
+export CORDAPPS_PATH=/home/karthik/github/samples-java/Basic/yo-cordapp/build/nodes/PartyA/cordapps
+```
 
-* Fetch and merge the latest node-server submodule code
-  - ``git submodule update --remote``
 
-* Doing work on the submodule i.e. changing files in ./server
-  - submodules default to a detached head, so change to server directory and checkout a branch
-  - ``cd ./server``
-  - ``git checkout master``
-  - Add or commit your changes as usual.
+##### Run docker-compose file
 
-* To PULL submodule updates from server side, if there are changes on your local branch either merge or rebase with the pull
-  - From MAIN project directory
-  - `` git submodule update --remote --merge `` OR
-  - ``git submodule update --remote --rebase``
+```
+docker-compose up -d
+```
 
-* To PUSH submodule updates to server side
-  - From MAIN project directory
-  - ``git push --recurse-submodules=on-demand``
+##### Node explorer UI
 
-#### Packaging electron installers / app files
+explorer runs at port 3000
 
-Note: You must have a compiled server jar in the directory root 
- - `cd ./server && ./gradlew bootJar`, move compiled jar in `./server/build/libs` to the root.
-
-Then run: ``npm run electron-pack``
-
+```
+http://localhost:3000/
+```
