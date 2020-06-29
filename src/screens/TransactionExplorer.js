@@ -445,7 +445,7 @@ class TransactionExplorer extends Component{
                                                 :null
                                             }
                                 {
-                                    this.props.flowSelected?
+                                    this.props.flowSelected && Object.keys(this.state.selectedFlow.constructors).length>0?
                                             <Button onClick={() => this.prepareFlowDataToStart()} style={{float: "right", marginTop: 10}} 
                                                     variant="contained" color="primary" disabled={this.props.flowInFlight}>
                                                 {this.props.flowInFlight?'Please Wait...':'Execute'}
