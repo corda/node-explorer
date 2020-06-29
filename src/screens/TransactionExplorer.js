@@ -402,6 +402,8 @@ class TransactionExplorer extends Component{
                                                 })
                                             }
                                         </Select>
+                                        <div style={{color: "red"}}>{this.state.selectedFlow.constructors && Object.keys(this.state.selectedFlow.constructors).length===0? 'No constructors with supported parameters found':null}</div>
+
                                 </FormControl>
                             </div>
                             {   
