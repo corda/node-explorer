@@ -54,7 +54,7 @@ Note: You must have a compiled server jar in the directory root
 
 Then run: ``npm run electron-pack``
 
-### Starting node-explorer as docker
+### Starting node-explorer in docker
 
 ##### Set cordapps path
 
