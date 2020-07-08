@@ -1,0 +1,18 @@
+version: '3.7'
+services:
+  node-explorer:
+    image: kirito37/node-explorer:v0.1.0
+    ports:
+      - "3000:80"
+    restart: always
+    depends_on:
+      - node-server
+
+  node-server:
+    image: kirito37/node-server:v0.1.0
+    ports:
+      - "8580:8580"
+    restart: always
+    volumes:
+      - ${CORDAPPS_PATH}:/cordapps
+    network_mode: "host"

@@ -54,3 +54,40 @@ Note: You must have a compiled server jar in the directory root
 
 Then run: ``npm run electron-pack``
 
+### Starting node-explorer in docker
+
+##### Set cordapps path
+
+```
+export CORDAPPS_PATH=Your cordapps path here
+```
+
+example
+
+```
+export CORDAPPS_PATH=/home/karthik/github/samples-java/Basic/yo-cordapp/build/nodes/PartyA/cordapps
+```
+
+
+##### Run docker-compose file
+
+```
+docker-compose up -d
+```
+
+##### Node explorer UI
+
+explorer runs at port 3000
+
+```
+http://localhost:3000/
+```
+
+
+##### explorer cordapps settings
+
+Provide cordapps path as /cordapps in settings tab.
+
+```
+/cordapps
+```
