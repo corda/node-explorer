@@ -28,7 +28,7 @@ const NetworkParameter = (props) => {
                 </div>
 
                 <div style={{marginTop: 10}}>
-                    <div><strong>Whilelisted Contracts</strong></div>
+                    <div><strong>Whitelisted Contracts</strong></div>
                     {   
                         props.data.whitelistedContractImplementations && props.data.whitelistedContractImplementations.length > 0?
                         Object.keys(props.data.whitelistedContractImplementations).map((contract, index) => {
