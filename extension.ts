@@ -156,7 +156,7 @@ export function activate(context: vscode.ExtensionContext) {
 					let logPort = 7005;
 					for (let index in nodeNames) { // create new terminals
 						const name = nodeNames[index];
-						const cmd1 = 'cd ' + path.join('build/nodes', name);
+						const cmd1 = 'cd ' + path.join(nodeDir, 'build/nodes', name);
 						// const cmd2 = 'java -Dcapsule.jvm.args=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=' + port + ' -javaagent:drivers/jolokia-jvm-1.6.0-agent.jar=port=' + logPort + ',logHandlerClass=net.corda.node.JolokiaSlf4jAdapter -Dname=' + name + ' -jar ' + 'corda.jar';
 						const cmd2 = 'java -jar corda.jar';
 						let terminal = vscode.window.createTerminal(name);
