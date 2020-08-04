@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { fileSync } from 'find';
 import * as path from 'path';
+import { v4 as uuidv4 } from 'uuid';
 
 //Import the parser used to scan the local gradle files and set platform specific paths
 var gjs = require('../parser');
@@ -15,6 +16,9 @@ var runningNodeTerminals = [] as vscode.Terminal[];
 
 var watcher: vscode.FileSystemWatcher;
 
+const clientToken = uuidv4();
+const debug = true;
+
 
 /**
  * activate runs when the extension is first loaded. 
@@ -22,6 +26,8 @@ var watcher: vscode.FileSystemWatcher;
  * @param context - Container for the extensions context
  */
 export function activate(context: vscode.ExtensionContext) {
+	debug ? console.log("my Token: " + clientToken):"";
+
 	var gradleCmd = "./gradlew ";
 	if(process.platform.includes("win32") || process.platform.includes("win64")){
 		winPlatform = true;
@@ -97,7 +103,7 @@ export function activate(context: vscode.ExtensionContext) {
 		if (areNodesDeployed()) {
 			vscode.window.showInformationMessage("Nodes already deployed. Any running nodes or node explorer views will exit, Re-Deploy?", 'Continue', 'Cancel')
 			.then(selection => {
-				console.log(selection);
+				debug ? console.log(selection) : "";
 				if (selection === 'Cancel') {
 					return 0;
 				} else if (selection === 'Continue') {
@@ -124,7 +130,7 @@ export function activate(context: vscode.ExtensionContext) {
 		if (!areNodesDeployed()) {
 			vscode.window.showInformationMessage("Please deploy nodes first then try again.", 'Click to Deploy Nodes')
 				.then(selection => {
-					console.log(selection);
+					debug ? console.log(selection): "";
 					if (selection === 'Click to Deploy Nodes') {
 						vscode.commands.executeCommand('extension.cordaDeployNodes');
 					}
@@ -135,7 +141,7 @@ export function activate(context: vscode.ExtensionContext) {
 			if (filterNodeConfigToActive().length > 0) { // nodes are already running
 				vscode.window.showInformationMessage("Nodes are already running, Re-Run?", 'Yes', 'No')
 				.then(selection => {
-					console.log(selection);
+					debug ? console.log(selection):"";
 					if (selection === 'No') {
 						return 0;
 					} else runNodes();
@@ -175,7 +181,7 @@ export function activate(context: vscode.ExtensionContext) {
 		if (!areNodesDeployed()) { // nodes aren't deployed
 			vscode.window.showInformationMessage("Local nodes available in build.gradle but not deployed. Deploy and run first; or use a remote node.", 'Cancel', 'Use Remote Node')
 			.then(selection => {
-				console.log(selection);
+				debug ? console.log(selection):"";
 				if (selection === 'Use Remote Node') {
 					launchClient();
 					launchView(context, 'Node Explorer');
@@ -186,7 +192,7 @@ export function activate(context: vscode.ExtensionContext) {
 		} else if (areNodesDeployed() && filterNodeConfigToActive().length == 0) { // filterNodeConfigToActive represents what nodes are running TODO: change this var.
 			vscode.window.showInformationMessage("Local nodes deployed but not running.", 'Run Local Nodes', 'Use Remote Node')
 			.then(selection => {
-				console.log(selection);
+				debug ? console.log(selection):"";
 				if (selection === 'Use Remote Node') {
 					launchClient();
 					launchView(context, 'Node Explorer');
@@ -239,13 +245,13 @@ function launchClient() {
 	if (!terminal) { // check if client already launched
 		const jarPath = vscode.extensions.getExtension("R3.vscode-corda")?.extensionPath;
 		const cmd1 = 'cd ' + jarPath;
-		const cmd2 = 'java -jar explorer-server-0.1.0.jar';
+		const cmd2 = 'java -jar explorer-server-0.1.0.jar --servertoken=' + clientToken;
 		terminal = vscode.window.createTerminal(name);
 		terminal.sendText(cmd1);
 		terminal.sendText(cmd2);
-		console.log("Client Launch Successful");
+		debug ? console.log("Client Launch Successful"):"";
 	} else {
-		console.log("Client Already Up");
+		debug ? console.log("Client Already Up"):"";
 	}
 }
 
@@ -293,7 +299,7 @@ function areNodesDeployed() {
  * a command will fundamentally change or break the current state
  */
 function disposeRunningNodes(){
-	console.log("Disposing runningNode terminals");
+	debug ? console.log("Disposing runningNode terminals"):"";
 	for (let i = 0; i < runningNodeTerminals.length; i++) {
 		runningNodeTerminals[i].sendText('bye');
 		runningNodeTerminals[i].dispose();
@@ -351,6 +357,7 @@ function launchView(context: any, view: string){
 			<div id="nodeDefaults" style="display:none">${JSON.stringify(nodeDefaults)}</div>
 			<div id="nodeList" style="display:none">${JSON.stringify(nodeList)}</div>
 			<div id="gradleNodesRunning" style="display:none">${JSON.stringify(gradleNodesRunning)}</div>
+			<div id="clienttoken" style="display:none">${clientToken}</div>
 			<div id="root"></div>
 			${loadScript(context,path.normalize('out/') + 'index' + '.js') /* e.g /out/transactionExplorer.js */}
 			
@@ -391,7 +398,7 @@ function updateWorkspaceFolders(): any {
 	let pCwdPath = path.join(projectCwd, '/build.gradle'); // path for checking if corda project
 
 	const fs = require('fs');
-	console.log('Root gradle file at ' + pCwdPath);
+	debug ? console.log('Root gradle file at ' + pCwdPath):"";
 
 	// TestRunner JDT fix - injects a prefs file for proper compilation when going through JDT compiler
 	function setJDTpref() {
@@ -414,7 +421,7 @@ function updateWorkspaceFolders(): any {
     watcher = vscode.workspace.createFileSystemWatcher(pattern);
 	watcher.onDidChange((event) => { 
 		watcher.dispose();
-		console.log(`gradle file changed: ${event.fsPath}`); 
+		debug ? console.log(`gradle file changed: ${event.fsPath}`):""; 
 		updateWorkspaceFolders();
 		vscode.window.showInformationMessage("build.gradle was updated. Re-deploy nodes if needed.");
 	})
@@ -427,7 +434,7 @@ function updateWorkspaceFolders(): any {
 			let contents = fs.readFileSync(pCwdPath);
 			if (contents.includes('corda')) {
 				gradleIsCorda = true;
-				console.log("gradleIsCorda is True");
+				debug ? console.log("gradleIsCorda is True"):"";
 			}
 		}
 	} catch(err) {
@@ -436,7 +443,7 @@ function updateWorkspaceFolders(): any {
 
 	try {
 		if (!gradleIsCorda) {
-			console.log("no gradle files found disabling corda commands");
+			debug ? console.log("no gradle files found disabling corda commands"):"";
 			vscode.workspace.getConfiguration('vscode-corda').update("isCordaProject", false);
 			return 1;
 		} else {
@@ -447,7 +454,7 @@ function updateWorkspaceFolders(): any {
 			for(let i = 0; i < files.length; i++){
 				scanGradleFile(files[i], i === files.length - 1);
 			}
-			console.log("gradle file found enabling corda commands");
+			debug ? console.log("gradle file found enabling corda commands"):"";
 			vscode.window.setStatusBarMessage('Loading nodes from gradle', 4000);
 			vscode.workspace.getConfiguration('vscode-corda').update("isCordaProject", true);
 			vscode.window.setStatusBarMessage("Corda-Project"); // identify project as Corda
@@ -485,7 +492,7 @@ function scanGradleFile(fileName : String, last: boolean): any {
 			for(let index in nodeConfig) {
 				nodeNames.push(nodeConfig[index].name.match("O=(.*),L")![1]);
 			}
-			console.log('Node names are: ' + JSON.stringify(nodeNames));
+			console.log('Node names in build.gradle are: ' + JSON.stringify(nodeNames));
 		}
 	});
 }

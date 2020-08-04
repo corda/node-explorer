@@ -4,6 +4,9 @@ import React, { Component } from "react";
 import PageTitle from "../components/PageTitle";
 import * as ActionType from "../store/Actions";
 
+// apply token header to axios calls
+axios.defaults.headers.common['clienttoken'] = document.getElementById('clienttoken').innerHTML;
+
 class Settings extends Component{
 
     state = {

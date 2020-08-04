@@ -14,6 +14,7 @@ async function main() {
 	}else{
 		exec("cd server && ./gradlew bootJar", function(err, stdout, stderr) {
 			if (err) {
+				console.log(err);
 				console.error('Failed to run compile client');
 			}
 			console.log(stdout);

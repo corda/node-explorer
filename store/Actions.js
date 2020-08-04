@@ -1,7 +1,8 @@
 import axios from 'axios';
 import axiosRetry from "axios-retry";
 import {toastr} from 'react-redux-toastr'
-export const SERVER_BASE_URL = window.location.href.startsWith("data:") ? "http://localhost:8580" : "/explorer";
+// export const SERVER_BASE_URL = window.location.href.startsWith("data:") ? "http://localhost:8580" : "/explorer";
+export const SERVER_BASE_URL = "http://localhost:8580";
 export const LOAD_APP_STATE = "LOAD_APP_STATE";
 export const SERVER_AWAKE = 'SERVER_AWAKE';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -26,6 +27,9 @@ export const LOAD_NETWORK_PARAMETERS = "LOAD_NETWORK_PARAMETERS";
 export const UPDATE_GRADLE_NODES_LIST = "UPDATE_GRADLE_NODES_LIST";
 export const USE_GRADLE_NODES = "USE_GRADLE_NODES";
 export const UPDATE_CURRENT_NODE = "UPDATE_CURRENT_NODE";
+
+// apply token header to axios calls
+axios.defaults.headers.common['clienttoken'] = document.getElementById('clienttoken').innerHTML;
 
 export const server_awake = () => {
     // Sets flag notifying successful access to Spring server
