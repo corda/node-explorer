@@ -402,8 +402,13 @@ function updateWorkspaceFolders(): any {
 
 	// TestRunner JDT fix - injects a prefs file for proper compilation when going through JDT compiler
 	function setJDTpref() {
-		const filePath = path.resolve(projectCwd,'.settings','org.eclipse.jdt.core.prefs');
+		const settingsPath = path.resolve(projectCwd, '.settings');
+		const filePath = path.resolve(settingsPath,'org.eclipse.jdt.core.prefs');
 		if (!fs.existsSync(filePath)) {
+			if (!fs.existsSync(settingsPath)){
+				fs.mkdirSync(settingsPath);
+			}
+
 			const content = 'org.eclipse.jdt.core.compiler.codegen.methodParameters=generate';
 
 			fs.writeFile(filePath, content, (err : any) => {
