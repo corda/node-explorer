@@ -12,6 +12,7 @@ const initialState = {
     currentCorDappDir: "",
     currentNodeChanged: false,
     remoteLogin: false,
+    extRemoteLoginFlagBurned: false,
     gradleNodesRunning: false
 };
 
@@ -100,15 +101,18 @@ const reducer = (state = initialState, action) => {
                 isServerAwake: true
             }
         case ActionType.LOGIN_SUCCESS:
-            // sessionStorage.setItem('isLoggedIn', true);    
-            // sessionStorage.setItem('profile', JSON.stringify(action.payload)); 
+            const extRemoteLoginVal = !state.extRemoteLoginFlagBurned ? document.getElementById('remotelogin').innerHTML : null;
+            const remoteLogin = extRemoteLoginVal === 'true' ? true : state.remoteLogin;
+            console.log(remoteLogin);
             ActionType.updateSettings(settings, 'cordappDir');   
             return {
                 ...state,
                 isLoggedIn: true,
                 profile: action.payload,
                 loginProcessing: false,
-                currentNodeChanged: false
+                currentNodeChanged: false,
+                remoteLogin: remoteLogin,
+                extRemoteLoginFlagBurned: true
             }
         case ActionType.CHANGE_SCREEN:
             // sessionStorage.setItem('currentPage', action.page);    
@@ -127,10 +131,7 @@ const reducer = (state = initialState, action) => {
                 // profile: profile
             }
         case ActionType.LOGOUT: 
-            // sessionStorage.removeItem("isLoggedIn");
-            // sessionStorage.removeItem("currentPage");
             return{
-                //initialState
                 ...state,
                 isLoggedIn: false,
                 currentPage: 1,

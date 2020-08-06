@@ -184,7 +184,7 @@ export function activate(context: vscode.ExtensionContext) {
 				debug ? console.log(selection):"";
 				if (selection === 'Use Remote Node') {
 					launchClient();
-					launchView(context, 'Node Explorer');
+					launchView(context, 'Node Explorer', true);
 				} else if (selection === 'Cancel') {
 					return 0;
 				}
@@ -195,7 +195,7 @@ export function activate(context: vscode.ExtensionContext) {
 				debug ? console.log(selection):"";
 				if (selection === 'Use Remote Node') {
 					launchClient();
-					launchView(context, 'Node Explorer');
+					launchView(context, 'Node Explorer', true);
 				} else if (selection === 'Run Local Nodes') {
 					vscode.commands.executeCommand('extension.cordaRunNodes');
 					vscode.window.showInformationMessage("Local nodes starting up. Re-launch the Node Explorer after completion");
@@ -331,7 +331,7 @@ function findTerminal(termName : string) {
  * @param context - Context of the extension
  * @param view - Name of the view being loaded 
  */
-function launchView(context: any, view: string){
+function launchView(context: any, view: string, remoteLogin?: boolean){
 	const nodeExplorerPanel = vscode.window.createWebviewPanel('reactView', 'Corda ' + view, vscode.ViewColumn.Active, {
 		enableScripts: true,
 		retainContextWhenHidden: true,
@@ -358,6 +358,7 @@ function launchView(context: any, view: string){
 			<div id="nodeList" style="display:none">${JSON.stringify(nodeList)}</div>
 			<div id="gradleNodesRunning" style="display:none">${JSON.stringify(gradleNodesRunning)}</div>
 			<div id="clienttoken" style="display:none">${clientToken}</div>
+			<div id="remotelogin" style="display:none">${remoteLogin}</div>
 			<div id="root"></div>
 			${loadScript(context,path.normalize('out/') + 'index' + '.js') /* e.g /out/transactionExplorer.js */}
 			
