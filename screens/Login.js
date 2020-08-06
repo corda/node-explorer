@@ -243,10 +243,10 @@ class Login extends Component {
                                     {sshCredentials()}
                                 </Grid>
                                 <Grid container justify="center" spacing={3}>
-                                    {this.props.remoteLogin && 
+                                    {(this.props.remoteLogin && !this.props.extRemoteLoginFlag) &&
                                         <Grid item> 
                                         <Button variant="contained" type="submit" color="primary" onClick={this.useGradle}
-                                                disabled={!this.props.remoteLogin || this.props.loginProcessing}>{this.props.loginProcessing? 'Please Wait...': 'Use Gradle Nodes'}</Button>
+                                                disabled={this.props.extRemoteLoginFlag || this.props.loginProcessing}>{this.props.loginProcessing? 'Please Wait...': 'Use Gradle Nodes'}</Button>
                                         </Grid>
                                     }
                                     <Grid item>
@@ -271,6 +271,7 @@ const mapStateToProps = state => {
         gradleNodesList: state.common.gradleNodesList,
         currentNode: state.common.currentNode,
         remoteLogin: state.common.remoteLogin,
+        extRemoteLoginFlag: state.common.extRemoteLoginFlag,
         currentNodeChanged: state.common.currentNodeChanged,
         gradleNodesRunning: state.common.gradleNodesRunning
     }

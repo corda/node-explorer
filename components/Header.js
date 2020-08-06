@@ -57,7 +57,7 @@ const Header = (props) => {
       prevOpen.current = open;
     }, [open]);
 
-    const serverLocation = (!props.localNodes ? "Gradle Node" : "Manual Node");
+    const serverLocation = (!props.remoteLogin ? "Gradle Node" : "Manual Node");
 
     const localNodesList = () => {
       return (
@@ -110,7 +110,7 @@ const Header = (props) => {
                             <hr style={{margin: 0}}/>
                             <ClickAwayListener onClickAway={handleClose}>
                               <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown} style={{padding: 0}}>
-                                {props.localNodes ? null : localNodesList()}
+                                {!props.remoteLogin ? localNodesList() : ""}
                                 <MenuItem onClick={props.onLogout}>Logout</MenuItem>
                               </MenuList>
                             </ClickAwayListener>
@@ -128,6 +128,7 @@ const Header = (props) => {
 const mapStateToProps = state => {
   return {
     profile: state.common.profile,
+    remoteLogin: state.common.remoteLogin,
     gradleNodes: state.common.gradleNodesList,
   }
 }

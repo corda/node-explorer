@@ -12,6 +12,7 @@ const initialState = {
     currentCorDappDir: "",
     currentNodeChanged: false,
     remoteLogin: false,
+    extRemoteLoginFlag: false,
     extRemoteLoginFlagBurned: false,
     gradleNodesRunning: false
 };
@@ -63,15 +64,23 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoggedIn: false,
+                remoteLogin: false,
                 currentNode: action.payload,
                 currentNodeChanged: true
             }
         case ActionType.USE_GRADLE_NODES:
             ActionType.updateSettings(settings, 'cordappDir');  
+            // return {
+            //     ...state,
+            //     isLoggedIn: true,
+            //     remoteLogin: false
+            // }
             return {
                 ...state,
-                isLoggedIn: true,
-                remoteLogin: false
+                isLoggedIn: false,
+                remoteLogin: false,
+                currentNodeChanged: true,
+                gradleNodesRunning: true
             }
         case ActionType.UPDATE_GRADLE_NODES_LIST:
             const nodes = getNodeData();
@@ -101,8 +110,8 @@ const reducer = (state = initialState, action) => {
                 isServerAwake: true
             }
         case ActionType.LOGIN_SUCCESS:
-            const extRemoteLoginVal = !state.extRemoteLoginFlagBurned ? document.getElementById('remotelogin').innerHTML : null;
-            const remoteLogin = extRemoteLoginVal === 'true' ? true : state.remoteLogin;
+            const extRemoteLoginFlag = !state.extRemoteLoginFlagBurned ? (document.getElementById('remotelogin').innerHTML === 'true') : state.extRemoteLoginFlag;
+            const remoteLogin = extRemoteLoginFlag ? extRemoteLoginFlag : state.remoteLogin;
             console.log(remoteLogin);
             ActionType.updateSettings(settings, 'cordappDir');   
             return {
@@ -112,6 +121,7 @@ const reducer = (state = initialState, action) => {
                 loginProcessing: false,
                 currentNodeChanged: false,
                 remoteLogin: remoteLogin,
+                extRemoteLoginFlag: extRemoteLoginFlag,
                 extRemoteLoginFlagBurned: true
             }
         case ActionType.CHANGE_SCREEN:

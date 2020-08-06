@@ -331,7 +331,7 @@ function findTerminal(termName : string) {
  * @param context - Context of the extension
  * @param view - Name of the view being loaded 
  */
-function launchView(context: any, view: string, remoteLogin?: boolean){
+function launchView(context: any, view: string, remoteLogin = false){
 	const nodeExplorerPanel = vscode.window.createWebviewPanel('reactView', 'Corda ' + view, vscode.ViewColumn.Active, {
 		enableScripts: true,
 		retainContextWhenHidden: true,
