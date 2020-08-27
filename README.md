@@ -7,7 +7,18 @@ Stand alone desktop app for Win/Osx/Linux that allows connecting to a local or r
 
 If you're looking to download the node explorer and get started using it; download the latest packaged release on this repo's [releases](https://github.com/corda/node-explorer/releases) page.
 
-There are install packages for Linux, OSX and Windows. You can find instructions on using the Node-Explorer application at the [documentation](https://docs.corda.net/docs/corda-os/4.5/node-explorer.html)
+There are install packages for Linux, OSX and Windows. 
+
+To login to your Corda node, you will need to provide the:
+
+- Hostname (domain, IP, or localhost)
+- Rpc Port
+- Username
+- Password
+
+Notes: You can find the Rpc port in your node config under `rpcSettings->address` or as displayed in a `CraSH shell` instance. If you have not explicitly set a username/password project defaults are `user1` and `test`.
+
+Full instructions for using the Node-Explorer application at the [documentation](https://docs.corda.net/docs/corda-os/4.5/node-explorer.html)
 
 ---
 

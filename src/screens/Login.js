@@ -156,7 +156,7 @@ class Login extends Component {
                                                onBlur={this.handleBlur("hostName")}/>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <TextField label="Node Port" type="number"
+                                    <TextField label="RPC Port" type="number"
                                                onChange={e => this.setState({port: e.target.value})}
                                                error={this.shouldMarkError("port")}
                                                helperText={this.shouldMarkError("port") ? 'Please Enter Node Port Number' : ''}
