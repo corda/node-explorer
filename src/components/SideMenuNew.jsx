@@ -24,8 +24,35 @@ const SideMenu = (props) => {
                 title={
                   'Dashboard'
                 }
+        ></SideBarItem>
+         <SideBarItem
+              icon="Lan"
+              onClick={() =>props.changeScreen(0)}
+                title={
+                  'Network'
+                }
               ></SideBarItem>
-          
+          <SideBarItem
+              icon="ViewDashboard"
+              onClick={() =>props.changeScreen(0)}
+                title={
+                  'Transactions'
+                }
+        ></SideBarItem>
+        <SideBarItem
+              icon="ViewDashboard"
+              onClick={() =>props.changeScreen(0)}
+                title={
+                  'Vault'
+                }
+        ></SideBarItem>
+         <SideBarItem
+              icon="ViewDashboard"
+              onClick={() =>props.changeScreen(0)}
+                title={
+                  'Settings'
+                }
+              ></SideBarItem>
       </SideBar>
      
 
