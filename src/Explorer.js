@@ -4,11 +4,12 @@ import CordaNetwork from './screens/CordaNetwork';
 import TransactionExplorer from './screens/TransactionExplorer';
 import Header from './components/Header';
 import Login from './screens/Login';
-import SideMenu from './components/SideMenu';
+import SideMenuNew from './components/SideMenuNew';
 import * as ActionType from './store/Actions';
 import VaultExplorer from './screens/VaultExplorer';
 import Dashboard from './screens/Dashboard';
 import Settings from './screens/Settings';
+import { Column, Container, Row} from '@r3/r3-tooling-design-system';
 
 class Explorer extends Component {
 
@@ -21,9 +22,14 @@ class Explorer extends Component {
         <React.Fragment>
             {this.props.isLoggedIn ?
               <div>
-                  <Header/>
-                  <SideMenu></SideMenu>
-                  <div style={{marginLeft: 120}}>
+              <Header />
+              <Container className="no-marg">
+                <Row>
+                  <Column lg={3}>
+                     <SideMenuNew />
+                  </Column>
+                  <Column lg={9}>
+                
                     <div className="content-pane">
                       {
                         this.props.spinner? 
@@ -42,7 +48,12 @@ class Explorer extends Component {
                         <Dashboard/>
                       }
                     </div> 
-                  </div> 
+              
+                  </Column>
+                </Row>
+                </Container>
+                 
+                  
               </div> 
               : 
               <Login></Login>

@@ -1,10 +1,11 @@
 import React from 'react';
+import { Card } from '@r3/r3-tooling-design-system'
 
 const NodeDiagnostic = (props) => {
 
     return(
-        <div className="widget">
-            <div className="title">Node Information</div>
+        <Card title="Node Information">
+            {/* <div className="title">Node Information</div> */}
             <div style={{padding: 10, position: "relative"}}>
                 {
                     props.data?
@@ -41,7 +42,7 @@ const NodeDiagnostic = (props) => {
                 }
                 
             </div>
-        </div>    
+        </Card>    
     );
 } 
 

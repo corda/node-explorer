@@ -1,10 +1,10 @@
 import React from 'react';
+import { Card } from '@r3/r3-tooling-design-system'
 
 const NetworkParameter = (props) => {
 
     return(
-        <div className="widget">
-            <div className="title">Network Parameters</div>
+        <Card title={"Network Parameters"}>
             <div style={{padding: 10, position: "relative"}}>
                 <div> Minumum Platform Version: <strong>{props.data.minimumPlatformVersion}</strong></div>
                 <div className="item"> Last Modified: <strong>{props.data.modifiedTime}</strong></div>
@@ -44,7 +44,7 @@ const NetworkParameter = (props) => {
                     }
                 </div>
             </div>
-        </div>    
+        </Card>    
     );
 } 
 

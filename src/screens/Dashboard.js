@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import * as ActionType from '../store/Actions';
 import NodeDiagnostic from '../components/NodeDiagnostic'
 import '../styles/Dashboard.css';
-import { Grid } from "@material-ui/core";
+import { Container, Column, Row } from "@r3/r3-tooling-design-system";
 import NetworkParameter from "../components/NetworkParameter";
 
 class Dashboard extends Component{
@@ -16,14 +16,16 @@ class Dashboard extends Component{
     render() {
         return(
             <React.Fragment>
-                <Grid container>
-                    <Grid item xs={6}>
+                <Container>
+                    <Row>
+                        <Column item lg={6}>
                         <NodeDiagnostic data={this.props.nodeDiagnostic}/>
-                    </Grid>    
-                    <Grid item xs={6}>
-                        <NetworkParameter data={this.props.networkParameter}/>
-                    </Grid>    
-                </Grid>    
+                        </Column>    
+                        <Column item lg={6}>
+                            <NetworkParameter data={this.props.networkParameter}/>
+                        </Column>    
+                    </Row>                   
+                </Container>    
             </React.Fragment>
         );
     }    

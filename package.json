@@ -12,6 +12,7 @@
   "dependencies": {
     "@material-ui/core": "^4.8.2",
     "@material-ui/icons": "^4.5.1",
+    "@r3/r3-tooling-design-system": "^2.0.2",
     "axios": "^0.19.1",
     "axios-retry": "^3.1.2",
     "logger": "0.0.1",
@@ -82,6 +83,12 @@
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+   "prettier": {
+    "printWidth": 120,
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 2
   },
   "browserslist": {
     "production": [

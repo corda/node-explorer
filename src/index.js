@@ -15,6 +15,7 @@ import './index.css';
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css'
 import * as serviceWorker from './serviceWorker';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import '@r3/r3-tooling-design-system/lib/index.scss';
 
 
 const rootReducer = combineReducers({

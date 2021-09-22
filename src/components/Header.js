@@ -1,6 +1,7 @@
 import React from 'react';
 import '../styles/Header.css';
 import { Button, Popper, Paper, Grow, ClickAwayListener, MenuList, MenuItem } from '@material-ui/core';
+import { TopNavBar, Dropdown, IconCustom, Option } from '@r3/r3-tooling-design-system';
 import * as ActionType from '../store/Actions'
 import { connect } from 'react-redux';
 
@@ -33,37 +34,53 @@ const Header = (props) => {
       prevOpen.current = open;
     }, [open]);
   
-    return(
-      <div className="Header">
-          <div>
-                <img src="crda-logo.svg" width="100%" alt="Corda Logo" className="Logo"/>
-                <div className="profile">
-                  <Button variant="outlined" ref={anchorRef} onClick={handleToggle}>{props.profile.name}</Button>
-                  <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
-                      {({ TransitionProps, placement }) => (
-                        <Grow
-                          {...TransitionProps}
-                          style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom'}}
-                        >
-                          <Paper>
-                            <div style={{padding: 10}}>
-                                <span style={{display: "block", paddingBottom: 3}}>{props.profile.name}</span>
-                                <span style={{fontSize: 12, display: "block"}}>{props.profile.city}, {props.profile.country}</span>
-                            </div>
-                            <hr style={{margin: 0}}/>
-                            <ClickAwayListener onClickAway={handleClose}>
-                              <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown} style={{padding: 0}}>
-                                <MenuItem onClick={props.onLogout}>Logout</MenuItem>
-                              </MenuList>
-                            </ClickAwayListener>
-                          </Paper>
-                        </Grow>
-                      )}
-                    </Popper>
-                </div>
-          </div>
-      </div>
-    );
+  return (
+    <TopNavBar
+      logo={'crda-logo.svg'}
+      logoHeight={'100px'}
+      logoWidth={'100px'}
+      logoAlt={"Corda"}
+      center={
+        <>
+          <Dropdown closeOnSelectOption positionX="right" positionY="bottom" trigger={<IconCustom className="h-5" icon="Account" />}>
+            <Option value="one">One</Option>
+            <Option value="two">Two</Option>
+          </Dropdown>
+          <IconCustom className="h-5" icon="ExitToApp"  onClick={props.onLogout} />
+        </>}
+/>
+      // <div className="Header">
+      //     <div>
+      //           <img src="crda-logo.svg" width="100%" alt="Corda Logo" className="Logo"/>
+      //           <div className="profile">
+      //             <Button variant="outlined" ref={anchorRef} onClick={handleToggle}>{props.profile.name}</Button>
+      //             <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
+      //                 {({ TransitionProps, placement }) => (
+      //                   <Grow
+      //                     {...TransitionProps}
+      //                     style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom'}}
+      //                   >
+      //                     <Paper>
+      //                       <div style={{padding: 10}}>
+      //                           <span style={{display: "block", paddingBottom: 3}}>{props.profile.name}</span>
+      //                           <span style={{fontSize: 12, display: "block"}}>{props.profile.city}, {props.profile.country}</span>
+      //                       </div>
+      //                       <hr style={{margin: 0}}/>
+      //                       <ClickAwayListener onClickAway={handleClose}>
+      //                         <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown} style={{padding: 0}}>
+      //                           <MenuItem onClick={props.onLogout}>Logout</MenuItem>
+      //                         </MenuList>
+      //                       </ClickAwayListener>
+      //                     </Paper>
+      //                   </Grow>
+      //                 )}
+      //               </Popper>
+      //           </div>
+      //     </div>
+      // </div>
+    
+  
+  );
 }
 
 const mapStateToProps = state => {
