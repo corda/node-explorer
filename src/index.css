@@ -55,3 +55,11 @@ code {
 .sidebar-toggable {
   position: relative;
 }
+
+.max-height {
+  height: 100%;
+}
+
+.no-gap {
+  gap: 0 !important;
+}

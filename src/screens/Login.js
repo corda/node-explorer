@@ -1,9 +1,10 @@
-import {Button, Grid, TextField, Checkbox, FormControlLabel} from '@material-ui/core';
+import { FormControlLabel} from '@material-ui/core';
 import React, { Component } from 'react';
-import '../styles/Login.css';
+import '../styles/Login.scss';
 import * as ActionType from '../store/Actions';
 import { connect } from 'react-redux';
 import SplashScreen from '../components/Splash';
+import { Container, Column, Row, Button, TextInput, Checkbox, PasswordInput } from '@r3/r3-tooling-design-system'
 
 class Login extends Component {
 
@@ -93,44 +94,42 @@ class Login extends Component {
 
         const sshCredentials = () => {
             // user, password/key, host, port
-            if (this.state.sshChecked) {
                 return (
-                    <div>
-                    <Grid container>
+        <React.Fragment>
                         {/*<Grid item xs={6}>*/}
-                        {/*    <TextField label="ssh Hostname" value={this.state.ssh.hostName}*/}
+                        {/*    <TextInput label="ssh Hostname" value={this.state.ssh.hostName}*/}
                         {/*               onChange={e => this.setState({ssh: {...this.state.ssh, hostName: e.target.value}})}*/}
                         {/*               error={this.shouldMarkError("sshHostName")}*/}
                         {/*               helperText={this.shouldMarkError("sshHostName") ? 'Please Enter ssh Hostname' : ''}*/}
                         {/*               onBlur={this.handleBlur("sshHostName")}/>*/}
-                        {/*</Grid>*/}
-                        <Grid item xs={6}>
-                            <TextField label="SSH Port" type="number" value={this.state.ssh.port}
+                            {/*</Grid>*/}
+                        <Row>
+                        <Column lg={3}>
+                            <TextInput label="SSH Port" type="number" value={this.state.ssh.port}
                                        onChange={e => this.setState({ssh: {...this.state.ssh, port: e.target.value}})}
-                                       error={this.shouldMarkError("sshPort")}
-                                       helperText={this.shouldMarkError("sshPort") ? 'Please Enter SSH Port Number' : ''}
+                                       errorMessage={this.shouldMarkError("sshPort")}
+                                       helpText={this.shouldMarkError("sshPort") ? 'Please Enter SSH Port Number' : ''}
                                        onBlur={this.handleBlur("sshPort")}/>
-                        </Grid>
-                        <Grid container>
-                            <Grid item xs={12}>
-                                <TextField label="SSH Username" fullWidth value={this.state.ssh.username}
+                        </Column>                    
+                            <Column lg={9}>
+                                <TextInput label="SSH Username" value={this.state.ssh.username}
                                            onChange={e => this.setState({ssh: {...this.state.ssh, username: e.target.value}})}
-                                           error={this.shouldMarkError("sshUsername")}
-                                           helperText={this.shouldMarkError("sshUsername") ? 'Please Enter SSH Username' : ''}
+                                           errorMessage={this.shouldMarkError("sshUsername")}
+                                           helpText={this.shouldMarkError("sshUsername") ? 'Please Enter SSH Username' : ''}
                                            onBlur={this.handleBlur("sshUsername")}/>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField label="SSH Password" type="password" fullWidth
+                            </Column>
+                            <Column lg={12}>
+                                <PasswordInput label="SSH Password" type="password" 
+                                        value={this.state.ssh.password}
                                            onInput={e => this.setState({ssh: {...this.state.ssh, password: e.target.value}})}
-                                           error={this.shouldMarkError("sshPassword")}
-                                           helperText={this.shouldMarkError("sshPassword") ? 'Please Enter SSH Password' : ''}
+                                           errorMessage={this.shouldMarkError("sshPassword")}
+                                           helpText={this.shouldMarkError("sshPassword") ? 'Please Enter SSH Password' : ''}
                                            onBlur={this.handleBlur("sshPassword")}/>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    </div>
+                            </Column>
+                        </Row>
+            </React.Fragment>
                 )
-            }
+            
         }
 
         if (!this.props.isServerAwake) {
@@ -139,61 +138,85 @@ class Login extends Component {
         } else {
 
             return (
-                <div style={{position: 'relative'}}>
-                    <img src="global-map.png" alt="Global Map" width="100%"></img>
-                    <div className="center-container">
-                        <div>
-                            <div>
-                                <img src="crda-logo.svg" alt="Corda Logo" width="250px"></img>
-                                <div className="explorer-text">Node Explorer</div>
-                            </div>
-                            <Grid container style={{marginTop: "20px"}} spacing={1}>
-                                <Grid item xs={6}>
-                                    <TextField label="Node Hostname" value={this.state.hostName}
-                                               onChange={e => this.setState({hostName: e.target.value})}
-                                               error={this.shouldMarkError("hostName")}
-                                               helperText={this.shouldMarkError("hostName") ? 'Please Enter Node Hostname' : ''}
-                                               onBlur={this.handleBlur("hostName")}/>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <TextField label="RPC Port" type="number"
-                                               onChange={e => this.setState({port: e.target.value})}
-                                               error={this.shouldMarkError("port")}
-                                               helperText={this.shouldMarkError("port") ? 'Please Enter Node Port Number' : ''}
-                                               onBlur={this.handleBlur("port")}/>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField label="RPC Username" fullWidth
+                <Container fluid className="login-view-container">
+                    <Row className="max-height no-gap">
+                        <Column lg={5} className="max-height">
+                            <div className="center-container">
+                                    <div className="logo-container">
+                                        <img src="crda-logo.svg" alt="Corda Logo" width="250px"></img>
+                                       
+                                </div>
+                                <div className="form-title">
+                                     <h2>Login</h2>
+                                </div>
+                                    <div className="login-form-container">
+                                    <Row>
+                                        <Column lg={8}>
+                                            <TextInput label="Node Hostname" value={this.state.hostName}
+                                                onChange={e => this.setState({hostName: e.target.value})}
+                                                errorMessage={this.shouldMarkError("hostName")}
+                                                helpText={this.shouldMarkError("hostName") ? 'Please Enter Node Hostname' : ''}
+                                                onBlur={this.handleBlur("hostName")}/>
+                                        </Column>
+                                        <Column lg={4}>
+                                            <TextInput label="RPC Port" type="number"
+                                                onChange={e => this.setState({port: e.target.value})}
+                                                errorMessage={this.shouldMarkError("port")}
+                                                helpText={this.shouldMarkError("port") ? 'Please Enter Node Port Number' : ''}
+                                                onBlur={this.handleBlur("port")}/>                                   
+                                        </Column>                               
+                                        <Column lg={12}>
+                                            <TextInput label="RPC Username" 
+                                                value={this.state.username}
                                                 onChange={e => this.setState({username: e.target.value})}
-                                                error={this.shouldMarkError("username")}
-                                                helperText={this.shouldMarkError("username") ? 'Please Enter RPC Username' : ''}
-                                                onBlur={this.handleBlur("username")}/>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField label="RPC Password" type="password" fullWidth
+                                                errorMessage={this.shouldMarkError("username")}
+                                                helpText={this.shouldMarkError("username") ? 'Please Enter RPC Username' : ''}
+                                                />
+                                        </Column>
+                                        <Column lg={12}>
+                                            <PasswordInput label="RPC Password" 
+                                                value={this.state.password}
                                                 onInput={e => this.setState({password: e.target.value})}
-                                                error={this.shouldMarkError("password")}
-                                                helperText={this.shouldMarkError("password") ? 'Please Enter RPC Password' : ''}
-                                                onBlur={this.handleBlur("password")}/>
-                                </Grid>
-                                <Grid item xs={12} style={{marginTop: "5px", textAlign: "left"}}>
-                                    <FormControlLabel control={
-                                        <Checkbox
-                                            checked={this.sshChecked}
-                                            onChange={e => this.setState({sshChecked: e.target.checked})}
-                                            value="primary"
-                                        />
-                                    } label={"Use SSH"} />
+                                                errorMessage={this.shouldMarkError("password")}
+                                                helpText={this.shouldMarkError("password") ? 'Please Enter RPC Password' : ''}
+                                                />
+                                        </Column>
+                                    </Row>
+                                    <Row>
+                                        <Column lg={12}>
+                                            <p className="separator-tag">or Login in with ssh</p>
+                                        </Column>
+                                    </Row>
                                     {sshCredentials()}
-                                </Grid>
-                                <Grid item xs={12} style={{marginTop: "20px", textAlign: "right"}}>
-                                    <Button variant="contained" type="submit" color="primary" onClick={this.doLogin}
-                                            disabled={isDisabled || this.props.loginProcessing}>{this.props.loginProcessing? 'Please Wait...': 'Connect'}</Button>
-                                </Grid>
-                            </Grid>
-                        </div>
-                    </div>
-                </div>
+                                    <Row className="cta-container">
+                                        <Column lg={12}>
+                                             <Button variant="primary" width="100%" type="submit" onClick={this.doLogin}
+                                                    disabled={isDisabled || this.props.loginProcessing}>{this.props.loginProcessing? 'Please Wait...': 'Connect'}</Button>
+                                        </Column>
+                                    </Row>
+                                </div>      
+                            </div>      
+                        </Column>
+                        <Column lg={7} className="container-right">
+                            <div className="block-right">
+                                <h4>Track your CorDapps</h4>
+                                <span className="icon-cordapp">
+                                    
+                                </span>
+                            </div>
+                             <div className="block-left">
+                                <h4>Manage your Transactions</h4>
+                                <span className="icon-cordapp">
+                                    
+                                </span>
+                            </div>
+                            <div className="screen-text">
+                                <h2>Node Explorer</h2>
+                                <h4>Interact with your Nodes, Cordapps and Vault.</h4>
+                            </div>
+                        </Column>                                    
+                    </Row>
+                </Container>             
             );
         }
     }

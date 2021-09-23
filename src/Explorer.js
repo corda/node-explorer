@@ -24,8 +24,8 @@ class Explorer extends Component {
     render(){
       return (
         <React.Fragment>
-            {this.props.isLoggedIn ?
-              <div>
+          {this.props.isLoggedIn ?
+            <React.Fragment>
               <Header />
               <PageHeader title="Dashboard" size="small" dark>
                  {
@@ -38,8 +38,8 @@ class Explorer extends Component {
                       }
               </PageHeader>
 
-              <Container className="no-marg">
-                <Row>
+              <Container className="no-marg max-height">
+                <Row className="max-height">
                   <Column lg={1}>
                      <SideMenuNew />
                   </Column>
@@ -67,9 +67,8 @@ class Explorer extends Component {
                   </Column>
                 </Row>
                 </Container>
-                 
+                </React.Fragment> 
                   
-              </div> 
               : 
               <Login></Login>
             }

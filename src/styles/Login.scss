@@ -1,0 +1,147 @@
+.center-container {
+  /* position: absolute;
+    left: 50%;
+    top: 20%;
+    margin-left: -200px; */
+  height: 100%;
+}
+
+.center-container {
+  width: 100%;
+  height: 100%;
+  box-shadow: 1px 1px 1px #cccccc;
+  background-color: #ffffff;
+  padding: 8rem;
+}
+
+.form-title {
+  margin-top: 4rem;
+}
+
+.explorer-text {
+  font-size: 32px;
+  color: #df0a1b;
+  font-weight: bold;
+}
+.login-view-container {
+  height: 100%;
+  position: relative;
+}
+.login-form-container {
+  padding-top: 2rem;
+  .cta-container {
+    margin-top: 2rem;
+  }
+}
+.logo-container {
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+.container-right {
+  background-image: url('../assets/login-background.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: relative;
+  height: 100%;
+  .screen-text {
+    color: #fff;
+    position: absolute;
+    bottom: 15%;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: calc(50% - 20px);
+    height: auto;
+    text-align: center;
+    h2,
+    h4 {
+      color: #fff;
+    }
+  }
+  // &:before {
+  //   content: '';
+  //   background-color: #df0a1b;
+  //   position: absolute;
+  //   opacity: 0.3;
+  //   height: 100%;
+  //   width: 100%;
+  //   top: 0;
+  //   bottom: 0;
+  //   left: 0;
+  //   right: 0;
+  //   z-index: 2;
+  //   display: block;
+  // }
+  .block-left {
+    width: calc(70% - 300px);
+    height: 300px;
+    position: absolute;
+    right: 40%;
+    top: 40%;
+    padding: 2rem;
+    background-color: #fff;
+    z-index: 4;
+    box-shadow: 0px 3px 6px #1d23431a;
+    min-width: 360px;
+    border-radius: 10px;
+  }
+  .block-right {
+    border-radius: 10px;
+    position: absolute;
+    right: 200px;
+    top: 250px;
+    height: 315px;
+    width: calc(55% - 300px);
+    padding: 2rem;
+    background-color: #fff;
+    z-index: 5;
+    box-shadow: 0px 3px 6px #1d23431a;
+    min-width: 330px;
+    .icon-cordapp {
+      width: 70%;
+      height: 70%;
+      background-size: cover;
+      background-repeat: no-repeat;
+      display: block;
+      background-image: url('../corda.png');
+      position: absolute;
+      right: 0px;
+      top: 40px;
+      left: 0;
+      bottom: 0;
+      margin: auto;
+    }
+  }
+}
+
+.separator-tag {
+  text-align: center;
+  margin: 2rem;
+  position: relative;
+  font-size: 20px;
+  &::before {
+    content: '';
+    width: calc(30% - 20px);
+    height: 1px;
+    background-color: #333;
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+  }
+  &::after {
+    content: '';
+    width: calc(30% - 20px);
+    height: 1px;
+    background-color: #333;
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+  }
+}
