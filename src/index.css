@@ -16,6 +16,7 @@ html,
 
 .content-pane {
   padding-top: 60px;
+  margin-right: 2rem;
 }
 
 code {
@@ -50,4 +51,7 @@ code {
 .no-marg {
   margin-left: 0rem !important;
   margin-right: 0rem !important;
+}
+.sidebar-toggable {
+  position: relative;
 }

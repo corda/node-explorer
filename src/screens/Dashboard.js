@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import * as ActionType from '../store/Actions';
 import NodeDiagnostic from '../components/NodeDiagnostic'
-import '../styles/Dashboard.css';
+import '../styles/Dashboard.scss';
 import { Container, Column, Row } from "@r3/r3-tooling-design-system";
 import NetworkParameter from "../components/NetworkParameter";
 
@@ -16,7 +16,7 @@ class Dashboard extends Component{
     render() {
         return(
             <React.Fragment>
-                <Container>
+             
                     <Row>
                         <Column item lg={6}>
                         <NodeDiagnostic data={this.props.nodeDiagnostic}/>
@@ -25,7 +25,7 @@ class Dashboard extends Component{
                             <NetworkParameter data={this.props.networkParameter}/>
                         </Column>    
                     </Row>                   
-                </Container>    
+           
             </React.Fragment>
         );
     }    

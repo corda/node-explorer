@@ -11,6 +11,9 @@ import Dashboard from './screens/Dashboard';
 import Settings from './screens/Settings';
 import { Column, Container, Row} from '@r3/r3-tooling-design-system';
 
+
+
+
 class Explorer extends Component {
 
     componentDidMount(){
@@ -25,10 +28,10 @@ class Explorer extends Component {
               <Header />
               <Container className="no-marg">
                 <Row>
-                  <Column lg={3}>
+                  <Column lg={1}>
                      <SideMenuNew />
                   </Column>
-                  <Column lg={9}>
+                  <Column lg={11}>
                 
                     <div className="content-pane">
                       {

@@ -4,8 +4,16 @@ import { Button, Popper, Paper, Grow, ClickAwayListener, MenuList, MenuItem } fr
 import { TopNavBar, Dropdown, IconCustom, Option } from '@r3/r3-tooling-design-system';
 import * as ActionType from '../store/Actions'
 import { connect } from 'react-redux';
+import logoSrc from '../crda-logo.svg';
+
 
 const Header = (props) => {
+
+  const logo = (
+    <a href="#">
+      <img src={logoSrc} alt="logo-alt-txt" width="100px" />
+    </a>
+  );
 
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
@@ -36,10 +44,7 @@ const Header = (props) => {
   
   return (
     <TopNavBar
-      logo={'crda-logo.svg'}
-      logoHeight={'100px'}
-      logoWidth={'100px'}
-      logoAlt={"Corda"}
+      logo={logo}
       center={
         <>
           <Dropdown closeOnSelectOption positionX="right" positionY="bottom" trigger={<IconCustom className="h-5" icon="Account" />}>

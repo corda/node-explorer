@@ -16,82 +16,46 @@ const SideMenu = (props) => {
 
     return (
 
-
-      <SideBar toggable>
+        <SideBar toggable className="sidebar-toggable">
             <SideBarItem
               icon="ViewDashboard"
-              onClick={() =>props.changeScreen(0)}
+              onClick={() =>this.props.changeScreen(0)}
                 title={
                   'Dashboard'
                 }
         ></SideBarItem>
          <SideBarItem
-              icon="Lan"
-              onClick={() =>props.changeScreen(0)}
+              icon="Earth"
+              onClick={() => this.props.changeScreen(1)}
                 title={
-                  'Network'
+                  'Networks'
                 }
               ></SideBarItem>
           <SideBarItem
-              icon="ViewDashboard"
-              onClick={() =>props.changeScreen(0)}
+              icon="SwapHorizontal"
+              onClick={() =>props.changeScreen(2)}
                 title={
                   'Transactions'
                 }
         ></SideBarItem>
         <SideBarItem
-              icon="ViewDashboard"
-              onClick={() =>props.changeScreen(0)}
+              icon="SafeSquareOutline"
+              onClick={() =>props.changeScreen(3)}
                 title={
                   'Vault'
                 }
         ></SideBarItem>
          <SideBarItem
-              icon="ViewDashboard"
-              onClick={() =>props.changeScreen(0)}
+              icon="CogOutline"
+              onClick={() =>props.changeScreen(4)}
                 title={
                   'Settings'
                 }
               ></SideBarItem>
       </SideBar>
-     
 
-
-
-        // <div className="SideMenu">
-        //     <ul>
-        //         <li className={props.currentPage === 0? "active":""} onClick={() => props.changeScreen(0)}>
-        //             <div>
-        //                 <DashboardIcon fontSize="large"></DashboardIcon>
-        //             </div>
-        //             <span>Dashboard</span>
-        //         </li>
-        //         <li className={props.currentPage === 1? "active":""} onClick={() => props.changeScreen(1)}>
-        //             <div>
-        //                 <PublicIcon fontSize="large"></PublicIcon>
-        //             </div>
-        //             <span>Network</span>
-        //         </li>
-        //         <li className={props.currentPage === 2? "active":""} onClick={() => props.changeScreen(2)}>
-        //             <div>
-        //                 <SyncAltRoundedIcon fontSize="large"></SyncAltRoundedIcon>
-        //             </div>
-        //             <span>Transactions</span>
-        //         </li>
-        //         <li className={props.currentPage === 3? "active":""} onClick={() => props.changeScreen(3)}>
-        //             <div>
-        //                 <SecurityRoundedIcon fontSize="large"></SecurityRoundedIcon>
-        //             </div>
-        //             <span>Vault</span>
-        //         </li>
-        //         <li className={props.currentPage === 4? "active":""} onClick={() => props.changeScreen(4)}>
-        //             <div>
-        //                 <SettingsApplicationsIcon fontSize="large"></SettingsApplicationsIcon>
-        //             </div>
-        //             <span>Settings</span>
-        //         </li>
-        //     </ul>
-        // </div>
+  
+       
     
     );
 }
