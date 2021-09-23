@@ -379,7 +379,7 @@ class TransactionExplorer extends Component{
         return(
             <div style={{padding: 20}}>
                 <div className="page-title">
-                    <span>Transaction Explorer</span>
+                    <span>Transactions</span>
                     <Button style={{float: "right"}} variant="contained" color="primary" onClick={this.handleOpen}>New Transaction</Button>
                     <Modal
                         open={this.props.open}

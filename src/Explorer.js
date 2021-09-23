@@ -9,7 +9,7 @@ import * as ActionType from './store/Actions';
 import VaultExplorer from './screens/VaultExplorer';
 import Dashboard from './screens/Dashboard';
 import Settings from './screens/Settings';
-import { Column, Container, Row} from '@r3/r3-tooling-design-system';
+import { Column, Container, Row, PageHeader} from '@r3/r3-tooling-design-system';
 
 
 
@@ -17,7 +17,8 @@ import { Column, Container, Row} from '@r3/r3-tooling-design-system';
 class Explorer extends Component {
 
     componentDidMount(){
-        this.props.getApplicationState();
+      this.props.getApplicationState();
+      console.log(this.props,'props')
     }
 
     render(){
@@ -26,6 +27,17 @@ class Explorer extends Component {
             {this.props.isLoggedIn ?
               <div>
               <Header />
+              <PageHeader title="Dashboard" size="small" dark>
+                 {
+                        this.props.currentPage === 0 ? "Dashboard": 
+                        this.props.currentPage === 1 ? "CordaNetwork": 
+                        this.props.currentPage === 2 ? "TransactionExplorer":
+                        this.props.currentPage === 3 ? "VaultExplorer": 
+                        this.props.currentPage === 4 ? "Settings": 
+                        <Dashboard/>
+                      }
+              </PageHeader>
+
               <Container className="no-marg">
                 <Row>
                   <Column lg={1}>

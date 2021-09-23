@@ -7,9 +7,24 @@
   box-shadow: 0px 3px 6px #1d23431a;
   border-radius: 3px;
   .tile-title {
+    padding-bottom: 1rem;
+    padding-right: 15px;
+    position: relative;
+    .cord-icon {
+      width: 30px;
+      height: 30px;
+      background-size: cover;
+      background-repeat: no-repeat;
+      display: block;
+      background-image: url('../corda.png');
+      position: absolute;
+      right: 0px;
+      top: 00px;
+    }
   }
   .tile-body {
   }
-  .tilt-footer {
+  .tile-footer {
+    font-size: 14px;
   }
 }

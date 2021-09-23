@@ -87,7 +87,6 @@ class Settings extends Component{
     render() {
         return( 
             <React.Fragment>
-                <PageTitle value="Settings" />
                 <div style={{padding: "10px 20px"}}>
                     <Grid container spacing={2}>
                         <Grid item xs={6}>

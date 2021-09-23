@@ -161,7 +161,7 @@ class VaultExplorer extends Component{
     render() {
         return(
             <React.Fragment>
-                <PageTitle value="Vault Explorer" />
+                <PageTitle value="The Vault" />
                 <Grid container spacing={0}>
                     <Grid item xs={3}><Filter filter={this.props.filters} handler={(type, value, checked) => this.handleFilterUpdate(type, value, checked)}/></Grid>
                     <Grid item xs={9}>
