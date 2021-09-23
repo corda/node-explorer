@@ -20,7 +20,7 @@ class Dashboard extends Component{
                         <Column item lg={8}>
                         <NodeDiagnostic data={this.props.nodeDiagnostic}/>
                         </Column>    
-                        <Column item lg={4}>
+                        <Column item lg={4} className="max-height">
                             <NetworkParameter data={this.props.networkParameter}/>
                         </Column>    
                     </Row>                   

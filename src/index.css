@@ -6,6 +6,7 @@ body {
     'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: var(--color-medium-dark-gray);
 }
 
 html,
@@ -16,7 +17,7 @@ html,
 
 .content-pane {
   padding-top: 60px;
-  margin-right: 2rem;
+  margin-right: 4rem;
 }
 
 code {

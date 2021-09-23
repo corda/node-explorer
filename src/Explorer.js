@@ -37,9 +37,8 @@ class Explorer extends Component {
                         <Dashboard/>
                       }
               </PageHeader>
-
               <Container className="no-marg max-height">
-                <Row className="max-height">
+                <Row className="max-height no-gap">
                   <Column lg={1}>
                      <SideMenuNew />
                   </Column>

@@ -3,21 +3,25 @@ import { Card } from '@r3/r3-tooling-design-system'
 import Tile from './Tile';
 const NodeDiagnostic = (props) => {
 
-    return(
-        <Card title="Node Information">
-            {/* <div className="title">Node Information</div> */}
-            <div style={{padding: 10, position: "relative"}}>
-                {
-                    props.data?
-                    <React.Fragment>
-                        <div><strong>{props.data.vendor}</strong></div>
+    return (
+        <React.Fragment>
+
+            <Card title="Node Information">
+                 <div style={{padding: 10, position: "relative"}}>
+                    <div><strong>{props.data.vendor}</strong></div>
                         <div>
                             Version: <strong>{props.data.version}</strong> |
                             Platform Version: <strong>{props.data.platformVersion}</strong>
                         </div>
                         <div style={{position: "absolute", top: 10, right: 10}}>Installed Cordapps: <strong>{props.data.cordapps? props.data.cordapps.length:''}</strong></div>
-                        <div style={{marginTop: 10}}>
-                            <div><strong>Installed CorDapps</strong></div>
+                </div>
+            </Card>
+            <Card title="Installed CorDapps" style={{marginTop: 10}}>
+                  <div style={{padding: 10, position: "relative"}}>
+                {
+                    props.data?
+                    <React.Fragment>
+                     <div >
                             {
                                 props.data.cordapps?
                                 props.data.cordapps.map((cordapp, index) => {
@@ -45,7 +49,8 @@ const NodeDiagnostic = (props) => {
                 }
                 
             </div>
-        </Card>    
+            </Card>
+        </React.Fragment>
     );
 } 
 

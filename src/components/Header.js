@@ -48,8 +48,8 @@ const Header = (props) => {
       center={
         <>
           <Dropdown closeOnSelectOption positionX="right" positionY="bottom" trigger={<IconCustom className="h-5" icon="Account" />}>
-            <Option value="one">One</Option>
-            <Option value="two">Two</Option>
+            <Option value="one">{props.profile.name}</Option>
+           
           </Dropdown>
           <IconCustom className="h-5" icon="ExitToApp"  onClick={props.onLogout} />
         </>}

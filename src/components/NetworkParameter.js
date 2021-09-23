@@ -4,7 +4,7 @@ import { Card } from '@r3/r3-tooling-design-system'
 const NetworkParameter = (props) => {
 
     return(
-        <Card title={"Network Parameters"}>
+        <Card title={"Network Parameters"} className="max-height">
             <div style={{padding: 10, position: "relative"}}>
                 <div> Minumum Platform Version: <strong>{props.data.minimumPlatformVersion}</strong></div>
                 <div className="item"> Last Modified: <strong>{props.data.modifiedTime}</strong></div>
