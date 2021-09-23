@@ -11,6 +11,8 @@ import '../styles/SideMenu.css';
 
 const SideMenu = (props) => {
 
+  console.log(props,'props')
+
     
     const [isActiveSideBarItem] = useState(false);
 
@@ -18,45 +20,51 @@ const SideMenu = (props) => {
 
         <SideBar toggable className="sidebar-toggable">
             <SideBarItem
-              icon="ViewDashboard"
-              onClick={() =>this.props.changeScreen(0)}
+          icon="ViewDashboard"
+          active={props.currentPage === 0? "active":""}
                 title={
-                  'Dashboard'
+                  <li onClick={() => props.changeScreen(0)}>
+                   Dashboard
+                </li>
                 }
         ></SideBarItem>
          <SideBarItem
-              icon="Earth"
-              onClick={() => this.props.changeScreen(1)}
+          icon="Earth"
+          active={props.currentPage === 1? "active":""}
                 title={
-                  'Networks'
+                  <li onClick={() => props.changeScreen(1)}>
+                   Networks
+                </li>
                 }
               ></SideBarItem>
           <SideBarItem
-              icon="SwapHorizontal"
-              onClick={() =>props.changeScreen(2)}
+          icon="SwapHorizontal"
+          active={props.currentPage === 2? "active":""}
                 title={
-                  'Transactions'
+                  <li  onClick={() => props.changeScreen(2)}>
+                  Transactions
+                </li>
                 }
         ></SideBarItem>
         <SideBarItem
               icon="SafeSquareOutline"
-              onClick={() =>props.changeScreen(3)}
+              active={props.currentPage === 3? "active":""}
                 title={
-                  'Vault'
+                  <li onClick={() => props.changeScreen(3)}>
+             Vault
+                </li>
                 }
         ></SideBarItem>
          <SideBarItem
               icon="CogOutline"
-              onClick={() =>props.changeScreen(4)}
+              active={props.currentPage === 4? "active":""}
                 title={
-                  'Settings'
+                   <li onClick={() => props.changeScreen(4)}>
+                   Settings
+                </li>
                 }
               ></SideBarItem>
       </SideBar>
-
-  
-       
-    
     );
 }
 
