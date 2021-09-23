@@ -23,45 +23,45 @@ const SideMenu = (props) => {
           icon="ViewDashboard"
           active={props.currentPage === 0? "active":""}
                 title={
-                  <li onClick={() => props.changeScreen(0)}>
+                  <span onClick={() => props.changeScreen(0)}>
                    Dashboard
-                </li>
+                </span>
                 }
         ></SideBarItem>
          <SideBarItem
           icon="Earth"
           active={props.currentPage === 1? "active":""}
                 title={
-                  <li onClick={() => props.changeScreen(1)}>
+                  <span onClick={() => props.changeScreen(1)}>
                    Networks
-                </li>
+                </span>
                 }
               ></SideBarItem>
           <SideBarItem
           icon="SwapHorizontal"
           active={props.currentPage === 2? "active":""}
                 title={
-                  <li  onClick={() => props.changeScreen(2)}>
+                  <span  onClick={() => props.changeScreen(2)}>
                   Transactions
-                </li>
+                </span>
                 }
         ></SideBarItem>
         <SideBarItem
               icon="SafeSquareOutline"
               active={props.currentPage === 3? "active":""}
                 title={
-                  <li onClick={() => props.changeScreen(3)}>
+                  <span onClick={() => props.changeScreen(3)}>
              Vault
-                </li>
+                </span>
                 }
         ></SideBarItem>
          <SideBarItem
               icon="CogOutline"
               active={props.currentPage === 4? "active":""}
                 title={
-                   <li onClick={() => props.changeScreen(4)}>
+                   <span onClick={() => props.changeScreen(4)}>
                    Settings
-                </li>
+                </span>
                 }
               ></SideBarItem>
       </SideBar>

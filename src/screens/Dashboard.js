@@ -18,10 +18,10 @@ class Dashboard extends Component{
             <React.Fragment>
              
                     <Row>
-                        <Column item lg={6}>
+                        <Column item lg={8}>
                         <NodeDiagnostic data={this.props.nodeDiagnostic}/>
                         </Column>    
-                        <Column item lg={6}>
+                        <Column item lg={4}>
                             <NetworkParameter data={this.props.networkParameter}/>
                         </Column>    
                     </Row>                   

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card } from '@r3/r3-tooling-design-system'
-
+import Tile from './Tile';
 const NodeDiagnostic = (props) => {
 
     return(
@@ -22,18 +22,21 @@ const NodeDiagnostic = (props) => {
                                 props.data.cordapps?
                                 props.data.cordapps.map((cordapp, index) => {
                                     return (
-                                                <div key={index} className="appInfo-wrapper">
-                                                    <div className="appInfo" style={{marginRight: index%2===0?5:0, marginLeft: index%2===0?0:5}}>
-                                                        <div className="app-title">{cordapp.shortName}</div>
+
+                                        <Tile title={cordapp.shortName} footer={cordapp.licence} key={index}>
+                                             <div key={index} className="appInfo-wrapper">
+                                                    <div className="" style={{marginRight: index%2===0?5:0, marginLeft: index%2===0?0:5}}>
                                                         <div><span>Version: </span> {cordapp.version}</div>
                                                         <div><span>Type: </span> {cordapp.type}</div>
                                                         <div><span>Minimum Platform Version: </span> {cordapp.minimumPlatformVersion}</div>
                                                         <div><span>Target Platform Version: </span> {cordapp.targetPlatformVersion}</div>
                                                         <div><span>File: </span> {cordapp.name}.jar</div>
                                                         <div><span>Vendor: </span> {cordapp.vendor}</div>
-                                                        <div><span>License: </span> {cordapp.licence}</div>
                                                     </div>
                                                 </div>
+                                                </Tile>
+
+                                               
                                     )
                                 }): <div className="no-data">No Installed CorDapps</div>
                             }
