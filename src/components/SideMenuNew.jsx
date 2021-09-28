@@ -7,7 +7,7 @@ import SyncAltRoundedIcon from '@material-ui/icons/SyncAltRounded';
 import SecurityRoundedIcon from '@material-ui/icons/SecurityRounded';
 import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
 import { SideBar, SideBarItem } from '@r3/r3-tooling-design-system';
-import '../styles/SideMenu.css';
+import '../styles/SideMenu.scss';
 
 const SideMenu = (props) => {
 

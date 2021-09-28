@@ -27,7 +27,7 @@ class Explorer extends Component {
           {this.props.isLoggedIn ?
             <React.Fragment>
               <Header />
-              <PageHeader title="Dashboard" size="small" dark>
+              <PageHeader title="Dashboard" size="small" >
                  {
                         this.props.currentPage === 0 ? "Dashboard": 
                         this.props.currentPage === 1 ? "CordaNetwork": 
@@ -42,8 +42,7 @@ class Explorer extends Component {
                   <Column lg={1}>
                      <SideMenuNew />
                   </Column>
-                  <Column lg={11}>
-                
+                  <Column lg={11}>                
                     <div className="content-pane">
                       {
                         this.props.spinner? 

@@ -22,6 +22,7 @@
     "react-redux": "^7.1.3",
     "react-redux-toastr": "^7.6.4",
     "react-scripts": "3.2.0",
+    "recharts": "^2.1.4",
     "redux": "^4.0.4",
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
@@ -84,7 +85,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-   "prettier": {
+  "prettier": {
     "printWidth": 120,
     "semi": true,
     "singleQuote": true,

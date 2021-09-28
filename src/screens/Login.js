@@ -184,7 +184,7 @@ class Login extends Component {
                                     </Row>
                                     <Row>
                                         <Column lg={12}>
-                                            <p className="separator-tag">or Login in with ssh</p>
+                                            <p className="separator-tag">or Login with ssh</p>
                                         </Column>
                                     </Row>
                                     {sshCredentials()}

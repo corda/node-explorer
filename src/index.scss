@@ -6,9 +6,41 @@ body {
     'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: var(--color-medium-dark-gray);
+  // background: rgb(91, 101, 145);
+  // background: radial-gradient(circle, rgba(51, 57, 88, 1) 24%, rgba(22, 27, 53, 1) 71%);
+  background: rgba(248, 248, 248, var(--bg-opacity));
 }
 
+.rotate {
+  transform: rotate(-90deg);
+  position: relative;
+}
+
+.pie-chart {
+  text-align: center;
+}
+.rotate-back {
+  transform: rotate(90deg);
+  display: block;
+  /* width: auto; */
+  margin-top: -47px;
+  position: absolute;
+  left: -17px;
+  right: 0px;
+  top: 0px;
+  bottom: 10px;
+  margin: auto;
+  width: 40px;
+  height: 40px;
+  text {
+    font-size: 25px;
+    font-weight: bold;
+  }
+}
+
+.chart-label {
+  text-align: center;
+}
 html,
 #root {
   width: 100%;
@@ -16,7 +48,6 @@ html,
 }
 
 .content-pane {
-  padding-top: 60px;
   margin-right: 4rem;
 }
 

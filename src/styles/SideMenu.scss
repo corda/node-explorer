@@ -31,3 +31,22 @@
   background-color: #df0a1b;
   color: #ffffff;
 }
+
+.sidebar {
+  &.sidebar-toggable {
+    background-color: #fff;
+    svg {
+      color: #df0a1b;
+    }
+    .sidebar-item.level-0 > .sidebar-item-container > .sidebar-item-title.active::after,
+    .sidebar-item.level-1 > .sidebar-item-container > .sidebar-item-title.active::after {
+      color: #df0a1b;
+      background-color: #df0a1b;
+    }
+    .sidebar-item-title-text,
+    .sidebar-item-title-text > *,
+    .sidebar-item-title-content {
+      color: #df0a1b;
+    }
+  }
+}

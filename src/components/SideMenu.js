@@ -6,7 +6,7 @@ import PublicIcon from '@material-ui/icons/Public';
 import SyncAltRoundedIcon from '@material-ui/icons/SyncAltRounded';
 import SecurityRoundedIcon from '@material-ui/icons/SecurityRounded';
 import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
-import '../styles/SideMenu.css';
+import '../styles/SideMenu.scss';
 
 const sideMenu = (props) => {
     return (

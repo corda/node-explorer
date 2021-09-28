@@ -8,7 +8,7 @@ const NodeDiagnostic = (props) => {
 
             <Card title="Node Information">
                  <div style={{padding: 10, position: "relative"}}>
-                    <div><strong>{props.data.vendor}</strong></div>
+                    <h2><strong>{props.data.vendor}</strong></h2>
                         <div>
                             Version: <strong>{props.data.version}</strong> |
                             Platform Version: <strong>{props.data.platformVersion}</strong>
@@ -17,11 +17,10 @@ const NodeDiagnostic = (props) => {
                 </div>
             </Card>
             <Card title="Installed CorDapps" style={{marginTop: 10}}>
-                  <div style={{padding: 10, position: "relative"}}>
+                  <div className="tile-block" style={{padding: 10, position: "relative"}}>
                 {
                     props.data?
                     <React.Fragment>
-                     <div >
                             {
                                 props.data.cordapps?
                                 props.data.cordapps.map((cordapp, index) => {
@@ -38,13 +37,12 @@ const NodeDiagnostic = (props) => {
                                                         <div><span>Vendor: </span> {cordapp.vendor}</div>
                                                     </div>
                                                 </div>
-                                                </Tile>
+                                        </Tile>
 
                                                
                                     )
                                 }): <div className="no-data">No Installed CorDapps</div>
                             }
-                        </div>
                     </React.Fragment>:<div className="no-data" style={{height: 280}}>Corda Version 4.3 and higher is required for this widget</div>
                 }
                 

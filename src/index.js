@@ -11,7 +11,7 @@ import vltReducer from './store/reducers/VaultReducer'
 import dsbdReducer from './store/reducers/DashboardReducer'
 import thunk from "redux-thunk";
 import Explorer from './Explorer';
-import './index.css';
+import './index.scss';
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css'
 import * as serviceWorker from './serviceWorker';
 import { composeWithDevTools } from 'redux-devtools-extension';

@@ -1,14 +1,23 @@
 import React from 'react';
-import { Card } from '@r3/r3-tooling-design-system'
+import { Card, Column, Row } from '@r3/r3-tooling-design-system'
+import DonutChart from './DonutChart';
 
 const NetworkParameter = (props) => {
 
     return(
         <Card title={"Network Parameters"} className="max-height">
+            <Row>
+                <Column lg={6}>
+                    <DonutChart title="Minumum Platform Version" value={props.data.minimumPlatformVersion} singleColor="#00C49F"/>
+                </Column>
+                  <Column lg={6}>
+                    <DonutChart title="Max Transaction Size" value={props.data.maxTransactionSize/(1024 * 1024)} singleColor="#FFBB28"/>
+                </Column>
+            
+            </Row>
             <div style={{padding: 10, position: "relative"}}>
-                <div> Minumum Platform Version: <strong>{props.data.minimumPlatformVersion}</strong></div>
+
                 <div className="item"> Last Modified: <strong>{props.data.modifiedTime}</strong></div>
-                <div className="item"> Max Transaction Size: <strong>{props.data.maxTransactionSize/(1024 * 1024)} MB</strong></div>
                 <div style={{position: "absolute", top: 10, right: 10}}>Version: <strong>{props.data.epoch}</strong></div>
                 <div style={{marginTop: 10}}>
                     <div><strong>Notaries</strong></div>
