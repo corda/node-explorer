@@ -1,6 +1,6 @@
 // import "./styles.css";
 import React from "react";
-import { PieChart, Pie, Sector, Cell } from "recharts";
+import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from "recharts";
 
 // const data = [
 //   { name: "Group A", value: 400 },
@@ -16,17 +16,18 @@ const DonutChart = (props) => {
     console.log(props.value,"props")
     return (
         <React.Fragment>       
-            <div className="pie-chart">                
-                <PieChart width={300} height={240}>                  
+            <div className="pie-chart">
+                <ResponsiveContainer width="100%" height={220}>
+
+                <PieChart >                  
                     <Pie
                         data={data}
-                        cx={120}
+                        cx={100}
                         cy={95}
                         innerRadius={60}
                         outerRadius={80}
                         fill="#8884d8"
                         dataKey="value"
-                        label="value"
                                     >
                                 
                             {data.map((entry, index) => (
@@ -36,9 +37,10 @@ const DonutChart = (props) => {
                             ))}
                     </Pie>                
                 </PieChart>
+                 </ResponsiveContainer>
                 <div className="rotate-back">
                     <text  x={0} y={0} dy={0} textAnchor="middle" fill='#333333'>
-                        {props.value}
+                        {props.value}{props.valueLabel}
                     </text>
                 </div>
                 
@@ -47,6 +49,7 @@ const DonutChart = (props) => {
             <div className="chart-label">
                 <h6>{props.title}</h6>
             </div>
+           
         </React.Fragment>
   );
 }

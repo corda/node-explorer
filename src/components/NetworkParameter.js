@@ -8,10 +8,10 @@ const NetworkParameter = (props) => {
         <Card title={"Network Parameters"} className="max-height">
             <Row>
                 <Column lg={6}>
-                    <DonutChart title="Minumum Platform Version" value={props.data.minimumPlatformVersion} singleColor="#00C49F"/>
+                    <DonutChart title="Minumum Platform Version" value={props.data.minimumPlatformVersion} singleColor="#00C49F" valueLabel="v"/>
                 </Column>
                   <Column lg={6}>
-                    <DonutChart title="Max Transaction Size" value={props.data.maxTransactionSize/(1024 * 1024)} singleColor="#FFBB28"/>
+                    <DonutChart title="Max Transaction Size" value={props.data.maxTransactionSize/(1024 * 1024)} singleColor="#FFBB28" valueLabel="MB"/>
                 </Column>
             
             </Row>

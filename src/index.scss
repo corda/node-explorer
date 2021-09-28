@@ -18,19 +18,20 @@ body {
 
 .pie-chart {
   text-align: center;
+  position: relative;
 }
 .rotate-back {
-  transform: rotate(90deg);
+  // transform: rotate(90deg);
   display: block;
   /* width: auto; */
-  margin-top: -47px;
+  margin-top: 0;
   position: absolute;
-  left: -17px;
+  left: 0;
   right: 0px;
   top: 0px;
-  bottom: 10px;
+  bottom: 0px;
   margin: auto;
-  width: 40px;
+  width: auto;
   height: 40px;
   text {
     font-size: 25px;
