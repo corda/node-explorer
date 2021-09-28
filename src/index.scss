@@ -6,9 +6,9 @@ body {
     'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  // background: rgb(91, 101, 145);
-  // background: radial-gradient(circle, rgba(51, 57, 88, 1) 24%, rgba(22, 27, 53, 1) 71%);
-  background: rgba(248, 248, 248, var(--bg-opacity));
+  background: rgb(248, 248, 248);
+  // // background: radial-gradient(circle, rgba(51, 57, 88, 1) 24%, rgba(22, 27, 53, 1) 71%);
+  // background-color: rgba(248, 248, 248, var(--bg-opacity));
 }
 
 .rotate {
@@ -94,4 +94,22 @@ code {
 
 .no-gap {
   gap: 0 !important;
+}
+
+.custom-node-explorer-header {
+  .page-header-main {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+    background-color: #e0071c;
+    color: #fff;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+  }
+}
+
+.sidebar-toggable:not(.open) .sidebar-item-title:hover:before,
+.sidebar-toggable:not(.open) .sidebar-item-title:active:before {
+  background-color: #e0071c;
+  color: #fff;
 }

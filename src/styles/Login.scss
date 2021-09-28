@@ -12,6 +12,9 @@
   box-shadow: 1px 1px 1px #cccccc;
   background-color: #ffffff;
   padding: 8rem;
+  @media screen and (max-width: 1600px) {
+    padding: 4rem;
+  }
 }
 
 .form-title {
@@ -51,7 +54,7 @@
     left: 0;
     right: 0;
     margin: auto;
-    width: calc(50% - 20px);
+    width: calc(100% - 20px);
     height: auto;
     text-align: center;
     h2,
@@ -85,6 +88,14 @@
     box-shadow: 0px 3px 6px #1d23431a;
     min-width: 360px;
     border-radius: 10px;
+    @media screen and (max-width: 1600px) {
+      min-width: 330px;
+      height: 200px;
+      padding: 1rem;
+      h4 {
+        font-size: large;
+      }
+    }
   }
   .block-right {
     border-radius: 10px;
@@ -98,6 +109,16 @@
     z-index: 5;
     box-shadow: 0px 3px 6px #1d23431a;
     min-width: 330px;
+    @media screen and (max-width: 1600px) {
+      right: 100px;
+      top: 100px;
+      height: 215px;
+      min-width: 300px;
+      padding: 1rem;
+      h4 {
+        font-size: large;
+      }
+    }
     .icon-cordapp {
       width: 70%;
       height: 70%;
@@ -111,6 +132,11 @@
       left: 0;
       bottom: 0;
       margin: auto;
+      @media screen and (max-width: 1600px) {
+        width: 70%;
+        height: 70%;
+        background-size: contain;
+      }
     }
   }
 }

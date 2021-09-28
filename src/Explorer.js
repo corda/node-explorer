@@ -26,17 +26,7 @@ class Explorer extends Component {
         <React.Fragment>
           {this.props.isLoggedIn ?
             <React.Fragment>
-              <Header />
-              <PageHeader title="Dashboard" size="small" >
-                 {
-                        this.props.currentPage === 0 ? "Dashboard": 
-                        this.props.currentPage === 1 ? "CordaNetwork": 
-                        this.props.currentPage === 2 ? "TransactionExplorer":
-                        this.props.currentPage === 3 ? "VaultExplorer": 
-                        this.props.currentPage === 4 ? "Settings": 
-                        <Dashboard/>
-                      }
-              </PageHeader>
+              <Header />              
               <Container className="no-marg max-height">
                 <Row className="max-height no-gap">
                   <Column lg={1}>

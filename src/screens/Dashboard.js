@@ -16,6 +16,9 @@ class Dashboard extends Component{
     render() {
         return(
             <React.Fragment>
+                <PageHeader title="Dashboard" size="small" className="custom-node-explorer-header" >
+             Dashboard
+              </PageHeader>
                     <Row>
                         <Column item lg={8}>
                         <NodeDiagnostic data={this.props.nodeDiagnostic}/>

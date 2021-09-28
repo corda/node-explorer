@@ -140,7 +140,7 @@ class Login extends Component {
             return (
                 <Container fluid className="login-view-container">
                     <Row className="max-height no-gap">
-                        <Column lg={5} className="max-height">
+                        <Column md={6} lg={5} className="max-height">
                             <div className="center-container">
                                     <div className="logo-container">
                                         <img src="crda-logo.svg" alt="Corda Logo" width="250px"></img>
@@ -159,7 +159,7 @@ class Login extends Component {
                                                 onBlur={this.handleBlur("hostName")}/>
                                         </Column>
                                         <Column lg={4}>
-                                            <TextInput label="RPC Port" type="number"
+                                            <TextInput label="RPC Port" type="number" value={this.state.port}
                                                 onChange={e => this.setState({port: e.target.value})}
                                                 errorMessage={this.shouldMarkError("port")}
                                                 helpText={this.shouldMarkError("port") ? 'Please Enter Node Port Number' : ''}
@@ -197,7 +197,7 @@ class Login extends Component {
                                 </div>      
                             </div>      
                         </Column>
-                        <Column lg={7} className="container-right">
+                        <Column md={6} lg={7} className="container-right">
                             <div className="block-right">
                                 <h4>Track your CorDapps</h4>
                                 <span className="icon-cordapp">
