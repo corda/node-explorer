@@ -133,11 +133,18 @@ tr.open {
 }
 
 .inner-form {
-  background: #eeeeee;
-  margin: 10px 0;
-  width: 100%;
-  float: left;
   position: relative;
+  margin-top: 1rem;
+  .custom-form-header {
+    background-color: #e0071c;
+    padding: 0.5rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    h6 {
+      color: #fff;
+      text-transform: capitalize;
+    }
+  }
 }
 
 label.MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLabel-animated {
@@ -242,5 +249,14 @@ label.MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLab
         }
       }
     }
+  }
+}
+
+.flow-form {
+  .form-body {
+    padding: 1rem;
+  }
+  .flow-form-title {
+    margin-bottom: 1rem;
   }
 }

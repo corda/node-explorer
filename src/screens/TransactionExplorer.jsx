@@ -139,16 +139,16 @@ class TransactionExplorer extends Component{
             <React.Fragment>
             {
                 innerForm? 
-                    <div className="inner-form" style={{padding: deep? "10px 0px 0px 0px":  "10px 0"}} key={key}>
+                    <div className="inner-form" key={key}>
                         {
                             delIdx>=0?<div className="inner-form-close" onClick={()=> this.updateCmplxListParam(param, false, delIdx)}>X</div>:null
                         }
-                        <div style={{padding: deep? 0:  "0 10px"}}>
-                            <div style={{textTransform:"capitalize"}}><strong>{title}</strong></div>
+                   
+                            <div className="custom-form-header"><h6>{title}</h6></div>
                             {
                                 paramList.map((param, index) => this.renderInnerForm(param, index, true))
                             }
-                        </div>
+                     
                     </div>
                 :
                 this.props.flowParams?this.props.flowParams.map((param, index) => this.renderInnerForm(param, index, false)):null
@@ -178,13 +178,13 @@ class TransactionExplorer extends Component{
                 </React.Fragment>
             :
             <React.Fragment>   
-            <div key={index} style={{width: "50%", float: "left", marginBottom: 5}}>
+            <div key={index}>
                 {
                 param.paramType === 'net.corda.core.identity.Party'?
-                    <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
+         
                         <FormGroup fullWidth>
                             
-                                <Select label={param.paramName} onChange={e => {param.paramValue = e.target.value}} autoWidth>
+                                <Select label={param.paramName} onChange={e => {param.paramValue = e.target.value}} autoWidth  helpText="Select Party">
                                     {
                                         this.props.parties.map((party, index) => {
                                             return(
@@ -192,44 +192,41 @@ class TransactionExplorer extends Component{
                                             );
                                         })
                                     }
-                                </Select>
-                                <TooltipWrapper>Select Party</TooltipWrapper>
+                                </Select>                              
                             </FormGroup>
-                    </div>
+        
                 :
                 param.paramType === 'java.time.LocalDateTime' || param.paramType === 'java.time.Instant'?
-                    <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
+                    <div>
                         <TextInput type="datetime-local" onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} InputLabelProps={{ shrink: true }} 
-                        helperText={this.getHelperText(param.paramType)} fullWidth/> 
+                        helpText={this.getHelperText(param.paramType)} fullWidth/> 
                     </div>
                 :
                 param.paramType === 'java.time.LocalDate'?
-                    <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
+                    <div>
                         <TextInput type="date" onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} InputLabelProps={{ shrink: true }} fullWidth/> 
                     </div>
                 :
                 param.hasParameterizedType && (param.paramType === 'java.util.List' || param.paramType === 'java.util.Set') ?
                     this.renderListParam(param, index)
                 :
-                    <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
-                        <TextInput onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} helperText={this.getHelperText(param.paramType)} fullWidth/> 
+                    <div>
+                        <TextInput onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} helpText={this.getHelperText(param.paramType)} fullWidth/> 
                     </div>
                 }
             </div> 
-            {
-                index%2 === 1? <div style={{clear: "both"}}></div>: null
-            }
+        
             </React.Fragment>
         );
     }
 
     renderListParam(param, index){
         return (
-            <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
+            <div>
                 {
                     param.parameterizedType === 'net.corda.core.identity.Party'?
                         <React.Fragment>
-                            <FormGroup fullWidth>
+                            
                                 <Select label={param.paramName} onChange={e => this.updateListParam(param, e.target.value, true)} autoWidth>
                                     {
                                         this.props.parties.map((party, index) => {
@@ -240,7 +237,7 @@ class TransactionExplorer extends Component{
                                     }
                                 </Select>
                                 <TooltipWrapper>Select Parties</TooltipWrapper>
-                            </FormGroup>
+                         
                             {
                                 this.state.paramList[param.paramName]?
                                 this.state.paramList[param.paramName].map((value, idx) => {
@@ -251,10 +248,8 @@ class TransactionExplorer extends Component{
                         </React.Fragment>
                     : param.parameterizedType === 'java.time.LocalDateTime' || param.parameterizedType === 'java.time.Instant'?
                         <React.Fragment>
-                            <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
                                 <TextInput type="datetime-local" onBlur={e => this.updateListParam(param, e.target.value, true)} label={param.paramName} InputLabelProps={{ shrink: true }} 
-                                helperText={this.getHelperText(param.paramType)} fullWidth/> 
-                            </div>
+                                helpText={this.getHelperText(param.paramType)} fullWidth/> 
                             {
                                 this.state.paramList[param.paramName]?
                                 this.state.paramList[param.paramName].map((value, idx) => {
@@ -266,9 +261,9 @@ class TransactionExplorer extends Component{
                     :
                     param.parameterizedType === 'java.time.LocalDate'?
                         <React.Fragment>
-                            <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
+                 
                                 <TextInput type="date" onBlur={e => this.updateListParam(param, e.target.value, true)} label={param.paramName} InputLabelProps={{ shrink: true }} fullWidth/> 
-                            </div>
+                   
                             {
                                 this.state.paramList[param.paramName]?
                                 this.state.paramList[param.paramName].map((value, idx) => {
@@ -282,9 +277,7 @@ class TransactionExplorer extends Component{
                         <div style={{color: 'red', marginTop: 10}}>Nested List Param is not supported!</div>
                     :
                         <React.Fragment>
-                            <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
-                               <TextInput onBlur={e => this.updateListParam(param, e.target.value, true)} label={param.paramName} helperText={this.getHelperText(param.paramType)} fullWidth/> 
-                            </div>
+                               <TextInput onBlur={e => this.updateListParam(param, e.target.value, true)} label={param.paramName} helpText={this.getHelperText(param.paramType)} fullWidth/> 
                             {
                                 this.state.paramList[param.paramName]?
                                 this.state.paramList[param.paramName].map((value, idx) => {
@@ -376,7 +369,7 @@ class TransactionExplorer extends Component{
 
     render(){
         return(
-            <div style={{padding: 20}}>
+            <div>
                 <div className="page-title">
                     <PageHeader title="Transactions" size="small" className="custom-node-explorer-header" >
                         Transactions
@@ -391,77 +384,71 @@ class TransactionExplorer extends Component{
                         closeOnOutsideClick
                         
                         >
-                        <div className="">
-                            <h3 id="simple-modal-title">Please Select a Flow to Execute</h3>
+                        <div className="flow-form">
+                            <h3 id="simple-modal-title" className="flow-form-title">Select a Flow to Execute</h3>
                             <div style={{color: "red"}}>{this.props.registeredFlows.length === 0? 'No Flows Found! Make sure you have the cordapp directory set in the Settings Tab':null}</div>
-                            <div>
-                            <div style={{width: "70%", float:"left"}}>
-                                <FormGroup style={{minWidth: 250, maxWidth:"100%", paddingRight: 10}}>                                       
-                                        <Select label="Select A Flow to Execute<" labelId="flow-select-label" onChange={this.handleFlowSelection}>
+                            <div className="form-body">
+                                                      
+                                            <Select label="Select A Flow to Execute" onChange={this.handleFlowSelection} value={null} >
+                                                <Option key="empty" value=""></Option>
                                             {
-                                                this.props.registeredFlows.map((flow, index) => {
-                                                    return(
-                                                        <Option key={index} value={flow.flowName}>{flow.flowName}</Option>
-                                                    );
-                                                })
-                                            }
-                                        </Select>
-                                        <div style={{color: "red"}}>{this.state.selectedFlow.constructors && Object.keys(this.state.selectedFlow.constructors).length===0? 'No constructors with supported parameters found':null}</div>
-
-                                </FormGroup>
-                            </div>
-                            {   
-                                this.state.selectedFlow.constructors && Object.keys(this.state.selectedFlow.constructors).length>0?
-                                <div style={{width: "30%", float: "left"}}>
-                                    <FormGroup style={{width:"100%"}}>
-                                        <div style={{paddingLeft: 10}}>
-                                        <Select label="Select A Constructor Type" labelId="flow-cons-select-label" onChange={this.handleFlowConstructorSelection} 
-                                        value={this.state.selectedFlow.activeConstructor} fullWidth>
-                                            {
-                                                Object.keys(this.state.selectedFlow.constructors).map((constructor, index) => {
-                                                    return(
-                                                        <Option key={index} value={constructor}>{constructor}</Option>
-                                                    );
-                                                })
-                                            }
-                                        </Select>
-                                        </div>
-                                    </FormGroup>
-                                </div>:null
-                            }
+                                                    this.props.registeredFlows.map((flow, index) => {
+                                                        return(
+                                                            <Option key={index} value={flow.flowName}>{flow.flowName}</Option>
+                                                        );
+                                                    })
+                                                }
+                                            </Select>
+                                            <div style={{color: "red"}}>{this.state.selectedFlow.constructors && Object.keys(this.state.selectedFlow.constructors).length===0? 'No constructors with supported parameters found':null}</div>
+                            
                             </div>
 
-                            <div>
+                            <div className="form-body">
+                                  {   
+                                    this.state.selectedFlow.constructors && Object.keys(this.state.selectedFlow.constructors).length>0?
+                                                <Select label="Select A Constructor Type" labelId="flow-cons-select-label" onChange={this.handleFlowConstructorSelection} 
+                                                value={this.state.selectedFlow.activeConstructor} fullWidth helpText="Select A Constructor Type">
+                                                    {
+                                                        Object.keys(this.state.selectedFlow.constructors).map((constructor, index) => {
+                                                            return(
+                                                                <Option key={index} value={constructor}>{constructor}</Option>
+                                                            );
+                                                        })
+                                                    }
+                                                </Select>
+                                       
+                                      :null
+                                }
                                 {
                                     this.renderParamForm(false)
                                 }
                                 
-                                        <div style={{width: "100%", float:"left", marginTop: 10, scroll: "auto"}}>
-                                            {
-                                            this.props.flowResultMsg    ?
-                                                <div style={{float: "left", fontSize: 14}}>
-                                                    <p style={{color: this.props.flowResultMsgType?"green":"red"}}>
-                                                        <span>{this.props.flowResultMsgType?'Flow Successful :': 'Flow Errored :'}</span>
-                                                        {this.props.flowResultMsg}
-                                                    </p>
-                                                </div>
-                                                :null
-                                            }
+                               
+                                    {
+                                    this.props.flowResultMsg    ?
+                                        <div style={{float: "left", fontSize: 14}}>
+                                            <p style={{color: this.props.flowResultMsgType?"green":"red"}}>
+                                                <span>{this.props.flowResultMsgType?'Flow Successful :': 'Flow Errored :'}</span>
+                                                {this.props.flowResultMsg}
+                                            </p>
+                                        </div>
+                                        :null
+                                    }
                                 {
                                     this.props.flowSelected && Object.keys(this.state.selectedFlow.constructors).length>0?
                                             <Button onClick={() => this.prepareFlowDataToStart()} style={{float: "right", marginTop: 10}} 
-                                                    variant="contained" color="primary" disabled={this.props.flowInFlight}>
+                                                    variant="primary" size="small" disabled={this.props.flowInFlight}>
                                                 {this.props.flowInFlight?'Please Wait...':'Execute'}
                                             </Button>
                                     :null
                                 }
-                                        </div>
+                               
+                                </div>
                             </div>
-                        </div>
-                    </Drawer>
-                </div>
+                        </Drawer>
+                    </div>
                 <div>
-                        <div className="transactions-container">
+                <div className="transactions-container">
                             {
                                 this.props.transactionList && this.props.transactionList.length > 0 ?
                                 this.props.transactionList.map((trnx, index) => {
@@ -519,7 +506,7 @@ class TransactionExplorer extends Component{
                                                     className="w-half"
                                                 >
                                            
-                                                    <div style={{textAlign: "center", padding: "0 30px"}}>
+                                                    <div>
                                                         <Container spacing={0}>
                                                             <Column xs={5}>
                                                                 <Card className="wrapper" title="Inputs">
@@ -572,8 +559,8 @@ class TransactionExplorer extends Component{
                                                             </Column>
                                                             <Column item xs={12}>
                                                             <div className="wrapper" style={{marginTop: 20, minWidth: "auto", height: "auto"}}>
-                                                                <div className="wtitle">Signatures</div>
-                                                                <div style={{padding: "10px", backgroundColor: "#FFFFFF"}}>
+                                                                <div className="title">Signatures</div>
+                                                                <div>
                                                                     {
                                                                         trnx.signers && trnx.signers.length > 0?
                                                                         trnx.signers.map((sig, idx) => {
