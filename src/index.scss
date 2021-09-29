@@ -114,3 +114,16 @@ code {
   background-color: #e0071c;
   color: #fff;
 }
+
+.w-half {
+  width: 50% !important;
+  max-width: 50%;
+  @media (max-width: 768px) {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+.full-width-drawer {
+  width: 100%;
+  max-width: 100%;
+}

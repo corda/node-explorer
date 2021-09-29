@@ -1,10 +1,7 @@
-import { Button, FormControl, Grid, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, FormHelperText } from '@material-ui/core';
-import Modal from '@material-ui/core/Modal';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import {TableCell, TablePagination } from '@material-ui/core';
 import ForwardIcon from '@material-ui/icons/Forward';
 import React, { Component } from 'react';
-import { PageHeader } from '@r3/r3-tooling-design-system';
+import {Column, PageHeader, Row, Drawer, Button, Container, InputLabel, Option, Select, TextInput, TooltipWrapper, FormGroup, Card} from '@r3/r3-tooling-design-system';
 import { connect } from 'react-redux';
 import * as ActionType from '../store/Actions';
 import '../styles/Transaction.scss';
@@ -18,7 +15,8 @@ class TransactionExplorer extends Component{
         flowInfo: {},
         selectedFlow: {},
         trnxDetail: [],
-        paramList: []
+        paramList: [],
+        isOpen:false,
     }
 
     handleClose = () => {
@@ -109,7 +107,8 @@ class TransactionExplorer extends Component{
         let txDetail = this.state.trnxDetail;
         txDetail[index] = !this.state.trnxDetail[index]
         this.setState({
-            trnxDetail : txDetail
+            trnxDetail: txDetail,
+            isOpen:true
         });
     }
 
@@ -183,37 +182,37 @@ class TransactionExplorer extends Component{
                 {
                 param.paramType === 'net.corda.core.identity.Party'?
                     <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
-                        <FormControl fullWidth>
-                            <InputLabel>{param.paramName}</InputLabel>
-                                <Select onChange={e => {param.paramValue = e.target.value}} autoWidth>
+                        <FormGroup fullWidth>
+                            
+                                <Select label={param.paramName} onChange={e => {param.paramValue = e.target.value}} autoWidth>
                                     {
                                         this.props.parties.map((party, index) => {
                                             return(
-                                                <MenuItem key={index} value={party}>{party}</MenuItem>
+                                                <Option key={index} value={party}>{party}</Option>
                                             );
                                         })
                                     }
                                 </Select>
-                                <FormHelperText>Select Party</FormHelperText>
-                            </FormControl>
+                                <TooltipWrapper>Select Party</TooltipWrapper>
+                            </FormGroup>
                     </div>
                 :
                 param.paramType === 'java.time.LocalDateTime' || param.paramType === 'java.time.Instant'?
                     <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
-                        <TextField type="datetime-local" onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} InputLabelProps={{ shrink: true }} 
+                        <TextInput type="datetime-local" onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} InputLabelProps={{ shrink: true }} 
                         helperText={this.getHelperText(param.paramType)} fullWidth/> 
                     </div>
                 :
                 param.paramType === 'java.time.LocalDate'?
                     <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
-                        <TextField type="date" onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} InputLabelProps={{ shrink: true }} fullWidth/> 
+                        <TextInput type="date" onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} InputLabelProps={{ shrink: true }} fullWidth/> 
                     </div>
                 :
                 param.hasParameterizedType && (param.paramType === 'java.util.List' || param.paramType === 'java.util.Set') ?
                     this.renderListParam(param, index)
                 :
                     <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
-                        <TextField onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} helperText={this.getHelperText(param.paramType)} fullWidth/> 
+                        <TextInput onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} helperText={this.getHelperText(param.paramType)} fullWidth/> 
                     </div>
                 }
             </div> 
@@ -230,19 +229,18 @@ class TransactionExplorer extends Component{
                 {
                     param.parameterizedType === 'net.corda.core.identity.Party'?
                         <React.Fragment>
-                            <FormControl fullWidth>
-                                <InputLabel>{param.paramName}</InputLabel>
-                                <Select onChange={e => this.updateListParam(param, e.target.value, true)} autoWidth>
+                            <FormGroup fullWidth>
+                                <Select label={param.paramName} onChange={e => this.updateListParam(param, e.target.value, true)} autoWidth>
                                     {
                                         this.props.parties.map((party, index) => {
                                             return(
-                                                <MenuItem key={index} value={party}>{party}</MenuItem>
+                                                <Option key={index} value={party}>{party}</Option>
                                             );
                                         })
                                     }
                                 </Select>
-                                <FormHelperText>Select Parties</FormHelperText>
-                            </FormControl>
+                                <TooltipWrapper>Select Parties</TooltipWrapper>
+                            </FormGroup>
                             {
                                 this.state.paramList[param.paramName]?
                                 this.state.paramList[param.paramName].map((value, idx) => {
@@ -254,7 +252,7 @@ class TransactionExplorer extends Component{
                     : param.parameterizedType === 'java.time.LocalDateTime' || param.parameterizedType === 'java.time.Instant'?
                         <React.Fragment>
                             <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
-                                <TextField type="datetime-local" onBlur={e => this.updateListParam(param, e.target.value, true)} label={param.paramName} InputLabelProps={{ shrink: true }} 
+                                <TextInput type="datetime-local" onBlur={e => this.updateListParam(param, e.target.value, true)} label={param.paramName} InputLabelProps={{ shrink: true }} 
                                 helperText={this.getHelperText(param.paramType)} fullWidth/> 
                             </div>
                             {
@@ -269,7 +267,7 @@ class TransactionExplorer extends Component{
                     param.parameterizedType === 'java.time.LocalDate'?
                         <React.Fragment>
                             <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
-                                <TextField type="date" onBlur={e => this.updateListParam(param, e.target.value, true)} label={param.paramName} InputLabelProps={{ shrink: true }} fullWidth/> 
+                                <TextInput type="date" onBlur={e => this.updateListParam(param, e.target.value, true)} label={param.paramName} InputLabelProps={{ shrink: true }} fullWidth/> 
                             </div>
                             {
                                 this.state.paramList[param.paramName]?
@@ -285,7 +283,7 @@ class TransactionExplorer extends Component{
                     :
                         <React.Fragment>
                             <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
-                               <TextField onBlur={e => this.updateListParam(param, e.target.value, true)} label={param.paramName} helperText={this.getHelperText(param.paramType)} fullWidth/> 
+                               <TextInput onBlur={e => this.updateListParam(param, e.target.value, true)} label={param.paramName} helperText={this.getHelperText(param.paramType)} fullWidth/> 
                             </div>
                             {
                                 this.state.paramList[param.paramName]?
@@ -383,50 +381,52 @@ class TransactionExplorer extends Component{
                     <PageHeader title="Transactions" size="small" className="custom-node-explorer-header" >
                         Transactions
                     </PageHeader>
-                    <Button style={{float: "right"}} variant="contained" color="primary" onClick={this.handleOpen}>New Transaction</Button>
-                    <Modal
+                    <Button style={{float: "right"}} variant="primary" iconRight="Plus" size="small" onClick={this.handleOpen}>New Transaction</Button>
+                    <Drawer
                         open={this.props.open}
                         onClose={this.handleClose}
-                        style={{overflow:"scroll"}}
+                        style={{ overflow: "scroll" }}
+                        withBackdrop
+                        position="right"
+                        closeOnOutsideClick
+                        
                         >
-                        <div className="paper">
+                        <div className="">
                             <h3 id="simple-modal-title">Please Select a Flow to Execute</h3>
                             <div style={{color: "red"}}>{this.props.registeredFlows.length === 0? 'No Flows Found! Make sure you have the cordapp directory set in the Settings Tab':null}</div>
                             <div>
                             <div style={{width: "70%", float:"left"}}>
-                                <FormControl style={{minWidth: 250, maxWidth:"100%", paddingRight: 10}}>
-                                        <InputLabel id="flow-select-label">Select A Flow to Execute</InputLabel>
-                                        <Select labelId="flow-select-label" onChange={this.handleFlowSelection}>
+                                <FormGroup style={{minWidth: 250, maxWidth:"100%", paddingRight: 10}}>                                       
+                                        <Select label="Select A Flow to Execute<" labelId="flow-select-label" onChange={this.handleFlowSelection}>
                                             {
                                                 this.props.registeredFlows.map((flow, index) => {
                                                     return(
-                                                        <MenuItem key={index} value={flow.flowName}>{flow.flowName}</MenuItem>
+                                                        <Option key={index} value={flow.flowName}>{flow.flowName}</Option>
                                                     );
                                                 })
                                             }
                                         </Select>
                                         <div style={{color: "red"}}>{this.state.selectedFlow.constructors && Object.keys(this.state.selectedFlow.constructors).length===0? 'No constructors with supported parameters found':null}</div>
 
-                                </FormControl>
+                                </FormGroup>
                             </div>
                             {   
                                 this.state.selectedFlow.constructors && Object.keys(this.state.selectedFlow.constructors).length>0?
                                 <div style={{width: "30%", float: "left"}}>
-                                    <FormControl style={{width:"100%"}}>
+                                    <FormGroup style={{width:"100%"}}>
                                         <div style={{paddingLeft: 10}}>
-                                        <InputLabel id="flow-cons-select-label" style={{paddingLeft: 10}}>Select A Constructor Type</InputLabel>
-                                        <Select labelId="flow-cons-select-label" onChange={this.handleFlowConstructorSelection} 
+                                        <Select label="Select A Constructor Type" labelId="flow-cons-select-label" onChange={this.handleFlowConstructorSelection} 
                                         value={this.state.selectedFlow.activeConstructor} fullWidth>
                                             {
                                                 Object.keys(this.state.selectedFlow.constructors).map((constructor, index) => {
                                                     return(
-                                                        <MenuItem key={index} value={constructor}>{constructor}</MenuItem>
+                                                        <Option key={index} value={constructor}>{constructor}</Option>
                                                     );
                                                 })
                                             }
                                         </Select>
                                         </div>
-                                    </FormControl>
+                                    </FormGroup>
                                 </div>:null
                             }
                             </div>
@@ -458,11 +458,10 @@ class TransactionExplorer extends Component{
                                         </div>
                             </div>
                         </div>
-                    </Modal>
+                    </Drawer>
                 </div>
                 <div>
-       
-                            <div className="transactions-container">
+                        <div className="transactions-container">
                             {
                                 this.props.transactionList && this.props.transactionList.length > 0 ?
                                 this.props.transactionList.map((trnx, index) => {
@@ -471,35 +470,64 @@ class TransactionExplorer extends Component{
                                             <div key={index} style={{cursor: "pointer"}} onClick={() => this.showTrnxDetails(trnx, index)}
                                                 className={`transaction-tile-container ${this.state.trnxDetail[index]?"open":null}`}>
                                               
-                                                <div style={{fontSize: 12, maxWidth: 275}}>{trnx.transactionId}</div>
-                                                <div>{trnx.inputTypes? trnx.inputTypes.map((typeCnt, index) => {
-                                                    return ( <div key={index}> {typeCnt.type + "(" + typeCnt.count + ")" }</div>);
-                                                }) :"-"}
+                                                <div className="tile-header">
+                                                    <div className="label">Transaction ID</div>
+                                                    <span className="label-data">
+                                                        {trnx.transactionId}
+                                                    </span>
+                                                    
                                                 </div>
-                                                <div>{trnx.outputTypes && trnx.outputTypes.length > 0 ? trnx.outputTypes.map((typeCnt, index) => {
-                                                    return ( <div key={index}> {typeCnt.type + "(" + typeCnt.count + ")" }</div>);
-                                                }) :"-"}
-                                                </div>
-                                                <div>{trnx.commands.map( command => {
-                                                    return (<div>{command}</div>)
+                                                <Row className="tile-body">
+                                                    <Column lg={6}>
+                                                        <div className="tile-features">
+                                                            <div className="label">Input</div>
+                                                            <span className="label-data">
+                                                            {trnx.inputTypes? trnx.inputTypes.map((typeCnt, index) => {
+                                                            return ( <div key={index}> {typeCnt.type + "(" + typeCnt.count + ")" }</div>);
+                                                        }) :"-"}
+                                                        </span>             
+                                                    </div>                                           
+                                                    </Column>
+                                                    <Column lg={6}>
+                                                        <div className="tile-features">
+                                                            <div className="label">Output</div>
+                                                                <span className="label-data">
+                                                                {trnx.outputTypes && trnx.outputTypes.length > 0 ? trnx.outputTypes.map((typeCnt, index) => {
+                                                                return ( <div key={index}> {typeCnt.type + "(" + typeCnt.count + ")" }</div>);
+                                                            }) :"-"}
+                                                                </span>
+                                                        </div>                                                    
+                                                    </Column>                                                                                                        
+                                                </Row>
+                                                 <div className="tile-footer">
+                                                    <span className="label">Command:</span>
+                                                    <span className="label-data-command">
+                                                        {trnx.commands.map( (command, index) => {
+                                                            return (<div key={index}>{command}</div>)
                                                         }
                                                     )}
-                                                </div>
+                                                    </span>                                                    
+                                                </div>                                             
                                             </div>
                                             {
-                                                this.state.trnxDetail[index]?
-                                                <TableRow style={{backgroundColor: "#EEEEEE"}}>
-                                                    <TableCell colSpan="5">
+                                               
+                                                <Drawer style={{ backgroundColor: "#EEEEEE" }} open={this.state.isOpen}
+                                                    withBackdrop 
+                                                    position="right"
+                                                    onClose={() => this.setState({ isOpen: false })}
+                                                    closeOnOutsideClick
+                                                    className="w-half"
+                                                >
+                                           
                                                     <div style={{textAlign: "center", padding: "0 30px"}}>
-                                                        <Grid container spacing={0}>
-                                                            <Grid item xs={5}>
-                                                                <div className="wrapper">
-                                                                    <div className="wtitle">Inputs</div>
+                                                        <Container spacing={0}>
+                                                            <Column xs={5}>
+                                                                <Card className="wrapper" title="Inputs">
                                                                     {
                                                                         trnx.inputs?
                                                                         trnx.inputs.map((input, idx) => {
                                                                             return (
-                                                                                <div className="content">
+                                                                                <div key={idx} className="content">
                                                                                     <div className="stitle">
                                                                                         <div>{input.type}</div>
                                                                                         <div style={{fontWeight: "normal", fontSize: 13}}>{input.stateRef.txhash} ({input.stateRef.index})</div>
@@ -510,28 +538,27 @@ class TransactionExplorer extends Component{
                                                                         }):
                                                                             <div className="content stripe"></div>
                                                                     }
-                                                                </div>
-                                                            </Grid>
-                                                            <Grid item xs={2}>
+                                                                </Card>
+                                                            </Column>
+                                                            <Column item xs={2}>
                                                                 <div className="cmd-wrapper">
-                                                                    <ForwardIcon style={{color: "#DE0A1B", fontSize: 120}}></ForwardIcon>
+                                                                    <ForwardIcon className='icon-arrow' style={{color: "#DE0A1B", fontSize: 120}}></ForwardIcon>
                                                                     <div style={{position: "relative", top: -15}}>
-                                                                        {trnx.commands.map( command => {
-                                                                            return (<div>{command}</div>)
+                                                                        {trnx.commands.map( (command , index) => {
+                                                                                return (<div key={index}>{command}</div>)
                                                                                 }
                                                                             )
                                                                         }
                                                                     </div>
                                                                 </div>
-                                                            </Grid>
-                                                            <Grid item xs={5}>
-                                                            <div className="wrapper">
-                                                                <div className="wtitle">Outputs</div>
+                                                            </Column>
+                                                            <Column item xs={5}>
+                                                            <Card className="wrapper" title="Outputs">                                                                
                                                                 {
                                                                     trnx.outputs && trnx.outputs.length > 0?
                                                                     trnx.outputs.map((output, idx) => {
                                                                         return (
-                                                                            <div className="content">
+                                                                            <div key={idx} className="content">
                                                                                 <div className="stitle">
                                                                                     <div>{output.type}</div>
                                                                                     <div style={{fontWeight: "normal", fontSize: 13}}>{output.stateRef.txhash} ({output.stateRef.index})</div>
@@ -541,9 +568,9 @@ class TransactionExplorer extends Component{
                                                                         )
                                                                     }):<div className="content stripe"></div>
                                                                 }
-                                                            </div>
-                                                            </Grid>
-                                                            <Grid item xs={12}>
+                                                            </Card>
+                                                            </Column>
+                                                            <Column item xs={12}>
                                                             <div className="wrapper" style={{marginTop: 20, minWidth: "auto", height: "auto"}}>
                                                                 <div className="wtitle">Signatures</div>
                                                                 <div style={{padding: "10px", backgroundColor: "#FFFFFF"}}>
@@ -551,7 +578,7 @@ class TransactionExplorer extends Component{
                                                                         trnx.signers && trnx.signers.length > 0?
                                                                         trnx.signers.map((sig, idx) => {
                                                                             return (
-                                                                                <div>{sig.signature.bytes}<strong>({sig.partyName})</strong></div>
+                                                                                <div key={idx}>{sig.signature.bytes}<strong>({sig.partyName})</strong></div>
                                                                             )
                                                                         })
                                                                         :
@@ -559,13 +586,13 @@ class TransactionExplorer extends Component{
                                                                     }
                                                                 </div>
                                                             </div>
-                                                            </Grid>
-                                                        </Grid>
+                                                            </Column>
+                                                        </Container>
                                                         
                                                     </div>
-                                                    </TableCell>
-                                                </TableRow>
-                                                :""
+                                             
+                                                </Drawer>
+                                           
                                             }
                                         </React.Fragment>
                                     );
@@ -585,8 +612,8 @@ class TransactionExplorer extends Component{
                         count={this.props.totalRecords}
                         rowsPerPage={this.state.page.pageSize}
                         page={this.state.page.offset}
-                        onChangePage={this.handleChangePage}
-                        onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                        onPageChange={this.handleChangePage}
+                        onRowsPerPageChange={this.handleChangeRowsPerPage}
                         />
                         :null
                     }
