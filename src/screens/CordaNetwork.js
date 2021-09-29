@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as ActionType from '../store/Actions';
+import { PageHeader } from '@r3/r3-tooling-design-system';
 import '../styles/Network.css';
 import BoxWithTitle from '../components/BoxWithTitle';
 import ListBoxWithTitle from '../components/ListBoxWithTitle';
@@ -52,7 +53,11 @@ class CordaNetwork extends Component{
 
   render(){
     return (
-      <div style={{position: "relative", height:window.outerHeight, overflowY: "auto"}} ref="mapPane">
+      <div className="content-pane">
+        <PageHeader title="Network Parameters" size="small" className="custom-node-explorer-header" >
+             Network Parameters
+        </PageHeader>
+         <div style={{position: "relative", height:window.outerHeight, overflowY: "auto"}} ref="mapPane">
         <img src="WorldMapSquare.png" alt="World Map" width="100%" onLoad={this.handleImageLoaded.bind(this)}></img>
         <div style={{position: "absolute", top: "0"}}>
           <div className="side-panel" style={{height:window.innerHeight - 60}}>
@@ -85,6 +90,8 @@ class CordaNetwork extends Component{
                             name={node.name}/>
             }): null
         }
+      </div>
+     
       </div>
     );
   }
