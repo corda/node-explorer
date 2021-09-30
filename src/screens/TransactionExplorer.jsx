@@ -1,8 +1,9 @@
-import {TableCell, TablePagination } from '@material-ui/core';
+import {TableCell, TablePagination, TextField } from '@material-ui/core';
 import ForwardIcon from '@material-ui/icons/Forward';
 import React, { Component } from 'react';
-import {Column, PageHeader, Row, Drawer, Button, Container, InputLabel, Option, Select, TextInput, TooltipWrapper, FormGroup, Card} from '@r3/r3-tooling-design-system';
+import {Column, PageHeader, Row, Drawer, Button, Container, DashboardItem, Option, Select, TooltipWrapper, FormGroup, Card, TextInput} from '@r3/r3-tooling-design-system';
 import { connect } from 'react-redux';
+import SnackbarComponent from '../components/SnackbarComponent';
 import * as ActionType from '../store/Actions';
 import '../styles/Transaction.scss';
 
@@ -16,7 +17,8 @@ class TransactionExplorer extends Component{
         selectedFlow: {},
         trnxDetail: [],
         paramList: [],
-        isOpen:false,
+        isOpen: false,
+        paramValues: []
     }
 
     handleClose = () => {
@@ -66,6 +68,13 @@ class TransactionExplorer extends Component{
         });
     }
 
+    updateState = (index,value) => {
+        const ParamValues = [...this.state.paramList]; //make a copy of array
+        ParamValues[index] = value;
+        this.setState({ paramList: ParamValues });
+        console.log(value, 'input')
+        console.log(this.state.paramList, 'this.state.paramList')
+    }
 
     handleChangePage = (event, newPage) => {
 
@@ -197,22 +206,24 @@ class TransactionExplorer extends Component{
         
                 :
                 param.paramType === 'java.time.LocalDateTime' || param.paramType === 'java.time.Instant'?
-                    <div>
-                        <TextInput type="datetime-local" onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} InputLabelProps={{ shrink: true }} 
+                
+                        <TextField type="datetime-local" onChange={e=> {param.paramValue = e.target.value}} className="custom-input" onChange={e=> {param.paramValue = e.target.value}} label={param.paramName}
                         helpText={this.getHelperText(param.paramType)} fullWidth/> 
-                    </div>
+                   
                 :
                 param.paramType === 'java.time.LocalDate'?
-                    <div>
-                        <TextInput type="date" onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} InputLabelProps={{ shrink: true }} fullWidth/> 
-                    </div>
+                  
+                        <TextField type="date" className="custom-input"  onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} InputLabelProps={{ shrink: true }} fullWidth/> 
+                    
                 :
                 param.hasParameterizedType && (param.paramType === 'java.util.List' || param.paramType === 'java.util.Set') ?
                     this.renderListParam(param, index)
                 :
-                    <div>
-                        <TextInput onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} helpText={this.getHelperText(param.paramType)} fullWidth/> 
-                    </div>
+                 <React.Fragment>
+                                                <TextField   variant="outlined" onChange={e=> {param.paramValue = e.target.value}} label={param.paramName} helperText={this.getHelperText(param.paramType)} fullWidth />
+                                </React.Fragment>
+
+                   
                 }
             </div> 
         
@@ -248,7 +259,7 @@ class TransactionExplorer extends Component{
                         </React.Fragment>
                     : param.parameterizedType === 'java.time.LocalDateTime' || param.parameterizedType === 'java.time.Instant'?
                         <React.Fragment>
-                                <TextInput type="datetime-local" onBlur={e => this.updateListParam(param, e.target.value, true)} label={param.paramName} InputLabelProps={{ shrink: true }} 
+                                <TextField type="datetime-local" onBlur={e => this.updateListParam(param, e.target.value, true)} label={param.paramName} InputLabelProps={{ shrink: true }} 
                                 helpText={this.getHelperText(param.paramType)} fullWidth/> 
                             {
                                 this.state.paramList[param.paramName]?
@@ -262,7 +273,7 @@ class TransactionExplorer extends Component{
                     param.parameterizedType === 'java.time.LocalDate'?
                         <React.Fragment>
                  
-                                <TextInput type="date" onBlur={e => this.updateListParam(param, e.target.value, true)} label={param.paramName} InputLabelProps={{ shrink: true }} fullWidth/> 
+                                <TextField type="date" onBlur={e => this.updateListParam(param, e.target.value, true)} label={param.paramName} InputLabelProps={{ shrink: true }} fullWidth/> 
                    
                             {
                                 this.state.paramList[param.paramName]?
@@ -277,7 +288,7 @@ class TransactionExplorer extends Component{
                         <div style={{color: 'red', marginTop: 10}}>Nested List Param is not supported!</div>
                     :
                         <React.Fragment>
-                               <TextInput onBlur={e => this.updateListParam(param, e.target.value, true)} label={param.paramName} helpText={this.getHelperText(param.paramType)} fullWidth/> 
+                               <TextField onBlur={e => this.updateListParam(param, e.target.value, true)} label={param.paramName} helpText={this.getHelperText(param.paramType)} fullWidth/> 
                             {
                                 this.state.paramList[param.paramName]?
                                 this.state.paramList[param.paramName].map((value, idx) => {
@@ -381,7 +392,7 @@ class TransactionExplorer extends Component{
                         style={{ overflow: "scroll" }}
                         withBackdrop
                         position="right"
-                        closeOnOutsideClick
+                        // closeOnOutsideClick
                         
                         >
                         <div className="flow-form">
@@ -389,7 +400,7 @@ class TransactionExplorer extends Component{
                             <div style={{color: "red"}}>{this.props.registeredFlows.length === 0? 'No Flows Found! Make sure you have the cordapp directory set in the Settings Tab':null}</div>
                             <div className="form-body">
                                                       
-                                            <Select label="Select A Flow to Execute" onChange={this.handleFlowSelection} value={null} >
+                                            <Select label="Select A Flow to Execute" onChange={this.handleFlowSelection}  >
                                                 <Option key="empty" value=""></Option>
                                             {
                                                     this.props.registeredFlows.map((flow, index) => {
@@ -425,13 +436,9 @@ class TransactionExplorer extends Component{
                                 
                                
                                     {
-                                    this.props.flowResultMsg    ?
-                                        <div style={{float: "left", fontSize: 14}}>
-                                            <p style={{color: this.props.flowResultMsgType?"green":"red"}}>
-                                                <span>{this.props.flowResultMsgType?'Flow Successful :': 'Flow Errored :'}</span>
-                                                {this.props.flowResultMsg}
-                                            </p>
-                                        </div>
+                                    this.props.flowResultMsg ?
+                                        <SnackbarComponent variant={this.props.flowResultMsgType?"success":"danger"} 
+                                        message={this.props.flowResultMsgType? `Flow Successful :` : `Flow Errored : ${this.props.flowResultMsg}` }/>                                        
                                         :null
                                     }
                                 {
@@ -498,7 +505,7 @@ class TransactionExplorer extends Component{
                                             </div>
                                             {
                                                
-                                                <Drawer style={{ backgroundColor: "#EEEEEE" }} open={this.state.isOpen}
+                                                <Drawer open={this.state.isOpen}
                                                     withBackdrop 
                                                     position="right"
                                                     onClose={() => this.setState({ isOpen: false })}
@@ -516,8 +523,8 @@ class TransactionExplorer extends Component{
                                                                             return (
                                                                                 <div key={idx} className="content">
                                                                                     <div className="stitle">
-                                                                                        <div>{input.type}</div>
-                                                                                        <div style={{fontWeight: "normal", fontSize: 13}}>{input.stateRef.txhash} ({input.stateRef.index})</div>
+                                                                                        <div className="break-word">{input.type}</div>
+                                                                                        <div className="break-word" style={{fontWeight: "normal", fontSize: 13}}>{input.stateRef.txhash} ({input.stateRef.index})</div>
                                                                                     </div>
                                                                                     {this.renderJson(input.state, 0)}
                                                                                 </div>
@@ -547,8 +554,8 @@ class TransactionExplorer extends Component{
                                                                         return (
                                                                             <div key={idx} className="content">
                                                                                 <div className="stitle">
-                                                                                    <div>{output.type}</div>
-                                                                                    <div style={{fontWeight: "normal", fontSize: 13}}>{output.stateRef.txhash} ({output.stateRef.index})</div>
+                                                                                    <div className="break-word">{output.type}</div>
+                                                                                    <div className="break-word" style={{fontWeight: "normal", fontSize: 13}}>{output.stateRef.txhash} ({output.stateRef.index})</div>
                                                                                 </div>
                                                                                 {this.renderJson(output.state, 0)}
                                                                             </div>    
@@ -558,21 +565,20 @@ class TransactionExplorer extends Component{
                                                             </Card>
                                                             </Column>
                                                             <Column item xs={12}>
-                                                            <div className="wrapper" style={{marginTop: 20, minWidth: "auto", height: "auto"}}>
-                                                                <div className="title">Signatures</div>
-                                                                <div>
+                                                            <Card className="wrapper" title="Signatures" style={{marginTop: 20, minWidth: "auto", height: "auto"}}>
+                                                            
                                                                     {
                                                                         trnx.signers && trnx.signers.length > 0?
                                                                         trnx.signers.map((sig, idx) => {
                                                                             return (
-                                                                                <div key={idx}>{sig.signature.bytes}<strong>({sig.partyName})</strong></div>
+                                                                                <div className="signature-label" key={idx}>{sig.signature.bytes}<strong>({sig.partyName})</strong></div>
                                                                             )
                                                                         })
                                                                         :
                                                                         <div>Transaction has no signatures</div>
                                                                     }
-                                                                </div>
-                                                            </div>
+                                                            
+                                                            </Card>
                                                             </Column>
                                                         </Container>
                                                         
@@ -586,8 +592,12 @@ class TransactionExplorer extends Component{
                                 })
                                 : 
                                     
-                                        <div>No Data Found</div>
-                                   
+                                    <div className="no-data-found">
+                                        <DashboardItem icon="AstronautSittingOnPlanet">
+                                            No Transactions Found
+                                        </DashboardItem>
+                                    </div>
+                                                                                              
                             }
                             </div>
          

@@ -65,6 +65,10 @@ tr th {
   background: #f1f1f1;
   height: 100%;
 }
+.signature-label,
+.break-word {
+  word-break: break-all;
+}
 
 .wtitle {
   border-bottom: 1px solid #cccccc;
@@ -77,16 +81,11 @@ tr th {
 
 .stitle {
   border: 1px solid #ccc;
-  margin-top: -1px;
-  margin-left: -11px;
   padding: 5px 10px;
-  position: absolute;
-  width: calc(100% - 20px);
   top: 0;
   background: #ececec;
   font-weight: bold;
   color: #df0b1b;
-  overflow: auto;
 }
 
 .cmd-wrapper {
@@ -121,7 +120,6 @@ tr:hover {
   border: 1px solid #ccc;
   margin: 5px;
   position: relative;
-  padding-top: 55px;
 }
 
 tr.open td {
@@ -186,6 +184,7 @@ label.MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLab
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   margin-top: 2rem;
+  position: relative;
   .transaction-tile-container {
     padding: 0rem;
     display: inline-block;
@@ -214,6 +213,8 @@ label.MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLab
       }
       .label-data {
         font-size: 12px;
+        padding-right: 0.5rem;
+        word-break: break-all;
       }
     }
     .tile-body {
