@@ -113,6 +113,7 @@ class TransactionExplorer extends Component{
     }
 
     showTrnxDetails = (trnx, index) => {
+        console.log(trnx,'selected trnx')
         let txDetail = this.state.trnxDetail;
         txDetail[index] = !this.state.trnxDetail[index]
         this.setState({
@@ -381,6 +382,12 @@ class TransactionExplorer extends Component{
     render(){
         return(
             <div>
+                 {
+                this.props.flowResultMsg ?
+                    <SnackbarComponent variant={this.props.flowResultMsgType?"success":"danger"} 
+                    message={this.props.flowResultMsgType? `Flow Successful :` : `Flow Errored : ${this.props.flowResultMsg}` }/>                                        
+                    :null
+                }
                 <div className="page-title">
                     <PageHeader title="Transactions" size="small" className="custom-node-explorer-header" >
                         Transactions
@@ -435,12 +442,7 @@ class TransactionExplorer extends Component{
                                 }
                                 
                                
-                                    {
-                                    this.props.flowResultMsg ?
-                                        <SnackbarComponent variant={this.props.flowResultMsgType?"success":"danger"} 
-                                        message={this.props.flowResultMsgType? `Flow Successful :` : `Flow Errored : ${this.props.flowResultMsg}` }/>                                        
-                                        :null
-                                    }
+                                   
                                 {
                                     this.props.flowSelected && Object.keys(this.state.selectedFlow.constructors).length>0?
                                             <Button onClick={() => this.prepareFlowDataToStart()} style={{float: "right", marginTop: 10}} 
@@ -459,10 +461,11 @@ class TransactionExplorer extends Component{
                             {
                                 this.props.transactionList && this.props.transactionList.length > 0 ?
                                 this.props.transactionList.map((trnx, index) => {
+                                    console.log(trnx, 'trnx')
                                     return (
                                         <React.Fragment>
                                             <div key={index} style={{cursor: "pointer"}} onClick={() => this.showTrnxDetails(trnx, index)}
-                                                className={`transaction-tile-container ${this.state.trnxDetail[index]?"open":null}`}>
+                                                className={`transaction-tile-container`}>
                                               
                                                 <div className="tile-header">
                                                     <div className="label">Transaction ID</div>
@@ -505,10 +508,10 @@ class TransactionExplorer extends Component{
                                             </div>
                                             {
                                                
-                                                <Drawer open={this.state.isOpen}
+                                                <Drawer open={this.state.trnxDetail[index]? true : false}
                                                     withBackdrop 
                                                     position="right"
-                                                    onClose={() => this.setState({ isOpen: false })}
+                                                    onClose={() => this.setState({ isOpen: false, trnxDetail:[] })}
                                                     closeOnOutsideClick
                                                     className="w-half"
                                                 >

@@ -22,7 +22,7 @@ const DonutChart = (props) => {
                 <PieChart >                  
                     <Pie
                         data={data}
-                        cx={100}
+                        cx={120}
                         cy={95}
                         innerRadius={60}
                         outerRadius={80}

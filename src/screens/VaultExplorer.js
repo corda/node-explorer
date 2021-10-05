@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import '../styles/Vault.css';
+import '../styles/Vault.scss';
 import PageTitle from '../components/PageTitle';
 import Filter from '../components/Filter';
 import { connect } from 'react-redux';
 import * as ActionType from '../store/Actions';
 import { Grid, TablePagination } from '@material-ui/core';
+import {Column, PageHeader, Row , Container} from '@r3/r3-tooling-design-system'
 
 class VaultExplorer extends Component{
 
@@ -161,33 +162,34 @@ class VaultExplorer extends Component{
     render() {
         return(
             <React.Fragment>
-                <PageTitle value="The Vault" />
-                <Grid container spacing={0}>
-                    <Grid item xs={3}><Filter filter={this.props.filters} handler={(type, value, checked) => this.handleFilterUpdate(type, value, checked)}/></Grid>
-                    <Grid item xs={9}>
+                  <PageHeader title="The Vault" size="small" className="custom-node-explorer-header" >
+                        The Vault
+                    </PageHeader>
+
+                    <Row>
+                        <Column  lg={3}><Filter filter={this.props.filters} handler={(type, value, checked) => this.handleFilterUpdate(type, value, checked)}/></Column>
+                        <Column  lg={9}>
+                        <Row>
+                         
                         {
                             this.props.states?
                             this.props.states.map((state, idx) => {
                                 return (
-                                    <div className="state-wrapper">
-                                        <div className="state-title">
-                                            <div style={{display:"inline=block"}}>{this.props.statesMetaData?this.props.statesMetaData[idx].contractStateClassName:null}</div>
-                                            <div className="tx">StateRef: {state.ref.txhash}({state.ref.index})</div>
+                                       <Column lg={6}>
+                                        <div className="vault-tile-container">
+                                        <div className="tile-header  ">
+                                            <div className="label">{this.props.statesMetaData?this.props.statesMetaData[idx].contractStateClassName:null}</div>
+                                            <div className="label-data ">StateRef: {state.ref.txhash}({state.ref.index})</div>
                                         </div>
-                                        <Grid container spacing={0} style={{padding:10}}>
-                                            <Grid item xs={9}>
+                                      
                                                 <div className="state-content">
                                                     {this.renderJson(state.state.data, 0)}
                                                 </div>
-                                            </Grid>
-                                            <Grid item xs={3}>
+                                   
                                                 {
                                                     this.props.statesMetaData?
                                                     <React.Fragment>
-                                                        <div className="bar">
-                                                            <div className={this.props.statesMetaData[idx].relevancyStatus==='RELEVANT'?'blue':'grey'}>{this.props.statesMetaData[idx].relevancyStatus}</div>
-                                                            <div className={this.props.statesMetaData[idx].status==='CONSUMED'?'red':'green'}>{this.props.statesMetaData[idx].status}</div>
-                                                        </div>
+                                                     
                                                         <div className="meta-container">
                                                             <div><span><strong>Contract: &nbsp;</strong></span> {state.state.contract}</div>
                                                             <div><span><strong>Recorded Time: &nbsp;</strong></span> {this.props.statesMetaData[idx].recordedTime}</div>
@@ -196,17 +198,25 @@ class VaultExplorer extends Component{
                                                             :null
                                                             }
                                                             <div><span><strong>Notary: &nbsp;</strong></span> {this.props.statesMetaData[idx].notary}</div>
+                                                            
+                                                        </div>
+                                                           <div className="tile-footer">
+                                                            <div className={`pill ${this.props.statesMetaData[idx].relevancyStatus === 'RELEVANT' ? 'blue' : 'grey'}`}>{this.props.statesMetaData[idx].relevancyStatus}</div>
+                                                            <div className={`pill ${this.props.statesMetaData[idx].status==='CONSUMED'?'red':'green'}`}>{this.props.statesMetaData[idx].status}</div>
                                                         </div>
                                                     </React.Fragment>
                                                     :null
                                                 }
-                                            </Grid>
-                                        </Grid>
+                                   
                                     </div>
+                                    </Column>
                                 )
                             }): null
 
+                        
                         }
+                        
+                        </Row>
                         {
                             !this.props.states || this.props.states.length === 0? 
                             <div className="empty">No States Recorded in The Vault</div>:null
@@ -221,8 +231,9 @@ class VaultExplorer extends Component{
                                 onChangePage={this.handleChangePage}
                             />
                         }
-                    </Grid>
-                </Grid>
+                    </Column>
+                    </Row>
+
                     
             </React.Fragment>
         )

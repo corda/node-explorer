@@ -76,32 +76,32 @@
   //   z-index: 2;
   //   display: block;
   // }
-  .block-left {
-    width: calc(70% - 300px);
-    height: 300px;
+  .blocks {
     position: absolute;
-    right: 40%;
-    top: 40%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    height: 50%;
+    width: calc(60% - 20px);
+  }
+  .block-left {
+    width: 60%;
+    height: 300px;
     padding: 2rem;
     background-color: #fff;
     z-index: 4;
     box-shadow: 0px 3px 6px #1d23431a;
     min-width: 360px;
     border-radius: 10px;
-    @media screen and (max-width: 1600px) {
-      min-width: 330px;
-      height: 200px;
-      padding: 1rem;
-      h4 {
-        font-size: large;
-      }
-    }
+    display: block;
+    position: relative;
+    top: -100px;
   }
   .block-right {
     border-radius: 10px;
-    position: absolute;
-    right: 200px;
-    top: 250px;
+    position: relative;
     height: 315px;
     width: calc(55% - 300px);
     padding: 2rem;
@@ -109,16 +109,8 @@
     z-index: 5;
     box-shadow: 0px 3px 6px #1d23431a;
     min-width: 330px;
-    @media screen and (max-width: 1600px) {
-      right: 100px;
-      top: 100px;
-      height: 215px;
-      min-width: 300px;
-      padding: 1rem;
-      h4 {
-        font-size: large;
-      }
-    }
+    margin-left: 50%;
+    display: inline-block;
     .icon-cordapp {
       width: 70%;
       height: 70%;

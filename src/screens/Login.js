@@ -198,18 +198,19 @@ class Login extends Component {
                             </div>      
                         </Column>
                         <Column md={6} lg={7} className="container-right">
-                            <div className="block-right">
-                                <h4>Track your CorDapps</h4>
-                                <span className="icon-cordapp">
-                                    
+                            <div className="blocks">
+                                <div className="block-right">
+                                    <h4>Track your CorDapps</h4>
+                                    <span className="icon-cordapp">
                                 </span>
-                            </div>
-                             <div className="block-left">
-                                <h4>Manage your Transactions</h4>
-                                <span className="icon-cordapp">
-                                    
+                                </div>
+                                <div className="block-left">
+                                    <h4>Manage your Transactions</h4>
+                                    <span className="icon-cordapp">
                                 </span>
+                                </div>
                             </div>
+                           
                             <div className="screen-text">
                                 <h2>Node Explorer</h2>
                                 <h4>Interact with your Nodes, Cordapps and Vault.</h4>

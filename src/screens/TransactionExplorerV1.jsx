@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import { PageHeader } from '@r3/r3-tooling-design-system';
 import { connect } from 'react-redux';
 import * as ActionType from '../store/Actions';
-import '../styles/Transaction.css';
+import '../styles/Transaction.scss';
 
 class TransactionExplorer extends Component{
     state = {
@@ -475,7 +475,9 @@ class TransactionExplorer extends Component{
                             <TableBody>
                             {
                                 this.props.transactionList && this.props.transactionList.length > 0 ?
-                                this.props.transactionList.map((trnx, index) => {
+                                        this.props.transactionList.map((trnx, index) => {
+                                            console.log(trnx,'trnx')
+                                    
                                     return (
                                         <React.Fragment>
                                             <TableRow key={index} style={{cursor: "pointer"}} onClick={() => this.showTrnxDetails(trnx, index)}

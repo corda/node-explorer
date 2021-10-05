@@ -21,14 +21,12 @@ body {
   position: relative;
 }
 .rotate-back {
-  // transform: rotate(90deg);
   display: block;
-  /* width: auto; */
   margin-top: 0;
   position: absolute;
   left: 0;
   right: 0px;
-  top: 0px;
+  top: -18px;
   bottom: 0px;
   margin: auto;
   width: auto;
@@ -176,4 +174,8 @@ code {
       background-color: #fff;
     }
   }
+}
+
+.drawer {
+  position: absolute;
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../styles/Vault.css';
+import '../styles/Vault.scss';
 import { Checkbox, FormControlLabel, Grid } from '@material-ui/core';
 
 class Filter extends Component{
