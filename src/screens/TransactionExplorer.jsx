@@ -391,8 +391,7 @@ class TransactionExplorer extends Component{
                 <div className="page-title">
                     <PageHeader title="Transactions" size="small" className="custom-node-explorer-header" >
                         Transactions
-                    </PageHeader>
-                    <Button style={{float: "right"}} variant="primary" iconRight="Plus" size="small" onClick={this.handleOpen}>New Transaction</Button>
+                    </PageHeader>                  
                     <Drawer
                         open={this.props.open}
                         onClose={this.handleClose}
@@ -457,6 +456,7 @@ class TransactionExplorer extends Component{
                         </Drawer>
                     </div>
                 <div>
+                      <Button variant="primary" iconRight="Plus" size="small" onClick={this.handleOpen}>New Transaction</Button>
                 <div className="transactions-container">
                             {
                                 this.props.transactionList && this.props.transactionList.length > 0 ?

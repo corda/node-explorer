@@ -222,7 +222,7 @@ class VaultExplorer extends Component{
                             <div className="empty">No States Recorded in The Vault</div>:null
                         }
                         {
-                            <TablePagination style= {{padding: "0 10px", marginTop: -15}}
+                            <TablePagination style= {{padding: "0 10px", marginTop: 20}}
                                 rowsPerPageOptions={[]}
                                 component="div"
                                 count={this.props.totalResults}

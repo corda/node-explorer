@@ -1,7 +1,7 @@
 import { Grid, TextField } from "@material-ui/core";
 import axios from 'axios';
 import React, { Component } from "react";
-import PageTitle from "../components/PageTitle";
+import { PageHeader} from '@r3/r3-tooling-design-system'
 import * as ActionType from "../store/Actions";
 
 class Settings extends Component{
@@ -87,6 +87,9 @@ class Settings extends Component{
     render() {
         return( 
             <React.Fragment>
+                  <PageHeader title="The Vault" size="small" className="custom-node-explorer-header" >
+                       Settings
+                    </PageHeader>
                 <div style={{padding: "10px 20px"}}>
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
