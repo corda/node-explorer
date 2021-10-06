@@ -454,9 +454,10 @@ class TransactionExplorer extends Component{
                                 </div>
                             </div>
                         </Drawer>
-                    </div>
+                </div>
+                <Button className="transaction-btn" variant="primary" iconRight="Plus" size="small" onClick={this.handleOpen}>New Transaction</Button>
+
                 <div>
-                      <Button variant="primary" iconRight="Plus" size="small" onClick={this.handleOpen}>New Transaction</Button>
                 <div className="transactions-container">
                             {
                                 this.props.transactionList && this.props.transactionList.length > 0 ?
@@ -595,7 +596,7 @@ class TransactionExplorer extends Component{
                                 })
                                 : 
                                     
-                                    <div className="no-data-found">
+                                    <div className="no-data-found position">
                                         <DashboardItem icon="AstronautSittingOnPlanet">
                                             No Transactions Found
                                         </DashboardItem>

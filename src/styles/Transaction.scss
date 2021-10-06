@@ -180,11 +180,15 @@ label.MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLab
   cursor: pointer;
   border: 1px solid #ccc;
 }
+.transaction-btn {
+  float: right;
+}
 .transactions-container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   margin-top: 0rem;
   position: relative;
+  margin-top: 80px;
   .transaction-tile-container {
     padding: 0rem;
     display: inline-block;

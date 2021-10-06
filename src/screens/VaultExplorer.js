@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import '../styles/Vault.scss';
-import PageTitle from '../components/PageTitle';
 import Filter from '../components/Filter';
 import { connect } from 'react-redux';
 import * as ActionType from '../store/Actions';
-import { Grid, TablePagination } from '@material-ui/core';
-import {Column, PageHeader, Row , Container} from '@r3/r3-tooling-design-system'
+import { TablePagination } from '@material-ui/core';
+import {Column, PageHeader, Row , DashboardItem} from '@r3/r3-tooling-design-system'
 
 class VaultExplorer extends Component{
 
@@ -219,7 +218,12 @@ class VaultExplorer extends Component{
                         </Row>
                         {
                             !this.props.states || this.props.states.length === 0? 
-                            <div className="empty">No States Recorded in The Vault</div>:null
+                                 <div className="no-data-found">
+                                        <DashboardItem icon="AstronautSittingOnPlanet">
+                                            No States Recorded in The Vault
+                                        </DashboardItem>
+                                    </div>  : null
+                          
                         }
                         {
                             <TablePagination style= {{padding: "0 10px", marginTop: 20}}

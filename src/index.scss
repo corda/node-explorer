@@ -128,15 +128,17 @@ code {
 }
 
 .no-data-found {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  margin: auto;
-  width: 400px;
+  &.position {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    width: 400px;
+    transform: translate(0%, 60%);
+  }
   height: 400px;
-  transform: translate(30%, 60%);
 }
 .form-body {
   .custom-input {

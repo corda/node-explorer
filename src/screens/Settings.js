@@ -92,7 +92,7 @@ class Settings extends Component{
                     </PageHeader>
                 <div style={{padding: "10px 20px"}}>
                     <Grid container spacing={2}>
-                        <Grid item xs={6}>
+                        <Grid item xs={6}>                        
                             <TextField label="Enter the path of your cordapps directory" fullWidth
                                 value={this.state.cordappDirectory}
                                 onChange={event => this.handleChange(event, 'cordappDir')} 
