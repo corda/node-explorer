@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as ActionType from '../store/Actions';
 import { PageHeader } from 'r3-tooling-design-system';
-import '../styles/Network.css';
+import '../styles/Network.scss';
 import BoxWithTitle from '../components/BoxWithTitle';
 import ListBoxWithTitle from '../components/ListBoxWithTitle';
 import Pin from '../components/Pin';

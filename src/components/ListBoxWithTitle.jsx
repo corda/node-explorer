@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import '../styles/Network.css';
+import '../styles/Network.scss';
 
 const ListBoxWithTitle = props => {
     const [show, setShow] = useState(true);

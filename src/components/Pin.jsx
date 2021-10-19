@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/Network.css';
+import '../styles/Network.scss';
 
 const Pin = props => {
     return (
