@@ -175,6 +175,16 @@
   margin: 2rem;
   position: relative;
   font-size: 20px;
+  .ssh-checkbox {
+    position: absolute;
+    left: -180px;
+    top: -5px;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    width: 30px;
+    height: 30px;
+  }
   &::before {
     content: '';
     width: calc(30% - 20px);

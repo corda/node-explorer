@@ -121,7 +121,7 @@ class Login extends Component {
                             <Column lg={12}>
                                 <PasswordInput label="SSH Password" type="password" 
                                         value={this.state.ssh.password}
-                                           onInput={e => this.setState({ssh: {...this.state.ssh, password: e.target.value}})}
+                                           onChange={e => this.setState({ssh: {...this.state.ssh, password: e.target.value}})}
                                            errorMessage={this.shouldMarkError("sshPassword")}
                                            helpText={this.shouldMarkError("sshPassword") ? 'Please Enter SSH Password' : ''}
                                            onBlur={this.handleBlur("sshPassword")}/>
@@ -181,7 +181,7 @@ class Login extends Component {
                                         <Column lg={12}>
                                             <PasswordInput label="RPC Password" 
                                                 value={this.state.password}
-                                                onInput={e => this.setState({password: e.target.value})}
+                                                onChange={e => this.setState({password: e.target.value})}
                                                 errorMessage={this.shouldMarkError("password")}
                                                 helpText={this.shouldMarkError("password") ? 'Please Enter RPC Password' : ''}
                                                 />
@@ -192,6 +192,7 @@ class Login extends Component {
                                             <p className="separator-tag">or Login with ssh</p>
                                         </Column>
                                     </Row>
+                                    
                                     {sshCredentials()}
                                     <Row className="cta-container">
                                         <Column lg={12}>
