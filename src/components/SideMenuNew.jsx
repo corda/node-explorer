@@ -1,20 +1,11 @@
-import React, {useState} from 'react';
-import DashboardIcon from '@material-ui/icons/Dashboard';
+import React from 'react';
 import { connect } from 'react-redux';
 import * as ActionType from '../store/Actions';
-import PublicIcon from '@material-ui/icons/Public';
-import SyncAltRoundedIcon from '@material-ui/icons/SyncAltRounded';
-import SecurityRoundedIcon from '@material-ui/icons/SecurityRounded';
-import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
 import { SideBar, SideBarItem } from 'r3-tooling-design-system';
 import '../styles/SideMenu.scss';
 
 const SideMenu = (props) => {
 
-  console.log(props,'props')
-
-    
-    const [isActiveSideBarItem] = useState(false);
 
     return (
 

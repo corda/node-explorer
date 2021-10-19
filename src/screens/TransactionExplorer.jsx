@@ -1,7 +1,7 @@
-import {TableCell, TablePagination, TextField } from '@material-ui/core';
+import { TablePagination, TextField } from '@material-ui/core';
 import ForwardIcon from '@material-ui/icons/Forward';
 import React, { Component } from 'react';
-import {Column, PageHeader, Row, Drawer, Button, Container, DashboardItem, Option, Select, TooltipWrapper, FormGroup, Card, TextInput} from 'r3-tooling-design-system';
+import {Column, PageHeader, Row, Drawer, Button, Container, DashboardItem, Option, Select, TooltipWrapper, FormGroup, Card} from 'r3-tooling-design-system';
 import { connect } from 'react-redux';
 import SnackbarComponent from '../components/SnackbarComponent';
 import * as ActionType from '../store/Actions';
@@ -72,8 +72,6 @@ class TransactionExplorer extends Component{
         const ParamValues = [...this.state.paramList]; //make a copy of array
         ParamValues[index] = value;
         this.setState({ paramList: ParamValues });
-        console.log(value, 'input')
-        console.log(this.state.paramList, 'this.state.paramList')
     }
 
     handleChangePage = (event, newPage) => {
@@ -113,7 +111,6 @@ class TransactionExplorer extends Component{
     }
 
     showTrnxDetails = (trnx, index) => {
-        console.log(trnx,'selected trnx')
         let txDetail = this.state.trnxDetail;
         txDetail[index] = !this.state.trnxDetail[index]
         this.setState({
@@ -208,7 +205,7 @@ class TransactionExplorer extends Component{
                 :
                 param.paramType === 'java.time.LocalDateTime' || param.paramType === 'java.time.Instant'?
                 
-                        <TextField type="datetime-local" onChange={e=> {param.paramValue = e.target.value}} className="custom-input" onChange={e=> {param.paramValue = e.target.value}} label={param.paramName}
+                        <TextField type="datetime-local" onChange={e=> {param.paramValue = e.target.value}} className="custom-input" label={param.paramName}
                         helpText={this.getHelperText(param.paramType)} fullWidth/> 
                    
                 :
@@ -465,7 +462,6 @@ class TransactionExplorer extends Component{
                             {
                                 this.props.transactionList && this.props.transactionList.length > 0 ?
                                 this.props.transactionList.map((trnx, index) => {
-                                    console.log(trnx, 'trnx')
                                     return (
                                         <React.Fragment>
                                             <div key={index} style={{cursor: "pointer"}} onClick={() => this.showTrnxDetails(trnx, index)}

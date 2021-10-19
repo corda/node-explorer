@@ -1,10 +1,9 @@
-import { FormControlLabel} from '@material-ui/core';
 import React, { Component } from 'react';
 import '../styles/Login.scss';
 import * as ActionType from '../store/Actions';
 import { connect } from 'react-redux';
 import SplashScreen from '../components/Splash';
-import { Container, Column, Row, Button, TextInput, Checkbox, PasswordInput, IconCustom } from 'r3-tooling-design-system'
+import { Container, Column, Row, Button, TextInput, PasswordInput, IconCustom } from 'r3-tooling-design-system'
 
 class Login extends Component {
 

@@ -10,7 +10,7 @@ import * as ActionType from './store/Actions';
 import VaultExplorer from './screens/VaultExplorer';
 import Dashboard from './screens/Dashboard';
 import Settings from './screens/Settings';
-import { Column, Container, Row, PageHeader} from 'r3-tooling-design-system';
+import { Column, Container, Row} from 'r3-tooling-design-system';
 
 
 
@@ -19,7 +19,6 @@ class Explorer extends Component {
 
     componentDidMount(){
       this.props.getApplicationState();
-      console.log(this.props,'props')
     }
 
     render(){

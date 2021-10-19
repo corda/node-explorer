@@ -476,7 +476,6 @@ class TransactionExplorer extends Component{
                             {
                                 this.props.transactionList && this.props.transactionList.length > 0 ?
                                         this.props.transactionList.map((trnx, index) => {
-                                            console.log(trnx,'trnx')
                                     
                                     return (
                                         <React.Fragment>
