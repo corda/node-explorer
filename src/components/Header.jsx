@@ -9,7 +9,7 @@ import logoSrc from '../crda-logo.svg';
 const Header = (props) => {
 
   const logo = (
-    <a href="/">
+    <a href="#">
       <img src={logoSrc} alt="logo-alt-txt" width="100px" />
     </a>
   );
@@ -32,13 +32,47 @@ const Header = (props) => {
       logo={logo}
       center={
         <>
+          <span style={{ display: "block", paddingBottom: 3 }}>{props.profile.name}</span>
           <Dropdown closeOnSelectOption positionX="right" positionY="bottom" trigger={<IconCustom className="h-5" icon="Account" />}>
-            <Option value="one">{props.profile.name}</Option>
+            <Option disabled value="one">
+              <span style={{ display: "block", paddingBottom: 3 }}>{props.profile.name}</span>
+              <span style={{ fontSize: 12, display: "block" }}>{props.profile.city}, {props.profile.country}</span>
+            </Option>
            
           </Dropdown>
           <IconCustom className="h-5" icon="ExitToApp"  onClick={props.onLogout} />
         </>}
 />
+      // <div className="Header">
+      //     <div>
+      //           <img src="crda-logo.svg" width="100%" alt="Corda Logo" className="Logo"/>
+      //           <div className="profile">
+      //             <Button variant="outlined" ref={anchorRef} onClick={handleToggle}>{props.profile.name}</Button>
+      //             <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
+      //                 {({ TransitionProps, placement }) => (
+      //                   <Grow
+      //                     {...TransitionProps}
+      //                     style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom'}}
+      //                   >
+      //                     <Paper>
+      //                       <div style={{padding: 10}}>
+      //                           <span style={{display: "block", paddingBottom: 3}}>{props.profile.name}</span>
+      //                           <span style={{fontSize: 12, display: "block"}}>{props.profile.city}, {props.profile.country}</span>
+      //                       </div>
+      //                       <hr style={{margin: 0}}/>
+      //                       <ClickAwayListener onClickAway={handleClose}>
+      //                         <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown} style={{padding: 0}}>
+      //                           <MenuItem onClick={props.onLogout}>Logout</MenuItem>
+      //                         </MenuList>
+      //                       </ClickAwayListener>
+      //                     </Paper>
+      //                   </Grow>
+      //                 )}
+      //               </Popper>
+      //           </div>
+      //     </div>
+      // </div>
+    
   
   );
 }

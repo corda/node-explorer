@@ -20,10 +20,10 @@ class Dashboard extends Component{
              Dashboard
               </PageHeader>
                     <Row>
-                        <Column item lg={8}>
+                        <Column lg={8}>
                         <NodeDiagnostic data={this.props.nodeDiagnostic}/>
                         </Column>    
-                        <Column item lg={4} className="max-height">
+                        <Column lg={4} className="max-height">
                             <NetworkParameter data={this.props.networkParameter}/>
                         </Column>    
                     </Row>                   

@@ -31,9 +31,9 @@ const DonutChart = (props) => {
                 </PieChart>
                  </ResponsiveContainer>
                 <div className="rotate-back">
-                    <text  x={0} y={0} dy={0} textAnchor="middle" fill='#333333'>
+                    <p>
                         {props.value}{props.valueLabel}
-                    </text>
+                    </p>
                 </div>
                 
             </div>
