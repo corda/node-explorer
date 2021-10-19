@@ -1,0 +1,28 @@
+.dropdown {
+  &-item {
+    &:hover {
+      &::before {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 5px;
+        background-color: var(--color-medium-light-gray-300);
+      }
+    }
+    &.active {
+      &::before {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 5px;
+        background-color: var(--color-medium-light-gray-300);
+      }
+    }
+  }
+}

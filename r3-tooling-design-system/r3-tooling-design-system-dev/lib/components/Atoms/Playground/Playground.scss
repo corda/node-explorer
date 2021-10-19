@@ -1,0 +1,16 @@
+.playground {
+  $playground-header-height: 4rem;
+  min-height: var(--h-128);
+
+  &-header {
+    height: $playground-header-height;
+  }
+
+  &-main {
+    height: 100%;
+
+    &.with-header {
+      height: calc(100% - #{$playground-header-height});
+    }
+  }
+}

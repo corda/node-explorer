@@ -4,7 +4,7 @@ import '../styles/Login.scss';
 import * as ActionType from '../store/Actions';
 import { connect } from 'react-redux';
 import SplashScreen from '../components/Splash';
-import { Container, Column, Row, Button, TextInput, Checkbox, PasswordInput } from '@r3/r3-tooling-design-system'
+import { Container, Column, Row, Button, TextInput, Checkbox, PasswordInput, IconCustom } from 'r3-tooling-design-system'
 
 class Login extends Component {
 
@@ -206,7 +206,8 @@ class Login extends Component {
                                 </div>
                                 <div className="block-left">
                                     <h4>Manage your Transactions</h4>
-                                    <span className="icon-cordapp">
+                                    <span className="icon-holder">
+                                        <IconCustom icon="SwapHorizontal" />
                                 </span>
                                 </div>
                             </div>

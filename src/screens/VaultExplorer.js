@@ -4,7 +4,7 @@ import Filter from '../components/Filter';
 import { connect } from 'react-redux';
 import * as ActionType from '../store/Actions';
 import { TablePagination } from '@material-ui/core';
-import {Column, PageHeader, Row , DashboardItem} from '@r3/r3-tooling-design-system'
+import {Column, PageHeader, Row , DashboardItem} from 'r3-tooling-design-system'
 
 class VaultExplorer extends Component{
 

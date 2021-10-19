@@ -1,0 +1,33 @@
+.Toastify {
+    --toastify-left-border-width: 15px;
+    &__toast {
+        box-shadow: none;
+        background: transparent;
+        cursor: default;
+    }
+    
+    &__progress-bar {
+        height: 1px;
+        width: calc(100% - var(--toastify-left-border-width));
+        bottom: 8px;
+        left: var(--toastify-left-border-width);
+        &--default {
+            background: var(--color-blue);
+        }
+        &--error {
+            background: var(--color-red);
+        }
+        &--warning {
+            background: var(--color-yellow);
+        }
+        &--success {
+            background: var(--color-green);
+        }
+    }
+    .Toastify__toast-body {
+        margin: auto 0;
+        padding: 0px;
+        -ms-flex: 1 1 auto;
+            flex: 1 1 auto;
+    }
+}

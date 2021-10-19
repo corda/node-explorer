@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from '@r3/r3-tooling-design-system'
+import { Card } from 'r3-tooling-design-system'
 import Tile from './Tile';
 const NodeDiagnostic = (props) => {
 

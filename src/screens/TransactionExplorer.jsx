@@ -1,7 +1,7 @@
 import {TableCell, TablePagination, TextField } from '@material-ui/core';
 import ForwardIcon from '@material-ui/icons/Forward';
 import React, { Component } from 'react';
-import {Column, PageHeader, Row, Drawer, Button, Container, DashboardItem, Option, Select, TooltipWrapper, FormGroup, Card, TextInput} from '@r3/r3-tooling-design-system';
+import {Column, PageHeader, Row, Drawer, Button, Container, DashboardItem, Option, Select, TooltipWrapper, FormGroup, Card, TextInput} from 'r3-tooling-design-system';
 import { connect } from 'react-redux';
 import SnackbarComponent from '../components/SnackbarComponent';
 import * as ActionType from '../store/Actions';
@@ -382,12 +382,7 @@ class TransactionExplorer extends Component{
     render(){
         return(
             <div>
-                 {
-                this.props.flowResultMsg ?
-                    <SnackbarComponent variant={this.props.flowResultMsgType?"success":"danger"} 
-                    message={this.props.flowResultMsgType? `Flow Successful :` : `Flow Errored : ${this.props.flowResultMsg}` }/>                                        
-                    :null
-                }
+              
                 <div className="page-title">
                     <PageHeader title="Transactions" size="small" className="custom-node-explorer-header" >
                         Transactions
@@ -402,6 +397,14 @@ class TransactionExplorer extends Component{
                         
                         >
                         <div className="flow-form">
+                              
+                                            {
+                                            this.props.flowResultMsg ?
+                                                <SnackbarComponent  variant={this.props.flowResultMsgType?"success":"danger"} 
+                                                message={this.props.flowResultMsgType? `Flow Successful :` : `Flow Errored : ${this.props.flowResultMsg}` }/>                                        
+                                                :null
+                                            }
+                              
                             <h3 id="simple-modal-title" className="flow-form-title">Select a Flow to Execute</h3>
                             <div style={{color: "red"}}>{this.props.registeredFlows.length === 0? 'No Flows Found! Make sure you have the cordapp directory set in the Settings Tab':null}</div>
                             <div className="form-body">
@@ -439,8 +442,8 @@ class TransactionExplorer extends Component{
                                 {
                                     this.renderParamForm(false)
                                 }
-                                
-                               
+                                 
+                                                                  
                                    
                                 {
                                     this.props.flowSelected && Object.keys(this.state.selectedFlow.constructors).length>0?

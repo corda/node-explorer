@@ -1,0 +1,289 @@
+/*date*/
+.flatpickr {
+  &-calendar {
+    padding: 10px !important;
+    background: #fff;
+    width: auto;
+  
+    &::before {
+      z-index: 1;
+    }
+    &.arrowBottom::before{
+      border-top-color: #fff;
+    }
+    &.arrowTop::before {
+      border-bottom-color: #fff;
+    }
+  }
+  
+  &-months,
+  &-month {
+    padding-bottom: 15px;
+    background: #fff !important;
+  }
+  
+  &-current-month {
+    .numInputWrapper {
+      font-weight: var(--font-bold) !important;
+      color: var(--color-dark-gray) !important;
+      font-family: var(--font-body) !important;
+      background-color: transparent !important;
+      span {
+        &.arrowUp,
+        &.arrowDown {
+          display: none;
+        }
+      }
+    }
+  }
+  
+  &-innerContainer,
+  &-days {
+    border: none;
+  }
+  
+  &-weekdays {
+    border-top: 1px solid var(--color-medium-light-gray-200);
+    padding: 20px 0 !important;
+    color: var(--color-dark-gray-400) !important;
+    background: #fff;
+  }
+
+  &-prev-month,
+  &-next-month {
+    padding-top: 21px !important;
+    & svg {
+      color: var(--color-blue) !important;
+    }
+  }
+  
+  &-next-month > span {
+    position: absolute;
+    display: block;
+    top: 23px;
+    left: -5px;
+    width: 10px;
+    height: 10px;
+    border-top: 2px solid var(--color-blue);
+    border-right: 2px solid var(--color-blue);
+    border-bottom: none;
+    border-left: none;
+    transform: rotate(45deg);
+  }
+  
+  &-prev-month > span {
+    position: absolute;
+    display: block;
+    top: 23px;
+    right: -5px;
+    width: 10px;
+    height: 10px;
+    border-top: none;
+    border-right: none;
+    border-bottom: 2px solid var(--color-blue);
+    border-left: 2px solid var(--color-blue);
+    transform: rotate(45deg);
+  }
+  &-weekday {
+    background: #fff !important;
+  }
+  &-day {
+    color: var(--color-dark-gray-400);
+    &,
+    &.today,
+    &.selected,
+    &.prevMonthDay,
+    &.nextMonthDay,
+    &:hover,
+    &:focus,
+    &.prevMonthDay:hover,
+    &.nextMonthDay:hover,
+    &.prevMonthDay:focus,
+    &.nextMonthDay:focus {
+      padding: 3px;
+      border: 2px solid transparent !important;
+      border-radius: 150px !important;
+      height: 39px !important;
+      line-height: 2;
+      font-weight: var(--font-bold) !important;
+    }
+    &:hover,
+    &:focus {
+      color: var(--color-blue);
+      background-color: transparent;
+    }
+    
+    &.today {
+      border: 2px solid var(--color-blue) !important;
+      &:hover,
+      &:focus {
+        color: var(--color-blue-300);
+        background-color: transparent;
+        border: 2px solid var(--color-blue-300) !important;
+      }
+    }
+    
+    &.selected {
+      background-color: var(--color-blue);
+      color: #fff;
+      &:hover,
+      &:focus {
+        background-color: var(--color-blue-300);
+        color: #fff;
+      }
+    }
+    
+    &.prevMonthDay,
+    &.nextMonthDay {
+      color: var(--color-medium-light-gray) !important;
+      &:hover,
+      &:focus {
+        color: var(--color-medium-light-gray) !important;
+        background-color: transparent;
+      }
+      &.selected {
+        background-color: var(--color-medium-light-gray-300) !important;
+        color: var(--color-medium-light-gray-500) !important;
+        &:hover,
+        &:focus {
+          background-color: var(--color-dark-gray-100) !important;
+        }
+      }
+    }
+  }
+} 
+
+.flatpickr-current-month span.cur-month,
+.flatpickr-current-month span.cur-month:hover,
+.numInput.cur-year,
+.numInput.cur-year:hover {
+  color: var(--color-dark-gray) !important;
+  font-family: var(--font-body) !important;
+  background-color: transparent !important;
+  font-weight: var(--font-bold) !important;
+}
+
+/*time*/
+.flatpickr {
+  &-calendar {
+    &.hasTime {
+      padding: 20px !important;
+      &.showTimeInput .flatpickr-time {
+        border: 2px solid var(--color-medium-light-gray);
+        border-radius: 5px !important;
+      }
+    }
+  }
+    
+  &-time {
+    width: 275px !important;
+
+    .flatpickr-am-pm {
+      width: 28%;
+      border-left: 2px solid var(--color-medium-light-gray);
+      &:hover,
+      &:focus {
+        background-color: var(--color-blue) !important;
+        color: #fff;
+      }
+    }
+    
+    input {
+      &:hover,
+      &:focus {
+        background-color: #fff;
+      }
+      .numInput.hour {
+        font-weight: normal !important;
+      }
+    }
+    
+    &-separator {
+      padding-left: 10px;
+    }
+    
+    .numInputWrapper span {
+      right: 12px;
+      padding: 0 3px;
+      &.arrowUp::after {
+        display: block;
+        top: 7px;
+        width: 7px;
+        height: 7px;
+        border-top: 2px solid var(--color-blue);
+        border-right: none;
+        border-bottom: none;
+        border-left: 2px solid var(--color-blue);
+        transform: rotate(45deg);
+      }
+      
+      &.arrowDown::after {
+        display: block;
+        top: 0;
+        width: 7px;
+        height: 7px;
+        border-top: none;
+        border-right: 2px solid var(--color-blue);
+        border-bottom: 2px solid var(--color-blue);
+        border-left: none;
+        transform: rotate(45deg);
+      }
+      &.arrowUp,
+      &.arrowDown {
+        &:hover::after,
+        &:focus::after {
+          border-color: #fff;
+        }
+      }
+    } 
+  }
+}
+
+.numInputWrapper span {
+  opacity: 1;
+  border: none;
+  &:hover,
+  &:focus {
+    background-color: var(--color-blue) !important;
+  }
+}
+
+/*datetime*/
+.flatpickr {
+  &-innerContainer ~ .flatpickr-time {
+    width: 305px !important;
+    box-sizing: initial;
+    padding: 0;
+  }
+
+  &-calendar.hasTime {
+    .flatpickr-innerContainer {
+      margin-bottom: 30px;
+      padding-bottom: 25px;
+      border-bottom: 1px solid var(--color-medium-light-gray-200) !important;
+    }
+    
+    &.flatpickr-next-month > span {
+      top: 33px;
+      left: -15px;
+    }
+
+    &.flatpickr-prev-month > span {
+      top: 33px;
+      right: -15px;
+    }
+    
+    .numInputWrapper span.arrowUp {
+      top: 2px;
+    }
+
+    &.open.timeInputDisabled .flatpickr-time {
+      opacity: 0.5 !important;
+      pointer-events: none;
+    }
+  } 
+}
+
+.date-time-input.gray + .date-time-input {
+  background-color: var(--color-light-gray);
+}

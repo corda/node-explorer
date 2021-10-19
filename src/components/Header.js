@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/Header.css';
 import { Button, Popper, Paper, Grow, ClickAwayListener, MenuList, MenuItem } from '@material-ui/core';
-import { TopNavBar, Dropdown, IconCustom, Option } from '@r3/r3-tooling-design-system';
+import { TopNavBar, Dropdown, IconCustom, Option } from 'r3-tooling-design-system';
 import * as ActionType from '../store/Actions'
 import { connect } from 'react-redux';
 import logoSrc from '../crda-logo.svg';

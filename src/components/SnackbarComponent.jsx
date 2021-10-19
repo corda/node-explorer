@@ -4,7 +4,7 @@ import {
   NotificationService,
   Snackbar,
   snackbarIdContext,
-} from '@r3/r3-tooling-design-system/lib/exports.js';
+} from 'r3-tooling-design-system/lib/exports.js';
 
 
 const SnackbarComponent = (props) => {
@@ -20,7 +20,8 @@ const SnackbarComponent = (props) => {
                 icon="Close"
                 className="inline h-5 pb-1 text-blue cursor-pointer"
                 onClick={() => NotificationService.dismiss(value)}
-              />
+                
+              >close</IconCustom>
             )}
           </snackbarIdContext.Consumer>
         }

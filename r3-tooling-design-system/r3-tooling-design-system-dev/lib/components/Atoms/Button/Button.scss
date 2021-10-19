@@ -1,0 +1,55 @@
+.button {
+  &-tertiary-text {
+    &::after {
+      background-color: var(--color-blue-200);
+    }
+  }
+
+  &-label-text {
+    &:hover {
+      &::after {
+        background-color: var(--color-medium-light-gray-200);
+      }
+    }
+  }
+
+  &-labeldanger-text {
+    &:hover {
+      &::after {
+        background-color: var(--color-red-300);
+      }
+    }
+  }
+
+  &-tertiary-text,
+  &-label-text,
+  &-labeldanger-text {
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      height: 3px;
+      width: 0;
+      transition: width 0.2s ease-in-out;
+    }
+    &:hover {
+      &::after {
+        width: 100%;
+        transition: width 0.2s ease-in-out;
+      }
+    }
+  }
+
+  &-icon-rotate {
+    animation: load-rotate 1.5s infinite linear;
+  }
+
+  @keyframes load-rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}

@@ -1,0 +1,24 @@
+.header-nav {
+  &-item {
+    position: relative;
+
+    a {
+      color: var(--medium-light-gray);
+    }
+
+    .active {
+      color: var(--color-blue);
+
+      a {
+        &::after {
+          content: '';
+          background-color: var(--color-blue);
+          display: block;
+          position: absolute;
+          height: 3px;
+          width: 100%;
+        }
+      }
+    }
+  }
+}

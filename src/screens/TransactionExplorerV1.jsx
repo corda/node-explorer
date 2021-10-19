@@ -4,7 +4,7 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ForwardIcon from '@material-ui/icons/Forward';
 import React, { Component } from 'react';
-import { PageHeader } from '@r3/r3-tooling-design-system';
+import { PageHeader } from 'r3-tooling-design-system';
 import { connect } from 'react-redux';
 import * as ActionType from '../store/Actions';
 import '../styles/Transaction.scss';

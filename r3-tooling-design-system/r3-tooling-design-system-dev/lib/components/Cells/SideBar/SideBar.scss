@@ -1,0 +1,106 @@
+.sidebar {
+  $sidebar: &;
+  --width: 290px;
+  --mobile-width: 80px;
+
+  width: var(--width);
+  height: 100%;
+  z-index: 50;
+
+  &-container {
+    width: var(--width);
+  }
+
+  &-toggable {
+    width: var(--mobile-width);
+    transition: width 0.3s;
+
+    #{$sidebar} {
+      &-container {
+        width: max-content;
+      }
+
+      &-item {
+        &-title {
+          &-content {
+            opacity: 0;
+            width: 0;
+          }
+        }
+
+        &-children {
+          width: 0;
+          height: 0;
+          overflow: hidden;
+          position: relative;
+        }
+      }
+    }
+
+    &:not(.open) {
+      #{$sidebar} {
+        &-item {
+          &-title {
+            &:before {
+              display: none;
+            }
+
+            &:hover,
+            &:active {
+              &:before {
+                // Tooltip on hover
+                content: attr(data-title);
+                display: block;
+                position: absolute;
+                line-height: var(--leading-4);
+                color: var(--color-dark-gray);
+                padding: var(--p-3);
+                font-size: var(--text-sm);
+                border-radius: 5px;
+                background-color: var(--color-blue-300);
+                left: calc(var(--mobile-width) + 10px);
+                display: initial;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                opacity: 1;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &.open {
+      width: var(--width);
+
+      .title-tooltip {
+        display: none !important;
+      }
+
+      #{$sidebar} {
+        &-container {
+          width: 100%;
+        }
+
+        &-item {
+          &-title {
+            overflow: visible;
+
+            &-content {
+              margin-left: 0.5rem;
+              width: 100% !important;
+              opacity: 1;
+            }
+          }
+
+          &-children {
+            width: auto;
+            height: auto;
+            position: static;
+          }
+        }
+      }
+    }
+  }
+}

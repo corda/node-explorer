@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import * as ActionType from '../store/Actions';
 import NodeDiagnostic from '../components/NodeDiagnostic'
 import '../styles/Dashboard.scss';
-import { Container, Column, Row, PageHeader } from "@r3/r3-tooling-design-system";
+import { Container, Column, Row, PageHeader } from "r3-tooling-design-system";
 import NetworkParameter from "../components/NetworkParameter";
 
 class Dashboard extends Component{

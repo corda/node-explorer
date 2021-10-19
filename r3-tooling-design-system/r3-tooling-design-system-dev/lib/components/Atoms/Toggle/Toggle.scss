@@ -1,0 +1,57 @@
+.toggle {
+  --toggle-dot-size: 20px;
+  --toggle-dot-padding: 4px;
+
+  &::after {
+    content: '';
+    position: absolute;
+    z-index: 2;
+    height: var(--toggle-dot-size);
+    width: var(--toggle-dot-size);
+    top: 5px;
+    background-color: #fff;
+    border-radius: 50%;
+  }
+
+  &:hover {
+    &::after {
+      box-shadow: var(--shadows-0-1-6-bluegray);
+    }
+  }
+
+  &:focus {
+    &::after {
+      box-shadow: var(--shadows-0-1-6-bluegray);
+    }
+  }
+
+  &-off {
+    &.gray {
+      background-color: var(--color-medium-light-gray-200);
+      transition: background-color 0.2s ease-in-out;
+    }
+    &.redgreen {
+      background-color: var(--color-red);
+      transition: background-color 0.2s ease-in-out;
+    }
+    &::after {
+      left: var(--toggle-dot-padding);
+      transition: left 0.2s ease-in-out;
+    }
+  }
+
+  &-on {
+    &.gray {
+      background-color: var(--color-medium-light-gray);
+      transition: background-color 0.2s ease-in-out;
+    }
+    &.redgreen {
+      background-color: var(--color-green);
+      transition: background-color 0.2s ease-in-out;
+    }
+    &::after {
+      left: calc(100% - (var(--toggle-dot-padding) + (var(--toggle-dot-size))));
+      transition: left 0.2s ease-in-out;
+    }
+  }
+}

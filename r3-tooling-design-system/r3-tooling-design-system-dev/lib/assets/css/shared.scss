@@ -1,0 +1,180 @@
+/* common */
+
+html {
+  scrollbar-color: #777b8e #f8f8f8;
+  scrollbar-width: thin;
+}
+body {
+  font-family: var(--font-body);
+}
+
+/* custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background-color: #f8f8f8;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #777b8e;
+}
+
+input {
+  $active-class: var(--color-blue);
+
+  &::-ms-reveal,
+  &::-ms-clear {
+    display: none;
+  }
+
+  &[type='checkbox'],
+  &[type='radio'] {
+    &:focus {
+      & ~ .checkmark {
+        box-shadow: var(--shadows-0-0-8-dark-gray);
+      }
+    }
+
+    &:disabled {
+      & ~ .checkmark {
+        border-color: var(--color-dark-gray-100) !important;
+      }
+    }
+
+    &.invalid,
+    &:invalid {
+      & ~ .checkmark {
+        border-color: var(--color-red) !important;
+      }
+    }
+
+    & ~ .checkmark {
+      position: relative;
+
+      &::after {
+        content: '';
+        display: none;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        border-color: inherit;
+      }
+    }
+
+    &:checked {
+      & ~ .checkmark {
+        border-color: $active-class;
+
+        &::after {
+          display: block;
+          width: 5px;
+          height: 10px;
+          border-width: 0 2px 2px 0;
+          transform: translate(-50%, -60%) rotate(45deg);
+        }
+      }
+    }
+  }
+
+  &[type='checkbox'] {
+    &:indeterminate {
+      & ~ .checkmark {
+        border-color: $active-class;
+
+        &::after {
+          content: '';
+          display: block;
+          width: 10px;
+          border-width: 0 0 2px 0;
+        }
+      }
+    }
+  }
+}
+
+input.white:-webkit-autofill,
+input.white:-webkit-autofill:hover,
+input.white:-webkit-autofill:focus,
+textarea.white:-webkit-autofill,
+textarea.white:-webkit-autofill:hover,
+textarea.white:-webkit-autofill:focus,
+select.white:-webkit-autofill,
+select.white:-webkit-autofill:hover,
+select.white:-webkit-autofill:focus {
+  box-shadow: 0 0 0 30px white inset !important;
+}
+
+input.gray:-webkit-autofill,
+input.gray:-webkit-autofill:hover,
+input.gray:-webkit-autofill:focus,
+textarea.gray:-webkit-autofill,
+textarea.gray:-webkit-autofill:hover,
+textarea.gray:-webkit-autofill:focus,
+select.gray:-webkit-autofill,
+select.gray:-webkit-autofill:hover,
+select.gray:-webkit-autofill:focus {
+  box-shadow: 0 0 0 30px var(--color-light-gray) inset !important;
+}
+
+input,
+.input-label,
+.select-label,
+.textarea-label,
+.download-file-name {
+  text-overflow: ellipsis;
+}
+
+.input-label,
+.textarea-label,
+.select-label {
+  transition: top 0.15s ease-in-out, font-size 0.15s ease-in-out;
+}
+
+input:not([type='file']):focus ~ .input-label,
+input:not([type='file']):not([value='']) ~ .input-label,
+.multiselect .focused .input-label,
+textarea:focus ~ .textarea-label,
+textarea:not([data-value='']) ~ .textarea-label,
+select:focus ~ .select-label,
+select:not([data-value='']) ~ .select-label {
+  top: -0.5rem;
+  font-size: var(--text-xs);
+}
+
+input:not([type='file']):focus ~ .input-label,
+select:focus ~ .select-label,
+textarea:focus ~ .textarea-label,
+.multiselect .focused .input-label {
+  color: var(--color-dark-gray-300);
+}
+
+input[data-modified='true']:invalid,
+.date-time-input[data-modified='true'] ~ .date-time-input:invalid,
+textarea[data-modified='true']:invalid,
+select[data-modified='true']:invalid,
+input[data-modified='true'][data-invalid='true'],
+label[data-modified='true'][data-invalid='true'],
+.date-time-input[data-modified='true'][data-invalid='true'] ~ .date-time-input,
+textarea[data-modified='true'][data-invalid='true'],
+select[data-modified='true'][data-invalid='true'] {
+  border-color: var(--color-red);
+}
+
+input[data-modified='true']:invalid ~ .input-label,
+.date-time-input[data-modified='true'] ~ .date-time-input:invalid ~ .input-label,
+textarea[data-modified='true']:invalid ~ .textarea-label,
+select[data-modified='true']:invalid ~ .select-label,
+input[data-modified='true'][data-invalid='true'] ~ .input-label,
+label[data-modified='true'][data-invalid='true'] .input-label,
+textarea[data-modified='true'][data-invalid='true'] ~ .textarea-label,
+select[data-modified='true'][data-invalid='true'] ~ .select-label {
+  color: var(--color-red);
+}
+
+.input-icon ~ input,
+.input-icon ~ .file-input-label,
+.input-icon ~ .chips,
+.download-file-size ~ .download-file-name {
+  padding-right: var(--p-10);
+}

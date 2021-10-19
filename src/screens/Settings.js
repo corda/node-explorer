@@ -1,7 +1,7 @@
 import { Grid, TextField } from "@material-ui/core";
 import axios from 'axios';
 import React, { Component } from "react";
-import { PageHeader} from '@r3/r3-tooling-design-system'
+import { PageHeader} from 'r3-tooling-design-system'
 import * as ActionType from "../store/Actions";
 
 class Settings extends Component{
