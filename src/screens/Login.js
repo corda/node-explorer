@@ -140,11 +140,16 @@ class Login extends Component {
             return (
                 <Container fluid className="login-view-container">
                     <Row className="max-height no-gap">
-                        <Column md={6} lg={5} className="max-height">
+                        <Column md={6} lg={5} className="max-height container-left">
                             <div className="center-container">
-                                    <div className="logo-container">
-                                        <img src="crda-logo.svg" alt="Corda Logo" width="250px"></img>
-                                       
+                                <div className="logo-container">
+                                    <img src="crda-logo.svg" alt="Corda Logo" width="250px"></img>
+                                    <div className="hidden-logo-text">
+                                            <div className="screen-text">
+                                            <h2>Node Explorer</h2>
+                                            <h4>Interact with your Nodes, Cordapps and Vault.</h4>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="form-title">
                                      <h2>Login</h2>

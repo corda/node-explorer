@@ -39,14 +39,30 @@
 .logo-container {
   text-align: left;
   margin-bottom: 2rem;
+  .hidden-logo-text {
+    margin-top: 20px;
+    h2 {
+      color: #df0a1b;
+    }
+    @media screen and (min-width: 1100px) {
+      display: none;
+    }
+  }
 }
-
+.container-left {
+  @media screen and (max-width: 1100px) {
+    grid-column: span 12 / span 12 !important;
+  }
+}
 .container-right {
   background-image: url('../assets/login-background.png');
   background-size: cover;
   background-repeat: no-repeat;
   position: relative;
   height: 100%;
+  @media screen and (max-width: 1100px) {
+    display: none;
+  }
   .screen-text {
     color: #fff;
     position: absolute;
@@ -98,10 +114,22 @@
     display: block;
     position: relative;
     top: -100px;
+    @media screen and (max-width: 1800px) {
+      left: -100px;
+      width: 80%;
+    }
+    @media screen and (max-width: 1360px) {
+      height: 330px;
+    }
     .icon-holder {
       svg {
         width: 100%;
         height: 100%;
+        margin: auto;
+        @media screen and (max-width: 1360px) {
+          width: 80%;
+          height: 80%;
+        }
       }
     }
   }
@@ -117,6 +145,9 @@
     min-width: 330px;
     margin-left: 55%;
     display: inline-block;
+    @media screen and (max-width: 1360px) {
+      margin-left: 40%;
+    }
     .icon-cordapp {
       width: 70%;
       height: 70%;
