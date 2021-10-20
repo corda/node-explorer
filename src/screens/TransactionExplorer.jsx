@@ -15,7 +15,7 @@ class TransactionExplorer extends Component{
           super(props);
            this.state =  {
             page: {
-                pageSize: 9,
+                pageSize: 8,
                 offset: 0
             
             },
@@ -88,7 +88,7 @@ class TransactionExplorer extends Component{
         console.log(newPage,'newPage')
         this.setState({
             page: {
-                pageSize: 9,
+                pageSize: 8,
                 offset: newPage
             },
             trnxDetail: []
