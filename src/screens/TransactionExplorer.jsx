@@ -1,25 +1,40 @@
-import { TablePagination, TextField } from '@material-ui/core';
+import { TextField, TablePagination } from '@material-ui/core';
 import ForwardIcon from '@material-ui/icons/Forward';
 import React, { Component } from 'react';
-import {Column, PageHeader, Row, Drawer, Button, Container, DashboardItem, Option, Select, TooltipWrapper, FormGroup, Card} from 'r3-tooling-design-system';
+import {Column, PageHeader, Row, Drawer, Button, Container, DashboardItem, Option, Select, TooltipWrapper, FormGroup, Card, Pagination} from 'r3-tooling-design-system';
 import { connect } from 'react-redux';
 import SnackbarComponent from '../components/SnackbarComponent';
 import * as ActionType from '../store/Actions';
 import '../styles/Transaction.scss';
 
 class TransactionExplorer extends Component{
-    state = {
-        page: {
-            pageSize: 10,
-            offset: 0
-        },
-        flowInfo: {},
-        selectedFlow: {},
-        trnxDetail: [],
-        paramList: [],
-        isOpen: false,
-        paramValues: []
+
+    
+
+      constructor(props){
+          super(props);
+           this.state =  {
+            page: {
+                pageSize: 9,
+                offset: 0
+            
+            },
+            flowInfo: {},
+            selectedFlow: {},
+            trnxDetail: [],
+            paramList: [],
+            isOpen: false,
+            paramValues: []
+        }
+        props.fetchFlowList();
+        props.fetchTrnxList(this.state.page);
+        props.fetchParties();
+          
+       
+
     }
+
+   
 
     handleClose = () => {
         this.setState({paramList: [], selectedFlow: {}})
@@ -32,12 +47,7 @@ class TransactionExplorer extends Component{
         this.props.loadFlowParams([]);
     }
 
-    constructor(props){
-        super(props);
-        props.fetchFlowList();
-        props.fetchTrnxList(this.state.page);
-        props.fetchParties();
-    }
+  
 
     handleFlowSelection = (event) => {
         for(var i=0; i<this.props.registeredFlows.length;i++){
@@ -75,10 +85,10 @@ class TransactionExplorer extends Component{
     }
 
     handleChangePage = (event, newPage) => {
-
+        console.log(newPage,'newPage')
         this.setState({
             page: {
-                pageSize: 10,
+                pageSize: 9,
                 offset: newPage
             },
             trnxDetail: []
@@ -181,11 +191,11 @@ class TransactionExplorer extends Component{
                         }):null
                     }
                     <div style={{cursor: "pointer"}} onClick={()=> this.updateCmplxListParam(param, true)}>Add</div> */}
-                    <div style={{color: 'red', marginTop: 10}}>List of Complex Object is not supported</div>
+                    <div key={index} style={{color: 'red', marginTop: 10}}>List of Complex Object is not supported</div>
                 </React.Fragment>
             :
             <React.Fragment>   
-            <div key={index}>
+            <div key={index} className="form-field">
                 {
                 param.paramType === 'net.corda.core.identity.Party'?
          
@@ -218,7 +228,7 @@ class TransactionExplorer extends Component{
                     this.renderListParam(param, index)
                 :
                  <React.Fragment>
-                                                <TextField   variant="outlined" onChange={e=> {param.paramValue = e.target.value}} label={param.paramName} helperText={this.getHelperText(param.paramType)} fullWidth />
+                                                <TextField className="custom-field"  variant="outlined" onChange={e=> {param.paramValue = e.target.value}} label={param.paramName} helperText={this.getHelperText(param.paramType)} fullWidth />
                                 </React.Fragment>
 
                    
@@ -231,12 +241,12 @@ class TransactionExplorer extends Component{
 
     renderListParam(param, index){
         return (
-            <div>
+            <div key={index} className="form-input">
                 {
                     param.parameterizedType === 'net.corda.core.identity.Party'?
                         <React.Fragment>
                             
-                                <Select label={param.paramName} onChange={e => this.updateListParam(param, e.target.value, true)} autoWidth>
+                                <Select key={index} label={param.paramName} onChange={e => this.updateListParam(param, e.target.value, true)} autoWidth>
                                     {
                                         this.props.parties.map((party, index) => {
                                             return(
@@ -388,19 +398,18 @@ class TransactionExplorer extends Component{
                         open={this.props.open}
                         onClose={this.handleClose}
                         style={{ overflow: "scroll" }}
-                        withBackdrop
                         position="right"
                         // closeOnOutsideClick
                         
                         >
                         <div className="flow-form">
                               
-                                            {
+                                            {/* {
                                             this.props.flowResultMsg ?
                                                 <SnackbarComponent  variant={this.props.flowResultMsgType?"success":"danger"} 
                                                 message={this.props.flowResultMsgType? `Flow Successful :` : `Flow Errored : ${this.props.flowResultMsg}` }/>                                        
                                                 :null
-                                            }
+                                            } */}
                               
                             <h3 id="simple-modal-title" className="flow-form-title">Select a Flow to Execute</h3>
                             <div style={{color: "red"}}>{this.props.registeredFlows.length === 0? 'No Flows Found! Make sure you have the cordapp directory set in the Settings Tab':null}</div>
@@ -423,7 +432,7 @@ class TransactionExplorer extends Component{
                             <div className="form-body">
                                   {   
                                     this.state.selectedFlow.constructors && Object.keys(this.state.selectedFlow.constructors).length>0?
-                                                <Select label="Select A Constructor Type" labelId="flow-cons-select-label" onChange={this.handleFlowConstructorSelection} 
+                                                <Select label="Select A Constructor Type" id="flow-cons-select-label" onChange={this.handleFlowConstructorSelection} 
                                                 value={this.state.selectedFlow.activeConstructor} fullWidth helpText="Select A Constructor Type">
                                                     {
                                                         Object.keys(this.state.selectedFlow.constructors).map((constructor, index) => {
@@ -463,7 +472,7 @@ class TransactionExplorer extends Component{
                                 this.props.transactionList && this.props.transactionList.length > 0 ?
                                 this.props.transactionList.map((trnx, index) => {
                                     return (
-                                        <React.Fragment>
+                                        <React.Fragment key={index}>
                                             <div key={index} style={{cursor: "pointer"}} onClick={() => this.showTrnxDetails(trnx, index)}
                                                 className={`transaction-tile-container`}>
                                               
@@ -509,7 +518,6 @@ class TransactionExplorer extends Component{
                                             {
                                                
                                                 <Drawer open={this.state.trnxDetail[index]? true : false}
-                                                    withBackdrop 
                                                     position="right"
                                                     onClose={() => this.setState({ isOpen: false, trnxDetail:[] })}
                                                     closeOnOutsideClick
@@ -596,7 +604,7 @@ class TransactionExplorer extends Component{
                                 : 
                                     
                                     <div className="no-data-found position">
-                                        <DashboardItem icon="AstronautSittingOnPlanet">
+                                        <DashboardItem color="#333" icon="AstronautSittingOnPlanet">
                                             No Transactions Found
                                         </DashboardItem>
                                     </div>
@@ -606,15 +614,15 @@ class TransactionExplorer extends Component{
          
                     {
                     this.props.totalRecords?
-                        <TablePagination
-                        rowsPerPageOptions={[10, 25, 50, 100]}
+                       <TablePagination
+                        rowsPerPageOptions={[-1]}
                         component="div"
                         count={this.props.totalRecords}
                         rowsPerPage={this.state.page.pageSize}
                         page={this.state.page.offset}
                         onPageChange={this.handleChangePage}
                         onRowsPerPageChange={this.handleChangeRowsPerPage}
-                        />
+                            />
                         :null
                     }
                 </div>

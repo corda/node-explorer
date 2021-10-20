@@ -29,10 +29,10 @@ class Explorer extends Component {
               <Header />              
               <Container className="no-marg max-height">
                 <Row className="max-height no-gap">
-                  <Column xs={1} sm={1} md={1} lg={1}>
+                  <Column sm={1} md={1} lg={1}>
                      <SideMenuNew />
                   </Column>
-                   <Column xs={10} sm={11} md={11} lg={11}>            
+                   <Column sm={11} md={11} lg={11}>            
                     <div className="content-pane">
                       {
                         this.props.spinner? 

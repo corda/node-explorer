@@ -48,6 +48,7 @@ html,
 
 .content-pane {
   margin-right: 4rem;
+  margin-bottom: 80px;
 }
 
 code {
@@ -138,6 +139,9 @@ code {
     width: 400px;
     transform: translate(0%, 60%);
   }
+  img {
+    filter: hue-rotate(454deg);
+  }
   height: 400px;
 }
 .form-body {
@@ -205,5 +209,27 @@ code {
 
   &-success::before {
     background-color: var(--color-green);
+  }
+}
+
+.Toastify__toast-container {
+  min-width: 400px;
+  .Toastify__close-button {
+    position: absolute;
+    z-index: 999;
+    color: #1e2543;
+    right: 20px;
+    top: 26px;
+    svg {
+      height: 20px;
+      width: 20px;
+    }
+  }
+  .snackbar {
+    & > div {
+      button {
+        display: none;
+      }
+    }
   }
 }

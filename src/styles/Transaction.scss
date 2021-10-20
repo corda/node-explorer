@@ -260,6 +260,32 @@ label.MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLab
 .flow-form {
   .form-body {
     padding: 1rem;
+    .form-field {
+      margin-top: 10px;
+      .custom-field {
+        fieldset {
+          border-color: rgb(144 159 188);
+        }
+        input {
+          color: rgba(119, 123, 142, var(--text-opacity));
+          padding-left: 30px;
+        }
+        span,
+        label {
+          --text-opacity: 1;
+          color: #777b8e;
+          color: rgba(119, 123, 142, var(--text-opacity));
+          font-size: 17px;
+          font-family: 'PT Sans';
+          padding-left: 10px;
+          background-color: transparent;
+        }
+        & > div {
+          border-radius: 30px;
+          background-color: #ffffff;
+        }
+      }
+    }
   }
   .flow-form-title {
     margin-bottom: 1rem;
