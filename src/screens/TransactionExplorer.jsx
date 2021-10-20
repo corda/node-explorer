@@ -1,7 +1,7 @@
 import { TextField, TablePagination } from '@material-ui/core';
 import ForwardIcon from '@material-ui/icons/Forward';
 import React, { Component } from 'react';
-import {Column, PageHeader, Row, Drawer, Button, Container, DashboardItem, Option, Select, TooltipWrapper, FormGroup, Card, Pagination} from 'r3-tooling-design-system';
+import {Column, PageHeader, Row, Drawer, Button, Container, DashboardItem, Option, Select, TooltipWrapper, FormGroup, Card, IconCustom} from 'r3-tooling-design-system';
 import { connect } from 'react-redux';
 import SnackbarComponent from '../components/SnackbarComponent';
 import * as ActionType from '../store/Actions';
@@ -216,21 +216,29 @@ class TransactionExplorer extends Component{
                 :
                 param.paramType === 'java.time.LocalDateTime' || param.paramType === 'java.time.Instant'?
                 
-                        <TextField type="datetime-local" onChange={e=> {param.paramValue = e.target.value}} className="custom-input" label={param.paramName}
+                        <TextField type="datetime-local" onChange={e=> {param.paramValue = e.target.value}} className="custom-input date-picker-custom" label={param.paramName}
                         helpText={this.getHelperText(param.paramType)} fullWidth/> 
                    
                 :
                 param.paramType === 'java.time.LocalDate'?
-                  
+                  <React.Fragment>
                         <TextField type="date" className="custom-input"  onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} InputLabelProps={{ shrink: true }} fullWidth/> 
-                    
+                            <IconCustom
+                                    icon="InformationVariant"
+                                    className="h-4 inline ml-4 -mt-2 text-medium-light-gray custom-info"
+                                />
+                </React.Fragment>
                 :
                 param.hasParameterizedType && (param.paramType === 'java.util.List' || param.paramType === 'java.util.Set') ?
                     this.renderListParam(param, index)
                 :
                  <React.Fragment>
                                                 <TextField className="custom-field"  variant="outlined" onChange={e=> {param.paramValue = e.target.value}} label={param.paramName} helperText={this.getHelperText(param.paramType)} fullWidth />
-                                </React.Fragment>
+                                  <IconCustom
+                                    icon="InformationVariant"
+                                    className="h-4 inline ml-4 -mt-2 text-medium-light-gray custom-info"
+                                />
+                                                </React.Fragment>
 
                    
                 }
@@ -268,7 +276,7 @@ class TransactionExplorer extends Component{
                         </React.Fragment>
                     : param.parameterizedType === 'java.time.LocalDateTime' || param.parameterizedType === 'java.time.Instant'?
                         <React.Fragment>
-                                <TextField type="datetime-local" onBlur={e => this.updateListParam(param, e.target.value, true)} label={param.paramName} InputLabelProps={{ shrink: true }} 
+                                <TextField className="date-picker-custom" type="datetime-local" onBlur={e => this.updateListParam(param, e.target.value, true)} label={param.paramName} InputLabelProps={{ shrink: true }} 
                                 helpText={this.getHelperText(param.paramType)} fullWidth/> 
                             {
                                 this.state.paramList[param.paramName]?

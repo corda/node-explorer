@@ -260,11 +260,32 @@ label.MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLab
 .flow-form {
   .form-body {
     padding: 1rem;
+
     .form-field {
       margin-top: 10px;
+      position: relative;
+      .date-picker-custom {
+        label {
+          transform: translate(26px, 10px);
+        }
+      }
+      .icon-container {
+        position: absolute;
+        left: 0;
+        bottom: -5px;
+      }
+      p {
+        font-size: 13px;
+        font-family: 'PT Sans';
+        font-weight: 400;
+        color: rgba(59, 66, 100, var(--text-opacity));
+        padding-left: 20px;
+        margin-top: 10px;
+      }
       .custom-field {
         fieldset {
           border-color: rgb(144 159 188);
+          border-width: 2px;
         }
         input {
           color: rgba(119, 123, 142, var(--text-opacity));
@@ -279,6 +300,11 @@ label.MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLab
           font-family: 'PT Sans';
           padding-left: 10px;
           background-color: transparent;
+        }
+        label {
+          &[data-shrink='true'] {
+            text-transform: uppercase;
+          }
         }
         & > div {
           border-radius: 30px;

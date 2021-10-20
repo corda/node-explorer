@@ -103,14 +103,14 @@ class Login extends Component {
                         {/*               onBlur={this.handleBlur("sshHostName")}/>*/}
                             {/*</Grid>*/}
                         <Row>
-                        <Column lg={3}>
+                        <Column lg={4}>
                             <TextInput label="SSH Port" type="number" value={this.state.ssh.port}
                                        onChange={e => this.setState({ssh: {...this.state.ssh, port: e.target.value}})}
                                        errorMessage={this.shouldMarkError("sshPort")}
                                        helpText={this.shouldMarkError("sshPort") ? 'Please Enter SSH Port Number' : ''}
                                        onBlur={this.handleBlur("sshPort")}/>
                         </Column>                    
-                            <Column lg={9}>
+                            <Column lg={8}>
                                 <TextInput label="SSH Username" value={this.state.ssh.username}
                                            onChange={e => this.setState({ssh: {...this.state.ssh, username: e.target.value}})}
                                            errorMessage={this.shouldMarkError("sshUsername")}

@@ -14,7 +14,7 @@ const DonutChart = (props) => {
                 <PieChart >                  
                     <Pie
                         data={data}
-                        cx={120}
+                        cx={100}
                         cy={95}
                         innerRadius={60}
                         outerRadius={80}

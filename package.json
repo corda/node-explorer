@@ -4,7 +4,7 @@
   "displayName": "Node Explorer",
   "publisher": "R3",
   "author": "R3 <devrel@r3.com>",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "Apache-2.0",
   "main": "public/electron.js",
   "electron-dev": "ELECTRON_START_URL=http://localhost:3000 electron .",
