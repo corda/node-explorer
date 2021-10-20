@@ -117,8 +117,9 @@ class TransactionExplorer extends Component{
                 flowName: this.state.selectedFlow.name,
                 flowParams: this.props.flowParams
             },
-        }, () => this.props.startFlow(this.state.flowInfo));
+        }, () => this.props.startFlow(this.state.flowInfo), this.props.fetchTrnxList(this.state.page));
     }
+    
 
     showTrnxDetails = (trnx, index) => {
         let txDetail = this.state.trnxDetail;
