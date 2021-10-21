@@ -70,6 +70,15 @@ tr th {
   word-break: break-all;
 }
 
+.signature-label,
+.item-block {
+  padding: 1rem;
+  border: 1px solid #cccccc;
+  margin: 2.5px 0;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
 .wtitle {
   border-bottom: 1px solid #cccccc;
   background: #999999;
@@ -86,6 +95,7 @@ tr th {
   background: #ececec;
   font-weight: bold;
   color: #df0b1b;
+  border-radius: 5px;
 }
 
 .cmd-wrapper {
@@ -117,7 +127,6 @@ tr:hover {
   flex-direction: column;
   padding: 10px;
   background: #ffffff;
-  border: 1px solid #ccc;
   margin: 5px;
   position: relative;
 }
@@ -183,6 +192,10 @@ label.MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLab
 .transaction-btn {
   float: right;
 }
+.sub-label {
+  font-weight: bold;
+  text-transform: capitalize;
+}
 .transactions-container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -211,12 +224,12 @@ label.MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLab
     .tile-header {
       background-color: #5b6b88;
       color: #fff;
-      padding: 1rem;
+      padding: 0.75rem;
       .label {
         color: #fff;
       }
       .label-data {
-        font-size: 12px;
+        font-size: 13px;
         padding-right: 0.5rem;
         word-break: break-all;
       }
@@ -269,18 +282,20 @@ label.MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLab
           transform: translate(26px, 10px);
         }
       }
-      .icon-container {
-        position: absolute;
-        left: 0;
-        bottom: -5px;
-      }
+
       p {
         font-size: 13px;
-        font-family: 'PT Sans';
         font-weight: 400;
         color: rgba(59, 66, 100, var(--text-opacity));
         padding-left: 20px;
         margin-top: 10px;
+      }
+      .custom-field-icon {
+        .icon-container {
+          position: absolute;
+          left: 0;
+          bottom: -5px;
+        }
       }
       .custom-field {
         fieldset {
@@ -297,7 +312,6 @@ label.MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLab
           color: #777b8e;
           color: rgba(119, 123, 142, var(--text-opacity));
           font-size: 17px;
-          font-family: 'PT Sans';
           padding-left: 10px;
           background-color: transparent;
         }

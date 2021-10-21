@@ -216,6 +216,7 @@ code {
 
 .Toastify__toast-container {
   min-width: 400px;
+  width: auto;
   .Toastify__close-button {
     position: absolute;
     z-index: 999;

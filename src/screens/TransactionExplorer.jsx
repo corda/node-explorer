@@ -135,11 +135,11 @@ class TransactionExplorer extends Component{
             Object.keys(jsonObj).map((key, index) => {
                 return (
                     jsonObj[key] ?
-                    <div key={index} style={{marginLeft: lvl * 15, paddingBottom: lvl === 0?5:0}}>
+                        <div key={index} className={`${lvl === 0?"item-block":""}` }>
                         {lvl === 0?
-                        <span><strong>{key}: &nbsp;</strong></span>
+                        <span className="label">{key}: &nbsp;</span>
                         :
-                        <span>{key}: &nbsp;</span>
+                        <span className="sub-label">{key}: &nbsp;</span>
                         }
 
                         {typeof jsonObj[key] === 'object'?
@@ -232,13 +232,13 @@ class TransactionExplorer extends Component{
                 param.hasParameterizedType && (param.paramType === 'java.util.List' || param.paramType === 'java.util.Set') ?
                     this.renderListParam(param, index)
                 :
-                 <React.Fragment>
-                                                <TextField className="custom-field"  variant="outlined" onChange={e=> {param.paramValue = e.target.value}} label={param.paramName} helperText={this.getHelperText(param.paramType)} fullWidth />
+                 <div className="custom-field-icon">
+                            <TextField className="custom-field"  variant="outlined" onChange={e=> {param.paramValue = e.target.value}} label={param.paramName} helperText={this.getHelperText(param.paramType)} fullWidth />
                                   <IconCustom
                                     icon="InformationVariant"
                                     className="h-4 inline ml-4 -mt-2 text-medium-light-gray custom-info"
                                 />
-                                                </React.Fragment>
+                                                </div>
 
                    
                 }
@@ -263,8 +263,9 @@ class TransactionExplorer extends Component{
                                             );
                                         })
                                     }
-                                </Select>
-                                <TooltipWrapper>Select Parties</TooltipWrapper>
+                            </Select>
+                            <br></br>
+                                 <div className="custom-form-header"><h6>Select Parties</h6></div>
                          
                             {
                                 this.state.paramList[param.paramName]?
