@@ -186,6 +186,11 @@ code {
 
 .drawer {
   position: absolute;
+  .wrapper {
+    .p-8 {
+      background-color: #fff;
+    }
+  }
 }
 .snackbar {
   &::before {
