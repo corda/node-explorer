@@ -95,8 +95,9 @@ ol {
 }
 
 .label {
-  letter-spacing: 0.12rem;
+  letter-spacing: initial;
   line-height: 1.5rem;
+  
   &, &-sm {
     color: var(--color-dark-gray-300);
     font-weight: var(--font-bold);

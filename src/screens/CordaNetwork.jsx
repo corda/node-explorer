@@ -54,8 +54,8 @@ class CordaNetwork extends Component{
   render(){
     return (
       <div className="content-pane">
-        <PageHeader title="Network Parameters" size="small" className="custom-node-explorer-header" >
-             Network Parameters
+        <PageHeader title="Network" size="small" className="custom-node-explorer-header" >
+             Network
         </PageHeader>
          <div style={{position: "relative", height:window.outerHeight, overflowY: "auto"}} ref="mapPane">
         <img src="WorldMapSquare.png" alt="World Map" width="100%" onLoad={this.handleImageLoaded.bind(this)}></img>
