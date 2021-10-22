@@ -65,6 +65,10 @@
   }
   .screen-text {
     color: #fff;
+    bottom: 40px;
+    position: relative;
+    left: 0;
+    right: 0;
     margin: auto;
     width: calc(100% - 20px);
     height: auto;
@@ -92,7 +96,7 @@
     position: absolute;
     left: 0;
     right: 0;
-    top: -100px;
+    top: -20%;
     bottom: 0;
     margin: auto;
     height: 50%;
