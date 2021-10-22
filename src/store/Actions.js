@@ -1,7 +1,8 @@
 import axios from 'axios';
 import axiosRetry from "axios-retry";
 import {toastr} from 'react-redux-toastr'
-
+import {NotificationService} from 'r3-tooling-design-system';
+import SnackbarComponent from '../components/SnackbarComponent';
 export const SERVER_BASE_URL = "http://localhost:8580";
 export const LOAD_APP_STATE = "LOAD_APP_STATE";
 export const SERVER_AWAKE = 'SERVER_AWAKE';
@@ -58,7 +59,7 @@ export const login = (loginRequest) => {
                         type: LOGIN_SUCCESS,
                         payload: data.data
                 })
-            }else{
+            } else {
                 dispatch({type: SET_LOGIN_PROCESSING_FLAG, data: false});
                 errorHandler(data);
             }
@@ -197,13 +198,16 @@ export const startFlow = (flowInfo) => {
             if(data.status){
                 //toastr.success("Flow completed successfully!");
                 dispatch({type: SET_INFLIGHT_FLOW_FLAG, data: false, message: data.data, messageType: true});
-                axios.post(SERVER_BASE_URL + "/transaction-list", {pageSize: 10, offset: 0})
+                axios.post(SERVER_BASE_URL + "/transaction-list", {pageSize: 8, offset: 0})
                 .then(({data}) => {
                     if(data.status){
                         dispatch({    
                             type: LOAD_TRNXS,
                             payload: data.data
                         })
+                         NotificationService.addNotification(
+                            <SnackbarComponent variant="success" message="Flow Created"/>
+                            );
                     }else{
                         errorHandler(data);
                     }
@@ -267,8 +271,10 @@ export const fetchVaultFilters = () => {
 export const updateSettings = (settings, type) => {
     axios.post(SERVER_BASE_URL + "/settings/"+ type, settings)
     .then(({data}) => {
-        if(data.status){
-            toastr.success("Settings updated successfully!");
+        if (data.status) {
+             NotificationService.addNotification(
+            <SnackbarComponent className="custom-toast" variant="success" message="Settings updated successfully!" />
+            );          
         }else{
             errorHandler(data);
         }
@@ -278,14 +284,22 @@ export const updateSettings = (settings, type) => {
 }
 
 export const errorHandler = error => {
-    if(error.message){
-        toastr.error(error.message);
+    if(error.message){       
+         NotificationService.addNotification(
+            <SnackbarComponent className="custom-toast" variant="danger" message={error.message} />
+        );
     }
     else if (error.response) {
-        toastr.error(error.response.data);
+        NotificationService.addNotification(
+            <SnackbarComponent className="custom-toast" variant="danger" message={error.response.data} />
+        );
     } else if (error.request) {
-        toastr.error('The Server is unavailable, Please try again later!');
+        NotificationService.addNotification(
+            <SnackbarComponent className="custom-toast" variant="danger" message="The Server is unavailable, Please try again later!" />
+        );
     } else {
-        toastr.error('Something went wrong, Please try again later');
+        NotificationService.addNotification(
+            <SnackbarComponent className="custom-toast" variant="danger" message="Something went wrong, Please try again later" />
+        );
     }
 }

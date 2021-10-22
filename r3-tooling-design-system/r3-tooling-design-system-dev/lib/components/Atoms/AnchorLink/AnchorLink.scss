@@ -1,0 +1,19 @@
+.anchor-link-text {
+    position: relative;
+    padding-bottom: 4px;
+    font-weight: var(--font-bold);
+
+    &::after {
+      content: ' ';
+      display: block;
+      position: absolute;
+      bottom: 0;
+      height: 3px;
+      width: 0%;
+      transition: width 0.2s ease-in-out;
+      background-color: var(--color-blue-300);
+    }
+    &:hover::after {
+      width: 100%;
+    }
+}

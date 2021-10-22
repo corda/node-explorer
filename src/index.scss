@@ -1,0 +1,246 @@
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
+    'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: rgb(248, 248, 248);
+  // // background: radial-gradient(circle, rgba(51, 57, 88, 1) 24%, rgba(22, 27, 53, 1) 71%);
+  // background-color: rgba(248, 248, 248, var(--bg-opacity));
+}
+
+.rotate {
+  transform: rotate(-90deg);
+  position: relative;
+}
+
+.pie-chart {
+  text-align: center;
+  position: relative;
+}
+.rotate-back {
+  display: block;
+  margin-top: 0;
+  position: absolute;
+  left: 0;
+  right: 0px;
+  top: -18px;
+  bottom: 0px;
+  margin: auto;
+  width: auto;
+  height: 40px;
+  p {
+    font-size: 22px;
+    font-weight: bold;
+    width: 50%;
+    margin: auto;
+  }
+}
+
+.chart-label {
+  text-align: center;
+}
+.label {
+  letter-spacing: normal !important;
+}
+html,
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+.content-pane {
+  margin-right: 4rem;
+  margin-bottom: 80px;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+.page-title {
+  // height: 50px;
+  color: #000000;
+  font-size: 25px;
+}
+
+.splash {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.spinner {
+  position: absolute;
+  z-index: 9999;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.no-marg {
+  margin-left: 0rem !important;
+  margin-right: 0rem !important;
+}
+.sidebar-toggable {
+  position: relative;
+}
+
+.max-height {
+  height: 100%;
+}
+
+.no-gap {
+  gap: 0 !important;
+}
+
+.custom-node-explorer-header {
+  .page-header-main {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+    background-color: #e0071c;
+    color: #fff;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+  }
+}
+
+.sidebar-toggable:not(.open) .sidebar-item-title:hover:before,
+.sidebar-toggable:not(.open) .sidebar-item-title:active:before {
+  background-color: #e0071c;
+  color: #fff;
+}
+
+.w-half {
+  width: 50% !important;
+  max-width: 50%;
+  overflow-x: auto;
+  @media (max-width: 768px) {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+.full-width-drawer {
+  width: 100%;
+  max-width: 100%;
+}
+
+.no-data-found {
+  &.position {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    width: 400px;
+    transform: translate(0%, 60%);
+  }
+  img {
+    filter: hue-rotate(454deg);
+  }
+  height: 400px;
+}
+.form-body {
+  .custom-input {
+    p {
+      --text-opacity: 1;
+      color: #3b4264;
+      color: rgba(59, 66, 100, var(--text-opacity));
+    }
+    margin-top: 5px;
+    label {
+      --text-opacity: 1;
+      color: #919ebd;
+      color: rgba(145, 158, 189, var(--text-opacity));
+      text-transform: uppercase !important;
+      font-weight: bold;
+      font-size: 12px;
+      font-family: 'Poppins';
+    }
+
+    input {
+      padding: 12px 24px;
+      color: #3b4264;
+      color: rgba(59, 66, 100, var(--text-opacity));
+    }
+    fieldset {
+      border-radius: 9999px;
+      --text-opacity: 1;
+      color: #1d2343;
+      color: rgba(29, 35, 67, var(--text-opacity));
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+      --border-opacity: 1;
+      border-color: #919ebd;
+      border-color: rgba(145, 158, 189, var(--border-opacity));
+      background-color: #fff;
+    }
+  }
+}
+
+.drawer {
+  position: absolute;
+  .wrapper {
+    .p-8 {
+      background-color: #fff;
+    }
+  }
+}
+.snackbar {
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 8px;
+    border-radius: 6px 0 0 6px;
+  }
+  &-info::before {
+    background-color: var(--color-deep-blue);
+  }
+  &-danger::before {
+    background-color: var(--color-red);
+  }
+
+  &-warning::before {
+    background-color: var(--color-yellow);
+  }
+
+  &-success::before {
+    background-color: var(--color-green);
+  }
+}
+
+.Toastify__toast-container {
+  min-width: 400px;
+  width: auto;
+  .Toastify__close-button {
+    position: absolute;
+    z-index: 999;
+    color: #1e2543;
+    right: 20px;
+    top: 26px;
+    svg {
+      height: 20px;
+      width: 20px;
+    }
+  }
+  .snackbar {
+    & > div {
+      button {
+        display: none;
+      }
+    }
+  }
+}

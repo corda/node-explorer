@@ -4,23 +4,27 @@
   "displayName": "Node Explorer",
   "publisher": "R3",
   "author": "R3 <devrel@r3.com>",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "Apache-2.0",
   "main": "public/electron.js",
   "electron-dev": "ELECTRON_START_URL=http://localhost:3000 electron .",
   "homepage": "./",
   "dependencies": {
-    "@material-ui/core": "^4.8.2",
-    "@material-ui/icons": "^4.5.1",
+    "@material-ui/core": "^4.12.3",
+    "@material-ui/icons": "^4.11.2",
     "axios": "^0.19.1",
     "axios-retry": "^3.1.2",
+    "i": "^0.3.7",
     "logger": "0.0.1",
     "mathjs": "^6.2.5",
+    "npm": "^8.1.0",
+    "r3-tooling-design-system": "file:r3-tooling-design-system/r3-tooling-design-system-dev.tar.gz",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-redux": "^7.1.3",
     "react-redux-toastr": "^7.6.4",
-    "react-scripts": "3.2.0",
+    "react-scripts": "^4.0.3",
+    "recharts": "^2.1.4",
     "redux": "^4.0.4",
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
@@ -82,6 +86,12 @@
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "prettier": {
+    "printWidth": 120,
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 2
   },
   "browserslist": {
     "production": [

@@ -1,0 +1,27 @@
+.toast{
+    &::before {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 8px;
+        border-radius: 6px 0 0 6px;
+    
+    }
+    &-info::before {
+        background-color: var(--color-blue);
+    }
+    &-danger::before {
+        background-color: var(--color-red);
+      }
+      
+    &-warning::before {
+        background-color: var(--color-yellow);
+      }
+      
+    &-success::before {
+        background-color: var(--color-green);
+    }
+}    

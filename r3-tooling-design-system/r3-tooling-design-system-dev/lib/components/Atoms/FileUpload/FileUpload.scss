@@ -1,0 +1,36 @@
+.fileupload {
+  $this: &;
+
+  &-inprogress {
+    #{$this}-progress {
+      display: block;
+      z-index: 5;
+    }
+  }
+
+  &-progress {
+    display: none;
+    overflow: visible;
+    position: absolute;
+    width: calc(100% + 1px);
+    height: calc(100% + 1px);
+    top: -1px;
+    left: -1px;
+    
+    rect {
+      fill: transparent;
+      stroke-width: 2;
+      stroke: var(--color-blue);
+      width: inherit;
+      height: inherit;
+      stroke-dasharray: 1000;
+      transition: stroke-dashoffset 0.3s ease;
+    }
+  }
+  &-help {
+    margin-top: 36px;
+    svg {
+      margin-left: 0;
+    }
+  }
+}

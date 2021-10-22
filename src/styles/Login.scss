@@ -1,0 +1,212 @@
+.center-container {
+  /* position: absolute;
+    left: 50%;
+    top: 20%;
+    margin-left: -200px; */
+  height: 100%;
+}
+
+.center-container {
+  width: 100%;
+  height: 100%;
+  box-shadow: 1px 1px 1px #cccccc;
+  background-color: #ffffff;
+  padding: 8rem;
+  @media screen and (max-width: 1600px) {
+    padding: 4rem;
+  }
+}
+
+.form-title {
+  margin-top: 4rem;
+}
+
+.explorer-text {
+  font-size: 32px;
+  color: #df0a1b;
+  font-weight: bold;
+}
+.login-view-container {
+  height: 100%;
+  position: relative;
+}
+.login-form-container {
+  padding-top: 2rem;
+  .cta-container {
+    margin-top: 2rem;
+  }
+}
+.logo-container {
+  text-align: left;
+  margin-bottom: 2rem;
+  .hidden-logo-text {
+    margin-top: 20px;
+    h2 {
+      color: #df0a1b;
+    }
+    @media screen and (min-width: 1100px) {
+      display: none;
+    }
+  }
+}
+.container-left {
+  @media screen and (max-width: 1100px) {
+    grid-column: span 12 / span 12 !important;
+  }
+}
+.container-right {
+  background-image: url('../assets/login-background.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: relative;
+  height: 100%;
+  @media screen and (max-width: 1100px) {
+    display: none;
+  }
+  .screen-text {
+    color: #fff;
+    position: absolute;
+    bottom: 15%;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: calc(100% - 20px);
+    height: auto;
+    text-align: center;
+    h2,
+    h4 {
+      color: #fff;
+    }
+  }
+  // &:before {
+  //   content: '';
+  //   background-color: #df0a1b;
+  //   position: absolute;
+  //   opacity: 0.3;
+  //   height: 100%;
+  //   width: 100%;
+  //   top: 0;
+  //   bottom: 0;
+  //   left: 0;
+  //   right: 0;
+  //   z-index: 2;
+  //   display: block;
+  // }
+  .blocks {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -100px;
+    bottom: 0;
+    margin: auto;
+    height: 50%;
+    width: calc(60% - 20px);
+  }
+  .block-left {
+    width: 60%;
+    height: 300px;
+    padding: 2rem;
+    background-color: #fff;
+    z-index: 4;
+    box-shadow: 0px 3px 6px #1d23431a;
+    min-width: 360px;
+    border-radius: 10px;
+    display: block;
+    position: relative;
+    top: -100px;
+    @media screen and (max-width: 1800px) {
+      left: -100px;
+      width: 80%;
+    }
+    @media screen and (max-width: 1360px) {
+      height: 330px;
+    }
+    .icon-holder {
+      svg {
+        width: 100%;
+        height: 100%;
+        margin: auto;
+        @media screen and (max-width: 1360px) {
+          width: 80%;
+          height: 80%;
+        }
+      }
+    }
+  }
+  .block-right {
+    border-radius: 10px;
+    position: relative;
+    height: 315px;
+    width: calc(55% - 300px);
+    padding: 2rem;
+    background-color: #fff;
+    z-index: 5;
+    box-shadow: 0px 3px 6px #1d23431a;
+    min-width: 330px;
+    margin-left: 55%;
+    display: inline-block;
+    @media screen and (max-width: 1360px) {
+      margin-left: 40%;
+    }
+    .icon-cordapp {
+      width: 70%;
+      height: 70%;
+      background-size: cover;
+      background-repeat: no-repeat;
+      display: block;
+      background-image: url('../corda.png');
+      position: absolute;
+      right: 0px;
+      top: 40px;
+      left: 0;
+      bottom: 0;
+      margin: auto;
+      @media screen and (max-width: 1600px) {
+        width: 70%;
+        height: 70%;
+        background-size: contain;
+      }
+    }
+  }
+}
+
+.separator-tag {
+  text-align: center;
+  margin: 2rem;
+  position: relative;
+  font-size: 20px;
+  .ssh-checkbox {
+    position: absolute;
+    left: -180px;
+    top: -5px;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    width: 30px;
+    height: 30px;
+  }
+  &::before {
+    content: '';
+    width: calc(30% - 20px);
+    height: 1px;
+    background-color: #333;
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+  }
+  &::after {
+    content: '';
+    width: calc(30% - 20px);
+    height: 1px;
+    background-color: #333;
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+  }
+}

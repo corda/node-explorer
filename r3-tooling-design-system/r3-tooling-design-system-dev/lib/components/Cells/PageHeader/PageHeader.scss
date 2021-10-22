@@ -1,0 +1,21 @@
+.page-header {
+  $this: &;
+  &-main {
+    transition: font-size 0.3s ease-in-out, padding 0.3s ease-in-out;
+    &.large {
+      font-size: var(--text-5xl);
+      padding-top: var(--p-24);
+      padding-bottom: var(--p-12);
+    }
+    &.small,
+    #{$this}.sticky & {
+      font-size: var(--text-3xl);
+      padding-top: var(--p-8);
+      padding-bottom: var(--p-6);
+    }
+  }
+  &.sticky {
+    position: fixed;
+    z-index: 40;
+  }
+}

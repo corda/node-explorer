@@ -1,0 +1,153 @@
+body {
+  color: var(--color-medium-dark-gray);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+}
+
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3,
+h4,
+.h4,
+h5,
+.h4,
+h6,
+.h6 {
+  color: var(--color-dark-gray);
+  font-family: var(--font-title);
+  font-weight: var(--font-bold);
+}
+
+h1,
+.h1 {
+  font-size: var(--text-5xl);
+  letter-spacing: 0.0575rem;
+  line-height: 3.635rem;
+}
+
+h2,
+.h2 {
+  letter-spacing: 0.045rem;
+  font-size: var(--text-4xl);
+  line-height: 3rem;
+}
+
+h3,
+.h3 {
+  letter-spacing: 0.0325rem;
+  font-size: var(--text-3xl);
+  line-height: 2.375rem;
+}
+
+h4,
+.h4 {
+  letter-spacing: 0.0275rem;
+  font-size: var(--text-xl);
+  line-height: 2.125rem;
+}
+
+h5,
+.h5 {
+  letter-spacing: 0.0225rem;
+  font-size: var(--text-lg);
+  line-height: 1.875rem;
+}
+
+.p,
+p,
+li,
+.li {
+  line-height: 1.875rem;
+  &,
+  &-sm,
+  &-lg {
+    font-family: var(--font-body);
+  }
+  &-sm {
+    font-size: var(--text-sm);
+    line-height: 1.75rem;
+  }
+  &-lg {
+    font-size: var(--text-lg);
+    line-height: 2.25rem;
+  }
+  &-xl {
+    font-size: var(--text-2xl);
+    line-height: 2.25rem;
+  }
+}
+
+ul {
+  li,
+  .li {
+    list-style: disc;
+  }
+}
+
+ol {
+  li,
+  .li {
+    list-style: decimal;
+  }
+}
+
+.label {
+  letter-spacing: initial;
+  line-height: 1.5rem;
+  
+  &, &-sm {
+    color: var(--color-dark-gray-300);
+    font-weight: var(--font-bold);
+    text-transform: uppercase;
+  }
+  &-sm {
+    font-size: var(--text-xs);
+    letter-spacing: 0.09rem;
+    line-height: 1.25rem;
+  }
+}
+
+b,
+strong,
+.bold {
+  font-weight: var(--font-bold);
+}
+
+q,
+.q,
+blockquote,
+.blockquote {
+  font-size: var(--text-3xl);
+}
+
+a {
+  color: var(--color-blue);
+}
+
+.a {
+  line-height: 1.5rem;
+  &,
+  &-sm {
+    color: var(--color-blue);
+    letter-spacing: var(--tracking-larger);
+  }
+  &-sm {
+    font-size: var(--text-xs);
+    line-height: 1.25rem;
+  }
+}
+
+pre,
+.pre,
+code,
+.code {
+  font-family: 'Monaco', 'Courier New', Courier, monospace;
+  font-size: var(--text-base);
+  &:not(.codebox-text) {
+    background-color: var(--color-medium-light-gray-100);
+    font-size: var(--text-sm);
+  }
+}

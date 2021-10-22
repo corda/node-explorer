@@ -1,0 +1,54 @@
+table {
+  --padding: 40px;
+  color: var(--color-dark-gray);
+  min-width: 100%;
+  font-size: 12px;
+  border-radius: 6px;
+  overflow: hidden;
+  letter-spacing: 0.12em;
+  thead {
+    background-color: var(--color-medium-dark-gray-100);
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+  tbody {
+    background-color: var(--color-light-gray);
+    tr {
+      & + tr {
+        td {
+          position: relative;
+          &::after {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            border-bottom: 1px solid var(--color-medium-dark-gray-100);
+          }
+          &:first-of-type,
+          &:last-of-type {
+            &::after {
+              width: calc(100% - var(--padding));
+            }
+          }
+          &:first-of-type::after {
+            right: 0;
+            left: unset;
+          }
+        }
+      }
+    }
+  }
+  th,
+  td {
+    padding: 16px calc(var(--padding) / 2);
+    width: fit-content;
+    &:first-of-type {
+      padding-left: var(--padding);
+    }
+    &:last-of-type {
+      padding-right: var(--padding);
+    }
+  }
+}

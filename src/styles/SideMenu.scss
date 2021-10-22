@@ -1,0 +1,52 @@
+.SideMenu ul {
+  list-style: none;
+  display: flex;
+  justify-content: left;
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+}
+
+.SideMenu ul li {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  padding: 20px 0;
+  cursor: pointer;
+}
+
+.SideMenu ul li:hover {
+  background-color: #ec908e;
+}
+
+.SideMenu {
+  border-right: 1px solid #dddddd;
+  height: 100%;
+  width: 120px;
+  position: fixed;
+  margin-top: 00px;
+}
+
+.SideMenu li.active {
+  background-color: #df0a1b;
+  color: #ffffff;
+}
+
+.sidebar {
+  &.sidebar-toggable {
+    background-color: #fff;
+    svg {
+      color: #df0a1b;
+    }
+    .sidebar-item.level-0 > .sidebar-item-container > .sidebar-item-title.active::after,
+    .sidebar-item.level-1 > .sidebar-item-container > .sidebar-item-title.active::after {
+      color: #df0a1b;
+      background-color: #df0a1b;
+    }
+    .sidebar-item-title-text,
+    .sidebar-item-title-text > *,
+    .sidebar-item-title-content {
+      color: #df0a1b;
+    }
+  }
+}

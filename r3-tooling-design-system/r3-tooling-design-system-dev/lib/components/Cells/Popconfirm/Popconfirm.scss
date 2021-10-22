@@ -1,0 +1,33 @@
+.popconfirm-text {
+    min-width: 366px;
+    &::after {
+      content: '';
+      display: block;
+      width: 15px;
+      height: 15px;
+      border-width: 6px;
+      position: absolute;
+      transform: rotate(45deg);
+    }
+    &.topRight::after,
+    &.bottomRight::after {
+      right: 20px;
+    }
+    &.topRight::after,
+    &.topLeft::after {
+      bottom: -5px;
+      border-color: transparent var(--color-light-gray) var(--color-light-gray) transparent;
+      box-shadow: 6px 6px 5px -5px #1d234366;
+    }
+    &.bottomRight::after,
+    &.bottomLeft::after {
+      top: -5px;
+      border-color: var(--color-light-gray) transparent transparent var(--color-light-gray);
+      box-shadow: -5px -5px 6px -5px #1d234366;
+    }
+    &.topLeft::after,
+    &.bottomLeft::after {
+      left: 20px;
+    }
+  }
+  

@@ -1,0 +1,19 @@
+.loader {
+  font-size: 10px;
+  text-indent: -9999em;
+  border-top: 8px solid var(--color-blue);
+  border-right: 8px solid var(--color-dark-gray-100);
+  border-bottom: 8px solid var(--color-dark-gray-100);
+  border-left: 8px solid var(--color-dark-gray-100);
+  transform: translateZ(0);
+  animation: load-rotate 1.5s infinite linear;
+}
+
+@keyframes load-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
