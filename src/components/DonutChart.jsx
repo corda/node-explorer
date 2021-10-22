@@ -9,7 +9,7 @@ const DonutChart = (props) => {
     return (
         <React.Fragment>       
             <div className="pie-chart">
-                <ResponsiveContainer width="100%" height={220}>
+                <ResponsiveContainer width="100%" height="100%">
 
                 <PieChart >                  
                     <Pie

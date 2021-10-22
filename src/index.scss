@@ -19,6 +19,8 @@ body {
 .pie-chart {
   text-align: center;
   position: relative;
+  width: 225px;
+  height: 225px;
 }
 .rotate-back {
   display: block;
@@ -54,6 +56,9 @@ html,
 .content-pane {
   margin-right: 4rem;
   margin-bottom: 80px;
+  @media screen and (max-width: 1600px) {
+    margin-right: 2rem;
+  }
 }
 
 code {
