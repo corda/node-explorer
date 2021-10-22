@@ -215,12 +215,13 @@ class Login extends Component {
                                         <IconCustom icon="SwapHorizontal" />
                                 </span>
                                 </div>
-                            </div>
-                           
-                            <div className="screen-text">
+                                <div className="screen-text">
                                 <h2>Node Explorer</h2>
                                 <h4>Interact with your Nodes, Cordapps and Vault.</h4>
                             </div>
+                            </div>
+                           
+                            
                         </Column>                                    
                     </Row>
                 </Container>             
