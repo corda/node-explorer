@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   node-explorer:
-    image: kirito37/node-explorer:v0.1.0
+    image: r3dockerhub/node-explorer:v0.1.2
     ports:
       - "3000:80"
     restart: always
@@ -9,7 +9,7 @@ services:
       - node-server
 
   node-server:
-    image: kirito37/node-server:v0.1.0
+    image: r3dockerhub/node-server:v0.1.2
     ports:
       - "8580:8580"
     restart: always
