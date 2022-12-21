@@ -25,7 +25,11 @@ if(process.platform === 'darwin' || process.platform === 'linux'){
 function startServer(port) {
   serverProcess = require('child_process')
     //.spawn('java', ['-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=y', '-jar', jarFile.substring(7)]);
-    .spawn('java', ['-jar', jarFile]);
+    .spawn('java', [
+    '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
+    '--add-opens', 'java.base/java.io=ALL-UNNAMED',
+    '--add-opens', 'java.base/java.time=ALL-UNNAMED',
+    '-jar', jarFile]);
 
     serverProcess.stdout.on('data', function (data) {
       console.log('Electron Server Log: ' + data);
